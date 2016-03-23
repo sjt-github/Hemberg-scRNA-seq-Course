@@ -12,6 +12,8 @@ r_packages:
 bioc_packages:
   - RUVSeq
 
+install: true
+
 sudo: false
 
 cache:
