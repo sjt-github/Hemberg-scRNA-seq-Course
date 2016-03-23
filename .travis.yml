@@ -1,5 +1,4 @@
 language: r
-
 pandoc_version: 1.17.0.1
 
 r_github_packages:

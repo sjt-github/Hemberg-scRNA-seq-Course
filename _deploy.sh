@@ -7,8 +7,8 @@ git clone -b master \
   https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git \
   book-output
 cd book-output
-rm -rf *
 cp -r ../_book/* ./
+rm -rf _bookdown_files
 git add *
 git commit -m "Build the book"
-git push origin gh-pages
+git push origin HEAD:gh-pages
