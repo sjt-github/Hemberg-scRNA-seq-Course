@@ -1,18 +1,8 @@
 language: r
-sudo: false
-cache:
-  packages: yes
-  directories:
-    - $TRAVIS_BUILD_DIR/_book/_bookdown_files
+
 r_github_packages:
   - rstudio/bookdown
-  - hemberg-lab/scRNA.seq.funcs
-  - davismcc/scater
-r_packages:
-  - mvoutlier
-  - knitr
-bioc_packages:
-  - RUVSeq
+
 install: true
 
 before_script:
