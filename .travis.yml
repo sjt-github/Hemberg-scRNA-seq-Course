@@ -1,5 +1,4 @@
 language: r
-pandoc_version: 1.17.0.1
 
 r_github_packages:
   - rstudio/bookdown
@@ -12,8 +11,6 @@ r_packages:
 
 bioc_packages:
   - RUVSeq
-
-install: true
 
 sudo: false
 
