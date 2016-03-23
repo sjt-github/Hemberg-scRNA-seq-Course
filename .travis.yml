@@ -1,8 +1,7 @@
 language: r
 
 install:
-  r_github_packages:
-    - rstudio/bookdown
+  - ./travis-tool.sh install_github rstudio/bookdown
 
 before_script:
   - chmod +x ./_build.sh
