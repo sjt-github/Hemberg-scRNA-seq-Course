@@ -1,0 +1,52 @@
+---
+knit: bookdown::preview_chapter
+---
+
+# Confounding factors (Reads)
+
+```{r, echo=FALSE, message=FALSE}
+library(scater, quietly = TRUE)
+library(knitr)
+options(stringsAsFactors = FALSE)
+opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
+reads <- readRDS("blischak/reads.rds")
+reads.qc <- reads[fData(reads)$use, pData(reads)$use]
+endog_genes <- !fData(reads.qc)$is_feature_control
+```
+
+```{r confound-pca-reads, fig.cap = "PCA plot of the blischak data"}
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                exprs_values = "counts")
+```
+
+```{r confound-find-pcs-total-features-reads, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
+scater::plotQC(reads.qc[endog_genes, ],
+               type = "find-pcs",
+               variable = "total_features")
+```
+
+```{r confound-find-pcs-erccs-reads, fig.cap = "PC correlation with the percentage of reads in ERCCs", fig.asp=1}
+scater::plotQC(reads.qc[endog_genes, ],
+               type = "find-pcs",
+               variable = "pct_counts_feature_controls_ERCC")
+```
+
+```{r confound-find-pcs-mts-reads, fig.cap = "PC correlation with the percentage of reads in MT genes", fig.asp=1}
+scater::plotQC(reads.qc[endog_genes, ],
+               type = "find-pcs",
+               variable = "pct_counts_feature_controls_MT")
+```
+
+```{r confound-find-expl-vars-reads, fig.cap = "Explanatory variables", fig.asp=1, eval=FALSE}
+scater::plotQC(reads.qc[endog_genes, ],
+               type = "expl",
+               exprs_values = "counts",
+               variables = c("total_features",
+                             "total_counts",
+                             "batch",
+                             "individual",
+                             "pct_counts_feature_controls_ERCC",
+                             "pct_counts_feature_controls_MT"))
+```

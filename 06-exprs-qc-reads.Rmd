@@ -1,0 +1,257 @@
+---
+knit: bookdown::preview_chapter
+---
+
+# Expression QC (Reads)
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(scater, quietly = TRUE)
+library(knitr)
+options(stringsAsFactors = FALSE)
+opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
+```
+
+```{r}
+reads <- read.table("blischak/reads.txt", sep = "\t")
+anno <- read.table("blischak/annotation.txt", sep = "\t", header = TRUE)
+```
+
+```{r}
+knitr::kable(
+    head(reads[ , 1:3]), booktabs = TRUE,
+    caption = 'A table of the first 6 rows and 3 columns of the molecules table.'
+)
+knitr::kable(
+    head(anno), booktabs = TRUE,
+    caption = 'A table of the first 6 rows of the anno table.'
+)
+```
+
+```{r}
+pheno_data <- new("AnnotatedDataFrame", anno)
+rownames(pheno_data) <- pheno_data$sample_id
+reads <- scater::newSCESet(
+    countData = reads,
+    phenoData = pheno_data
+)
+```
+
+```{r}
+keep_feature <- rowSums(is_exprs(reads)) > 0
+reads <- reads[keep_feature, ]
+```
+
+```{r}
+ercc <- featureNames(reads)[grepl("ERCC-", featureNames(reads))]
+mt <- c("ENSG00000198899", "ENSG00000198727", "ENSG00000198888",
+        "ENSG00000198886", "ENSG00000212907", "ENSG00000198786",
+        "ENSG00000198695", "ENSG00000198712", "ENSG00000198804",
+        "ENSG00000198763", "ENSG00000228253", "ENSG00000198938",
+        "ENSG00000198840")
+```
+
+```{r}
+reads <- scater::calculateQCMetrics(
+    reads,
+    feature_controls = list(ERCC = ercc, MT = mt)
+)
+```
+
+```{r dropout-overview-reads, fig.cap = "Dropout rate vs mean expression"}
+scater::plotQC(reads, type = "exprs-freq-vs-mean")
+```
+
+```{r top50-gene-expr-reads, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
+scater::plotQC(reads, type = "highest-expression")
+```
+
+```{r}
+filter_genes <- apply(counts(reads), 1, function(x) length(x[x > 1]) >= 2)
+fData(reads)$use <- filter_genes
+```
+
+```{r}
+knitr::kable(
+    as.data.frame(table(filter_genes)),
+    booktabs = TRUE,
+    row.names = FALSE,
+    caption = 'The number of genes removed by gene filter (FALSE)'
+)
+```
+
+```{r total-counts-hist-reads, fig.cap = "Histogram of library sizes for all cells"}
+hist(
+    reads$total_counts,
+    breaks = 100
+)
+```
+
+```{r}
+filter_by_total_counts <- (reads$total_counts > 1.3e6)
+```
+
+```{r}
+knitr::kable(
+    as.data.frame(table(filter_by_total_counts)),
+    booktabs = TRUE,
+    row.names = FALSE,
+    caption = 'The number of cells removed by total counts filter (FALSE)'
+)
+```
+
+```{r total-features-hist-reads, fig.cap = "Histogram of the number of detected genes in all cells"}
+hist(
+    reads$total_features,
+    breaks = 100
+)
+```
+
+```{r}
+filter_by_expr_features <- (reads$total_features > 5000)
+```
+
+```{r}
+knitr::kable(
+    as.data.frame(table(filter_by_expr_features)),
+    booktabs = TRUE,
+    row.names = FALSE,
+    caption = 'The number of cells removed by total features filter (FALSE)'
+)
+```
+
+```{r total-features-vs-counts-reads, fig.cap = "Library size vs number of detected genes"}
+scater::plotPhenoData(
+    reads,
+    aes(x = total_features, y = log10(total_counts), colour = batch)
+)
+```
+
+```{r mt-vs-counts-reads, fig.cap = "Percentage of counts in MT genes"}
+scater::plotPhenoData(
+    reads,
+    aes_string(x = "total_features",
+               y = "pct_counts_feature_controls_MT",
+               colour = "batch")
+)
+```
+
+```{r ercc-vs-counts-reads, fig.cap = "Percentage of counts in ERCCs"}
+scater::plotPhenoData(
+    reads,
+    aes_string(x = "total_features",
+               y = "pct_counts_feature_controls_ERCC",
+               colour = "batch")
+)
+```
+
+```{r}
+filter_by_ERCC <- reads$batch != "NA19098.r2" &
+    reads$pct_counts_feature_controls_ERCC < 25
+```
+
+```{r}
+knitr::kable(
+  as.data.frame(table(filter_by_ERCC)),
+  booktabs = TRUE,
+  row.names = FALSE,
+  caption = 'The number of cells removed by ERCC filter (FALSE)'
+)
+```
+
+```{r}
+filter_by_MT <- reads$pct_counts_feature_controls_MT < 30
+```
+
+```{r}
+knitr::kable(
+  as.data.frame(table(filter_by_MT)),
+  booktabs = TRUE,
+  row.names = FALSE,
+  caption = 'The number of cells removed by MT filter (FALSE)'
+)
+```
+
+```{r}
+reads$use_default <- (
+    # remove cells with unusual numbers of genes
+    !reads$filter_on_total_features &
+    # sufficient molecules counted
+    !reads$filter_on_total_counts &
+    # sufficient endogenous RNA
+    !reads$filter_on_pct_counts_feature_controls_ERCC &
+    # remove cells with unusual number of reads in MT genes
+    !reads$filter_on_pct_counts_feature_controls_MT &
+    # controls shouldn't be used in downstream analysis
+    !reads$is_cell_control
+)
+```
+
+```{r}
+knitr::kable(
+  as.data.frame(table(reads$use_default)),
+  booktabs = TRUE,
+  row.names = FALSE,
+  caption = 'The number of cells removed by default filter (FALSE)'
+)
+```
+
+```{r auto-cell-filt-reads, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
+reads <-
+scater::plotPCA(reads,
+                size_by = "total_features", 
+                shape_by = "filter_on_total_features",
+                pca_data_input = "pdata",
+                detect_outliers = TRUE,
+                return_SCESet = TRUE)
+```
+
+```{r}
+knitr::kable(
+  as.data.frame(table(reads$outlier)),
+  booktabs = TRUE,
+  row.names = FALSE,
+  caption = 'The number of cells removed by automatic filter (FALSE)'
+)
+```
+
+```{r}
+reads$use <- (
+    # sufficient features (genes)
+    filter_by_expr_features &
+    # sufficient molecules counted
+    filter_by_total_counts &
+    # sufficient endogenous RNA
+    filter_by_ERCC &
+    # remove cells with unusual number of reads in MT genes
+    filter_by_MT
+)
+```
+
+```{r}
+knitr::kable(
+  as.data.frame(table(reads$use)),
+  booktabs = TRUE,
+  row.names = FALSE,
+  caption = 'The number of cells removed by manual filter (FALSE)'
+)
+```
+
+```{r cell-filt-comp-reads, fig.cap = "Comparison of the default, automatic and manual cell filters"}
+def <- colnames(reads)[!reads$use_default]
+auto <- colnames(reads)[reads$outlier]
+man <- colnames(reads)[!reads$use]
+venn.diag <- limma::vennCounts(cbind(colnames(reads) %in% def,
+                                     colnames(reads) %in% auto,
+                                     colnames(reads) %in% man))
+limma::vennDiagram(venn.diag,
+                   names = c("Default", "Automatic", "Manual"),
+                   circle.col = c("magenta", "blue", "green"))
+```
+
+```{r}
+dim(reads[fData(reads)$use, pData(reads)$use])
+```
+
+```{r}
+saveRDS(reads, file = "blischak/reads.rds")
+```

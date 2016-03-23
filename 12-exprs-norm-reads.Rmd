@@ -1,0 +1,186 @@
+---
+knit: bookdown::preview_chapter
+---
+
+# Normalization for library size (Reads)
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(scater, quietly = TRUE)
+library(knitr)
+options(stringsAsFactors = FALSE)
+opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
+reads <- readRDS("blischak/reads.rds")
+reads.qc <- reads[fData(reads)$use, pData(reads)$use]
+endog_genes <- !fData(reads.qc)$is_feature_control
+```
+
+```{r norm-pca-raw-reads, fig.cap = "PCA plot of the blischak data"}
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                exprs_values = "counts")
+```
+
+```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the blischak data after CPM normalisation"}
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                exprs_values = "cpm")
+```
+
+```{r norm-pca-log2-cpm-reads, fig.cap = "PCA plot of the blischak data after log2(CPM) normalisation"}
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                exprs_values = "exprs")
+```
+
+```{r norm-pca-tmm-reads, fig.cap = "PCA plot of the blischak data after TMM normalisation"}
+reads.qc <- 
+    scater::normaliseExprs(reads.qc,
+                           method = "TMM",
+                           feature_set = endog_genes,
+                           lib.size = rep(1, ncol(reads.qc)))
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "norm_counts")
+```
+
+```{r norm-pca-rle-reads, fig.cap = "PCA plot of the blischak data after RLE normalisation"}
+reads.qc <- 
+    scater::normaliseExprs(reads.qc,
+                           method = "RLE",
+                           feature_set = endog_genes,
+                           lib.size = rep(1, ncol(reads.qc)))
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "norm_counts")
+```
+
+```{r norm-pca-uq-reads, fig.cap = "PCA plot of the blischak data after UQ normalisation"}
+reads.qc <- 
+    scater::normaliseExprs(reads.qc,
+                           method = "upperquartile", 
+                           feature_set = endog_genes,
+                           p = 0.99,
+                           lib.size = rep(1, ncol(reads.qc)))
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "norm_counts")
+```
+
+```{r}
+reads.qc <-
+    scater::getBMFeatureAnnos(reads.qc,
+                              filters = "ensembl_gene_id", 
+                              attributes = c("ensembl_gene_id",
+                                             "hgnc_symbol",
+                                             "chromosome_name",
+                                             "start_position",
+                                             "end_position"), 
+                              feature_symbol = "hgnc_symbol",
+                              feature_id = "ensembl_gene_id",
+                              biomart = "ENSEMBL_MART_ENSEMBL", 
+                              dataset = "hsapiens_gene_ensembl",
+                              host = "www.ensembl.org")
+
+# If you have mouse data, change the arguments based on this example:
+# scater::getBMFeatureAnnos(object,
+#                           filters = "ensembl_transcript_id", 
+#                           attributes = c("ensembl_transcript_id", 
+#                                        "ensembl_gene_id", "mgi_symbol", 
+#                                        "chromosome_name",
+#                                        "transcript_biotype",
+#                                        "transcript_start",
+#                                        "transcript_end", 
+#                                        "transcript_count"), 
+#                           feature_symbol = "mgi_symbol",
+#                           feature_id = "ensembl_gene_id",
+#                           biomart = "ENSEMBL_MART_ENSEMBL", 
+#                           dataset = "mmusculus_gene_ensembl",
+#                           host = "www.ensembl.org") 
+```
+
+```{r}
+reads.qc.ann <-
+    reads.qc[!is.na(fData(reads.qc)$ensembl_gene_id), ]
+```
+
+```{r}
+eff_length <- abs(fData(reads.qc.ann)$end_position -
+                      fData(reads.qc.ann)$start_position)/1000
+```
+
+```{r}
+tpm(reads.qc.ann) <-
+    calculateTPM(
+        reads.qc.ann,
+        eff_length
+    )
+fpkm(reads.qc.ann) <-
+    calculateFPKM(
+        reads.qc.ann,
+        eff_length
+    )
+```
+
+```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the blischak data after FPKM normalisation"}
+scater::plotPCA(reads.qc.ann,
+                colour_by = "batch",
+                size_by = "total_features",
+                exprs_values = "fpkm")
+```
+
+```{r norm-genes-raw-reads, fig.cap = "Expression of the first 6 genes of the blischak data"}
+scater::plotExpression(reads.qc.ann,
+                       rownames(reads.qc.ann)[1:6],
+                       x = "individual",
+                       exprs_values = "counts",
+                       colour = "batch")
+```
+
+```{r norm-genes-cpm-reads, fig.cap = "Expression of the first 6 genes of the blischak data after the CPM normalisation"}
+scater::plotExpression(reads.qc.ann,
+                       rownames(reads.qc.ann)[1:6],
+                       x = "individual",
+                       exprs_values = "cpm",
+                       colour = "batch")
+```
+
+```{r norm-genes-log2-cpm-reads, fig.cap = "Expression of the first 6 genes of the blischak data after the log2(CPM) normalisation"}
+scater::plotExpression(reads.qc.ann,
+                       rownames(reads.qc.ann)[1:6],
+                       x = "individual",
+                       exprs_values = "exprs",
+                       colour = "batch")
+```
+
+```{r norm-genes-UQ-reads, fig.cap = "Expression of the first 6 genes of the blischak data after the UQ normalisation"}
+scater::plotExpression(reads.qc.ann,
+                       rownames(reads.qc.ann)[1:6],
+                       x = "individual",
+                       exprs_values = "norm_counts",
+                       colour = "batch")
+```
+
+```{r norm-genes-fpkm-reads, fig.cap = "Expression of the first 6 genes of the blischak data after the FPKM normalisation"}
+scater::plotExpression(reads.qc.ann,
+                       rownames(reads.qc.ann)[1:6],
+                       x = "individual",
+                       exprs_values = "fpkm",
+                       colour = "batch")
+```
+
+```{r norm-genes-tpm-reads, fig.cap = "Expression of the first 6 genes of the blischak data after the TPM normalisation"}
+scater::plotExpression(reads.qc.ann,
+                       rownames(reads.qc.ann)[1:6],
+                       x = "individual",
+                       exprs_values = "tpm",
+                       colour = "batch")
+```

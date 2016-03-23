@@ -1,0 +1,77 @@
+---
+knit: bookdown::preview_chapter
+---
+
+# Expression overview (Reads)
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(scater, quietly = TRUE)
+library(knitr)
+options(stringsAsFactors = FALSE)
+opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
+reads <- readRDS("blischak/reads.rds")
+reads.qc <- reads[fData(reads)$use, pData(reads)$use]
+endog_genes <- !fData(reads.qc)$is_feature_control
+```
+
+```{r expr-overview-top500-before-qc-reads, fig.cap = "Proportion of reads accounted by the top 500"}
+scater::plot(reads[endog_genes, ],
+             block1 = "individual",
+             block2 = "replicate",
+             colour_by = "use",
+             exprs_values = "counts")
+```
+
+```{r expr-overview-top500-after-qc-reads, fig.cap = "Proportion of reads accounted by the top 500"}
+scater::plot(reads.qc[endog_genes, ],
+             block1 = "individual",
+             block2 = "replicate",
+             colour_by = "use",
+             exprs_values = "counts")
+```
+
+```{r expr-overview-pca-before-qc-reads, fig.cap = "PCA plot of the blischak data"}
+scater::plotPCA(reads[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                exprs_values = "counts")
+```
+
+```{r expr-overview-pca-after-qc-reads, fig.cap = "PCA plot of the blischak data"}
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                exprs_values = "counts")
+```
+
+```{r expr-overview-diff-before-qc-reads, fig.cap = "Diffusion map of the blischak data", warning=FALSE}
+scater::plotDiffusionMap(reads[endog_genes, ],
+                         colour_by = "batch",
+                         size_by = "total_features",
+                         exprs_values = "counts",
+                         rand_seed = 123456)
+```
+
+```{r expr-overview-diff-after-qc-reads, fig.cap = "Diffusion map of the blischak data", warning=FALSE}
+scater::plotDiffusionMap(reads.qc[endog_genes, ],
+                         colour_by = "batch",
+                         size_by = "total_features",
+                         exprs_values = "counts",
+                         rand_seed = 123456)
+```
+
+```{r expr-overview-tsne-before-qc-reads, fig.cap = "tSNE map of the blischak data"}
+scater::plotTSNE(reads[endog_genes, ],
+                 colour_by = "batch",
+                 size_by = "total_features",
+                 exprs_values = "counts",
+                 rand_seed = 123456)
+```
+
+```{r expr-overview-tsne-after-qc-reads, fig.cap = "tSNE map of the blischak data"}
+scater::plotTSNE(reads.qc[endog_genes, ],
+                 colour_by = "batch",
+                 size_by = "total_features",
+                 exprs_values = "counts",
+                 rand_seed = 123456)
+```
