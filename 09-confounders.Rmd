@@ -11,7 +11,7 @@ There are a very large number of potential confounders, artifacts and biases in 
 The [scater](https://github.com/davismcc/scater) package provides a set of methods specifically for quality control of experimental and explanatory variables.
 
 Here we will continue to work with the Blischak data that was used in the previous chapter.
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
 library(knitr)
 options(stringsAsFactors = FALSE)

@@ -26,8 +26,8 @@ MathJax.Hub.Config({
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="technical-requirements.html">
-<link rel="next" href="construction-of-expression-matrix.html">
+<link rel="prev" href="normalization-for-library-size-reads.html">
+<link rel="next" href="remove-confounders-using-controls-reads.html">
 
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -237,70 +237,62 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="introduction-to-single-cell-rna-seq" class="section level1">
-<h1><span class="header-section-number">3</span> Introduction to single-cell RNA-seq</h1>
-<div id="bulk-rna-seq" class="section level2">
-<h2><span class="header-section-number">3.1</span> Bulk RNA-seq</h2>
-<ul>
-<li>A major breakthrough (replaced microarrays) in the late 00’s and has been widely used since</li>
-<li>Provides an <strong>average expression level</strong> for each gene from a large population of input cells</li>
-<li>Useful for comparative transcriptomics, e.g. samples of the same tissue from different species</li>
-<li>Useful for quantifying expression signatures from ensembles, e.g. in disease studies</li>
-<li><strong>Insufficient</strong> for studying heterogeneous systems, e.g. early development studies, complex tissues (brain)</li>
-<li>Does <strong>not</strong> provide insights into the stochastic nature of gene expression</li>
-</ul>
+<div id="remove-confounders-using-controls" class="section level1">
+<h1><span class="header-section-number">14</span> Remove confounders using controls</h1>
+<div id="introduction-5" class="section level2">
+<h2><span class="header-section-number">14.1</span> Introduction</h2>
+<p>In the previous chapter we saw that the library size normalisation is able to remove major confounders. Let us see whether further use of the controls (ERCC and MT) can provide us with more insights into the data.</p>
+<p>Several methods (eg. <a href="https://github.com/catavallejos/BASiCS">BASiCS</a>, <a href="https://github.com/PMBio/scLVM">scLVM</a>, <a href="http://bioconductor.org/packages/release/bioc/html/RUVSeq.html">RUV</a>) have been developed for normalisation using ERCCs using different noise models and different fitting procedures.</p>
+<p>We will demonstrate some of the methods starting from the simplest one proposed by <a href="http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html">Brennecke et al.</a>, which identifies genes with significant variation above technical noise (ERCCs).</p>
 </div>
-<div id="scrna-seq" class="section level2">
-<h2><span class="header-section-number">3.2</span> scRNA-seq</h2>
-<ul>
-<li>A <strong>new</strong> technology, first publication by <a href="http://www.nature.com/nmeth/journal/v6/n5/abs/nmeth.1315.html">Tang et al</a> in 2009</li>
-<li>Instead of providing an average of expression of a population of cells, scRNA-seq provides a <strong>distribution of expression levels</strong> from a population of cells</li>
-<li>Allows to study new biological questions in which <strong>cell-specific changes in transcriptome are important</strong>, e.g. cell type identification, inference of gene regulatory networks across the cells, stochastic component of transcription</li>
-<li>Datasets range <strong>from <span class="math inline">\(10^2\)</span> to <span class="math inline">\(10^4\)</span> cells</strong> and increase in size every year</li>
-<li>Currently there are several different protocols in use, e.g. <a href="http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2639.html">SMART-seq2</a>, <a href="http://www.cell.com/cell-reports/abstract/S2211-1247%2812%2900228-8">CELL-seq</a> and <a href="http://mccarrolllab.com/dropseq/">Drop-seq</a></li>
-<li>Several computational analysis methods from bulk RNA-seq <strong>can</strong> be used</li>
-<li><strong>In most cases</strong> requires adaptation of the existing methods or development of new ones</li>
-</ul>
+<div id="brennecke-method" class="section level2">
+<h2><span class="header-section-number">14.2</span> Brennecke method</h2>
+<p>To use the method, we first normalize for library size then calculate the mean and the square coefficient of variation (variation divided by the squared mean expression). A curve is fit for the relationship between these two variables for the ERCC spike-in (subject to just technical variation) then a chi-square test is used to find genes significantly above the curve. This has been provided for you as the Brenneck_getVariableGenes(counts, spikes) function.</p>
+<pre><code>## Warning in scRNA.seq.funcs::Brennecke_getVariableGenes(assayData(umi.qc)
+## $norm_counts, : Only 21 spike-ins to be used in fitting, may result in poor
+## fit.</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:rm-conf-brennecke"></span>
+<img src="scRNA-seq-course_files/figure-html/rm-conf-brennecke-1.png" alt="Results of using the Brennecke method on the Blischak dataset" width="90%" />
+<p class="caption">
+Figure 14.1: Results of using the Brennecke method on the Blischak dataset
+</p>
 </div>
-<div id="protocol" class="section level2">
-<h2><span class="header-section-number">3.3</span> Protocol</h2>
-<div class="figure">
-<img src="figures/RNA-Seq_workflow-5.pdf.jpg" />
+<p>In the figure above blue points are the ERCC spike-ins. The red curve is the fitted technical noise model and the dashed line is the 95% CI. Pink dots are the genes with significant biological variability after multiple-testing correction. Since our dataset is relatively homogeneous only 148 genes are identified as significantly variable.</p>
+</div>
+<div id="remove-unwanted-variation" class="section level2">
+<h2><span class="header-section-number">14.3</span> Remove Unwanted Variation</h2>
+<p>Factors contributing to technical noise frequently appear as “batch effects” where cells processed on different days or by different technicians systematically vary from one another. Removing technical noise and correcting for batch effects can frequently be performed using the same tool or slight variants on it. We will be considering the <a href="http://bioconductor.org/packages/release/bioc/html/RUVSeq.html">Remove Unwanted Variation (RUV)</a> method which uses <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">singular value decomposition</a> (similar to PCA) on subsets of the dataset which should be invariant (e.g. <a href="https://www.thermofisher.com/order/catalog/product/4456740">ERCC spike-ins</a>). Then the method removes the identified unwanted factors.</p>
+</div>
+<div id="effectiveness-1" class="section level2">
+<h2><span class="header-section-number">14.4</span> Effectiveness 1</h2>
+<p>We evaluate the effectiveness of the normalization by inspecting the PCA plot where shape corresponds the technical replicate and colour corresponds to different biological samples (individuals from whom the iPSC lines where derived). Separation of biological samples and interspersed batches indicates that technical variation has been removed.</p>
+<div class="figure" style="text-align: center"><span id="fig:rm-conf-pca-rle"></span>
+<img src="scRNA-seq-course_files/figure-html/rm-conf-pca-rle-1.png" alt="PCA plot of the blischak data after RLE normalisation" width="90%" />
+<p class="caption">
+Figure 14.2: PCA plot of the blischak data after RLE normalisation
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:rm-conf-pca-rle-ruv"></span>
+<img src="scRNA-seq-course_files/figure-html/rm-conf-pca-rle-ruv-1.png" alt="PCA plot of the blischak data after RLE and RUV normalisations" width="90%" />
+<p class="caption">
+Figure 14.3: PCA plot of the blischak data after RLE and RUV normalisations
+</p>
+</div>
+</div>
+<div id="effectiveness-2" class="section level2">
+<h2><span class="header-section-number">14.5</span> Effectiveness 2</h2>
+<p>We can also examine the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset.</p>
+<div class="figure" style="text-align: center"><span id="fig:rm-conf-rle-comp"></span>
+<img src="scRNA-seq-course_files/figure-html/rm-conf-rle-comp-1.png" alt="Comparison of the relative log expression of the blischak data before and after the RUV normalisation" width="90%" />
+<p class="caption">
+Figure 14.4: Comparison of the relative log expression of the blischak data before and after the RUV normalisation
+</p>
+</div>
+</div>
+<div id="exercise-4" class="section level2">
+<h2><span class="header-section-number">14.6</span> Exercise</h2>
+<p>Perform the same analysis with read counts of the Blischak data. Use <code>blischak/reads.rds</code> file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.</p>
 
-</div>
-<p>image from <a href="https://en.wikipedia.org/wiki/Single_cell_sequencing">Wikipedia - Single cell sequencing</a></p>
-<p>Overall, experimental scRNA-seq protocols are similar to the methods used for bulk RNA-seq. For a discussion on experimental methods, please see reviews by <a href="http://nar.oxfordjournals.org/content/42/14/8845">Saliba et al</a>, <a href="http://www.sciencedirect.com/science/article/pii/S1097276515003068">Handley et al</a> or <a href="http://www.sciencedirect.com/science/article/pii/S1097276515002610">Kolodziejczyk et al</a>.</p>
-</div>
-<div id="analysis" class="section level2">
-<h2><span class="header-section-number">3.4</span> Analysis</h2>
-<p>This course is concerned with the computational analysis of the data obtained from scRNA-seq experiments. Even though the format of the data is the same as for bulk RNA-seq, the fact that individual cells are sampled means that the data <strong>should</strong> be analyzed differently. We will provide an overview of how to process a scRNA-seq sample and how to analyze the data to provide biological insights.</p>
-<div class="figure">
-<img src="figures/flowchart.png" />
-
-</div>
-<p>Flowchart for analyzing scRNA-seq data.</p>
-</div>
-<div id="challenges" class="section level2">
-<h2><span class="header-section-number">3.5</span> Challenges</h2>
-<p>The main difference between bulk and single cell RNA-seq is that each sequencing library represents a single cell, instead of a population of cells. Therefore, significant attention has to be paid to comparison of the results from different cells (sequencing libraries). The main sources of discrepancy between the libraries are:</p>
-<ul>
-<li><strong>Amplification</strong> (up to 1 million fold)</li>
-<li><strong>Gene ‘dropouts’</strong> in which a gene is observed at a moderate expression level in one cell but is not detected in another cell (<a href="http://www.nature.com/nmeth/journal/v11/n7/full/nmeth.2967.html">Kharchenko et al</a>).</li>
-</ul>
-<p>In both cases the discrepancies are introduced due to low starting transcript amount (from one cell only) and have yet to be addressed by improving the experimental protocol.</p>
-</div>
-<div id="controls" class="section level2">
-<h2><span class="header-section-number">3.6</span> Controls</h2>
-<p>To address challenges in technical variation between scRNA sequencing libraries two quantitative standards were introduced. They allow to normalize gene expression levels across different cells.</p>
-<div id="ercc-spike-ins" class="section level3">
-<h3><span class="header-section-number">3.6.1</span> ERCC <em>spike-ins</em></h3>
-<p>One standard, strongly recommended for all scRNA-seq experiments is to use extrinsic <em>spike-in</em> molecules. These molecules are added to the lysate before the reverse transcription. The most popular and widely used artificial spike-ins are from <a href="https://www.thermofisher.com/order/catalog/product/4456740">External RNA Control Consortium (ERCC)</a>. It contains 92 synthetic spikes based on bacterial sequences. Normalization using <em>spike-ins</em> is based on the fact that the number of molecules of each <em>spike-in</em> RNA species should be the same across all single-cell libraries.</p>
-</div>
-<div id="umis" class="section level3">
-<h3><span class="header-section-number">3.6.2</span> UMIs</h3>
-<p>Another method of standartisation is to use <a href="http://www.nature.com/nmeth/journal/v9/n1/full/nmeth.1778.html">Unique Molecular Identifiers (UMIs)</a>. Instead of sequencing the amplified reads from a cell library, it allows for sequencing reads derived solely from 3’ or 5’ end of the amplified transcript. UMIs are added as barcodes to the individual RNA molecules. This approach provides an estimate of the number of transcripts that is independent of amplification biases.</p>
-
-</div>
 </div>
 </div>
             </section>
@@ -308,8 +300,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="technical-requirements.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="construction-of-expression-matrix.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="normalization-for-library-size-reads.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="remove-confounders-using-controls-reads.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -336,7 +328,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/wikiselev/bookdown-demo/edit/master/02-intro.Rmd",
+"link": "https://github.com/wikiselev/bookdown-demo/edit/master/13-remove-conf.Rmd",
 "text": "Edit"
 },
 "download": null,

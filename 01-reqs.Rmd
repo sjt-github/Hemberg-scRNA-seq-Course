@@ -9,9 +9,9 @@ Other than that, before running the course exercises, all you need to do is to i
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 install.packages("devtools")
 ```
-[scRNA.seq.course](https://github.com/hemberg-lab/scRNA.seq.course) - the main course package (it also contains all materials and slides in __inst/materials__ folder):
+[scRNA.seq.funcs](https://github.com/hemberg-lab/scRNA.seq.funcs) - R package containing our own functions used in this course:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
-devtools::install_github("hemberg-lab/scRNA.seq.course")
+devtools::install_github("hemberg-lab/scRNA.seq.funcs")
 ```
 
 [mvoutlier](https://cran.r-project.org/web/packages/mvoutlier/index.html) - for an automatic outlier detection in the [scater](https://github.com/davismcc/scater) package.

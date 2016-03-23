@@ -26,8 +26,8 @@ MathJax.Hub.Config({
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="technical-requirements.html">
-<link rel="next" href="construction-of-expression-matrix.html">
+<link rel="prev" href="remove-confounders-using-controls.html">
+
 
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -237,70 +237,40 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="introduction-to-single-cell-rna-seq" class="section level1">
-<h1><span class="header-section-number">3</span> Introduction to single-cell RNA-seq</h1>
-<div id="bulk-rna-seq" class="section level2">
-<h2><span class="header-section-number">3.1</span> Bulk RNA-seq</h2>
-<ul>
-<li>A major breakthrough (replaced microarrays) in the late 00’s and has been widely used since</li>
-<li>Provides an <strong>average expression level</strong> for each gene from a large population of input cells</li>
-<li>Useful for comparative transcriptomics, e.g. samples of the same tissue from different species</li>
-<li>Useful for quantifying expression signatures from ensembles, e.g. in disease studies</li>
-<li><strong>Insufficient</strong> for studying heterogeneous systems, e.g. early development studies, complex tissues (brain)</li>
-<li>Does <strong>not</strong> provide insights into the stochastic nature of gene expression</li>
-</ul>
+<div id="remove-confounders-using-controls-reads" class="section level1">
+<h1><span class="header-section-number">15</span> Remove confounders using controls (Reads)</h1>
+<pre><code>## Warning in scRNA.seq.funcs::Brennecke_getVariableGenes(assayData(reads.qc)
+## $norm_counts, : Only 17 spike-ins to be used in fitting, may result in poor
+## fit.</code></pre>
+<pre><code>## Warning in xy.coords(x, y, xlabel, ylabel, log): 7 x values &lt;= 0 omitted
+## from logarithmic plot</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:rm-conf-brennecke-reads"></span>
+<img src="scRNA-seq-course_files/figure-html/rm-conf-brennecke-reads-1.png" alt="Results of using the Brennecke method on the Blischak dataset" width="90%" />
+<p class="caption">
+Figure 15.1: Results of using the Brennecke method on the Blischak dataset
+</p>
 </div>
-<div id="scrna-seq" class="section level2">
-<h2><span class="header-section-number">3.2</span> scRNA-seq</h2>
-<ul>
-<li>A <strong>new</strong> technology, first publication by <a href="http://www.nature.com/nmeth/journal/v6/n5/abs/nmeth.1315.html">Tang et al</a> in 2009</li>
-<li>Instead of providing an average of expression of a population of cells, scRNA-seq provides a <strong>distribution of expression levels</strong> from a population of cells</li>
-<li>Allows to study new biological questions in which <strong>cell-specific changes in transcriptome are important</strong>, e.g. cell type identification, inference of gene regulatory networks across the cells, stochastic component of transcription</li>
-<li>Datasets range <strong>from <span class="math inline">\(10^2\)</span> to <span class="math inline">\(10^4\)</span> cells</strong> and increase in size every year</li>
-<li>Currently there are several different protocols in use, e.g. <a href="http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2639.html">SMART-seq2</a>, <a href="http://www.cell.com/cell-reports/abstract/S2211-1247%2812%2900228-8">CELL-seq</a> and <a href="http://mccarrolllab.com/dropseq/">Drop-seq</a></li>
-<li>Several computational analysis methods from bulk RNA-seq <strong>can</strong> be used</li>
-<li><strong>In most cases</strong> requires adaptation of the existing methods or development of new ones</li>
-</ul>
+<div class="figure" style="text-align: center"><span id="fig:rm-conf-pca-rle-reads"></span>
+<img src="scRNA-seq-course_files/figure-html/rm-conf-pca-rle-reads-1.png" alt="PCA plot of the blischak data after RLE normalisation" width="90%" />
+<p class="caption">
+Figure 15.2: PCA plot of the blischak data after RLE normalisation
+</p>
 </div>
-<div id="protocol" class="section level2">
-<h2><span class="header-section-number">3.3</span> Protocol</h2>
-<div class="figure">
-<img src="figures/RNA-Seq_workflow-5.pdf.jpg" />
+<div class="figure" style="text-align: center"><span id="fig:rm-conf-pca-rle-ruv-reads"></span>
+<img src="scRNA-seq-course_files/figure-html/rm-conf-pca-rle-ruv-reads-1.png" alt="PCA plot of the blischak data after RLE and RUV normalisations" width="90%" />
+<p class="caption">
+Figure 15.3: PCA plot of the blischak data after RLE and RUV normalisations
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:rm-conf-rle-comp-reads"></span>
+<img src="scRNA-seq-course_files/figure-html/rm-conf-rle-comp-reads-1.png" alt="Comparison of the relative log expression of the blischak data before and after the RUV normalisation" width="90%" />
+<p class="caption">
+Figure 15.4: Comparison of the relative log expression of the blischak data before and after the RUV normalisation
+</p>
+</div>
 
-</div>
-<p>image from <a href="https://en.wikipedia.org/wiki/Single_cell_sequencing">Wikipedia - Single cell sequencing</a></p>
-<p>Overall, experimental scRNA-seq protocols are similar to the methods used for bulk RNA-seq. For a discussion on experimental methods, please see reviews by <a href="http://nar.oxfordjournals.org/content/42/14/8845">Saliba et al</a>, <a href="http://www.sciencedirect.com/science/article/pii/S1097276515003068">Handley et al</a> or <a href="http://www.sciencedirect.com/science/article/pii/S1097276515002610">Kolodziejczyk et al</a>.</p>
-</div>
-<div id="analysis" class="section level2">
-<h2><span class="header-section-number">3.4</span> Analysis</h2>
-<p>This course is concerned with the computational analysis of the data obtained from scRNA-seq experiments. Even though the format of the data is the same as for bulk RNA-seq, the fact that individual cells are sampled means that the data <strong>should</strong> be analyzed differently. We will provide an overview of how to process a scRNA-seq sample and how to analyze the data to provide biological insights.</p>
-<div class="figure">
-<img src="figures/flowchart.png" />
+<div id="refs" class="references">
 
-</div>
-<p>Flowchart for analyzing scRNA-seq data.</p>
-</div>
-<div id="challenges" class="section level2">
-<h2><span class="header-section-number">3.5</span> Challenges</h2>
-<p>The main difference between bulk and single cell RNA-seq is that each sequencing library represents a single cell, instead of a population of cells. Therefore, significant attention has to be paid to comparison of the results from different cells (sequencing libraries). The main sources of discrepancy between the libraries are:</p>
-<ul>
-<li><strong>Amplification</strong> (up to 1 million fold)</li>
-<li><strong>Gene ‘dropouts’</strong> in which a gene is observed at a moderate expression level in one cell but is not detected in another cell (<a href="http://www.nature.com/nmeth/journal/v11/n7/full/nmeth.2967.html">Kharchenko et al</a>).</li>
-</ul>
-<p>In both cases the discrepancies are introduced due to low starting transcript amount (from one cell only) and have yet to be addressed by improving the experimental protocol.</p>
-</div>
-<div id="controls" class="section level2">
-<h2><span class="header-section-number">3.6</span> Controls</h2>
-<p>To address challenges in technical variation between scRNA sequencing libraries two quantitative standards were introduced. They allow to normalize gene expression levels across different cells.</p>
-<div id="ercc-spike-ins" class="section level3">
-<h3><span class="header-section-number">3.6.1</span> ERCC <em>spike-ins</em></h3>
-<p>One standard, strongly recommended for all scRNA-seq experiments is to use extrinsic <em>spike-in</em> molecules. These molecules are added to the lysate before the reverse transcription. The most popular and widely used artificial spike-ins are from <a href="https://www.thermofisher.com/order/catalog/product/4456740">External RNA Control Consortium (ERCC)</a>. It contains 92 synthetic spikes based on bacterial sequences. Normalization using <em>spike-ins</em> is based on the fact that the number of molecules of each <em>spike-in</em> RNA species should be the same across all single-cell libraries.</p>
-</div>
-<div id="umis" class="section level3">
-<h3><span class="header-section-number">3.6.2</span> UMIs</h3>
-<p>Another method of standartisation is to use <a href="http://www.nature.com/nmeth/journal/v9/n1/full/nmeth.1778.html">Unique Molecular Identifiers (UMIs)</a>. Instead of sequencing the amplified reads from a cell library, it allows for sequencing reads derived solely from 3’ or 5’ end of the amplified transcript. UMIs are added as barcodes to the individual RNA molecules. This approach provides an estimate of the number of transcripts that is independent of amplification biases.</p>
-
-</div>
 </div>
 </div>
             </section>
@@ -308,8 +278,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="technical-requirements.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="construction-of-expression-matrix.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="remove-confounders-using-controls.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
 
 <script src="libs/gitbook-2.6.7/js/app.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -336,7 +306,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/wikiselev/bookdown-demo/edit/master/02-intro.Rmd",
+"link": "https://github.com/wikiselev/bookdown-demo/edit/master/14-remove-conf-reads.Rmd",
 "text": "Edit"
 },
 "download": null,

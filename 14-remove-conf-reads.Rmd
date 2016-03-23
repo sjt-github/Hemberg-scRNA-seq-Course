@@ -1,0 +1,58 @@
+---
+knit: bookdown::preview_chapter
+---
+
+# Remove confounders using controls (Reads)
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(scRNA.seq.funcs)
+library(RUVSeq)
+library(scater, quietly = TRUE)
+library(knitr)
+options(stringsAsFactors = FALSE)
+opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
+reads <- readRDS("blischak/reads.rds")
+reads.qc <- reads[fData(reads)$use, pData(reads)$use]
+endog_genes <- !fData(reads.qc)$is_feature_control
+```
+
+```{r rm-conf-brennecke-reads, fig.cap = "Results of using the Brennecke method on the Blischak dataset", fig.asp=1}
+reads.qc <- 
+    scater::normaliseExprs(reads.qc,
+                           method = "RLE",
+                           feature_set = endog_genes,
+                           lib.size = rep(1, ncol(reads.qc)))
+erccs <- grep("ERCC-", rownames(assayData(reads.qc)$norm_counts))
+highly.var.genes <- scRNA.seq.funcs::Brennecke_getVariableGenes(
+            assayData(reads.qc)$norm_counts,
+            erccs
+)
+```
+
+```{r}
+assayData(reads.qc)$ruv_counts <- RUVSeq::RUVg(
+    round(assayData(reads.qc)$norm_counts),
+    erccs,
+    k = 1)$normalizedCounts
+```
+
+```{r rm-conf-pca-rle-reads, fig.cap = "PCA plot of the blischak data after RLE normalisation"}
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "norm_counts")
+```
+
+```{r rm-conf-pca-rle-ruv-reads, fig.cap = "PCA plot of the blischak data after RLE and RUV normalisations"}
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "ruv_counts")
+```
+
+```{r rm-conf-rle-comp-reads, fig.cap = "Comparison of the relative log expression of the blischak data before and after the RUV normalisation"}
+boxplot(list(scRNA.seq.funcs::calc_cell_RLE(assayData(reads.qc)$norm_counts),
+             scRNA.seq.funcs::calc_cell_RLE(assayData(reads.qc)$ruv_counts)))
+```

@@ -18,6 +18,7 @@ endog_genes <- !fData(reads.qc)$is_feature_control
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
+                shape_by = "individual",
                 exprs_values = "counts")
 ```
 
@@ -25,6 +26,7 @@ scater::plotPCA(reads.qc[endog_genes, ],
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
+                shape_by = "individual",
                 exprs_values = "cpm")
 ```
 
@@ -32,6 +34,7 @@ scater::plotPCA(reads.qc[endog_genes, ],
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
+                shape_by = "individual",
                 exprs_values = "exprs")
 ```
 
@@ -89,22 +92,6 @@ reads.qc <-
                               biomart = "ENSEMBL_MART_ENSEMBL", 
                               dataset = "hsapiens_gene_ensembl",
                               host = "www.ensembl.org")
-
-# If you have mouse data, change the arguments based on this example:
-# scater::getBMFeatureAnnos(object,
-#                           filters = "ensembl_transcript_id", 
-#                           attributes = c("ensembl_transcript_id", 
-#                                        "ensembl_gene_id", "mgi_symbol", 
-#                                        "chromosome_name",
-#                                        "transcript_biotype",
-#                                        "transcript_start",
-#                                        "transcript_end", 
-#                                        "transcript_count"), 
-#                           feature_symbol = "mgi_symbol",
-#                           feature_id = "ensembl_gene_id",
-#                           biomart = "ENSEMBL_MART_ENSEMBL", 
-#                           dataset = "mmusculus_gene_ensembl",
-#                           host = "www.ensembl.org") 
 ```
 
 ```{r}
@@ -134,6 +121,7 @@ fpkm(reads.qc.ann) <-
 scater::plotPCA(reads.qc.ann,
                 colour_by = "batch",
                 size_by = "total_features",
+                shape_by = "individual",
                 exprs_values = "fpkm")
 ```
 

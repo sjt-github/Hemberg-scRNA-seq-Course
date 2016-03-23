@@ -4,7 +4,7 @@ knit: bookdown::preview_chapter
 
 # Confounding factors (Reads)
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
 library(knitr)
 options(stringsAsFactors = FALSE)

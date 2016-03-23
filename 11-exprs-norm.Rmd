@@ -23,7 +23,7 @@ Many methods to correct for library size have been developped for bulk RNA-seq a
 
 We will continue to work with the Blischak data that was used in the previous chapter and show how scater makes it easy to perform different types of size-factor normalizations.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
 library(knitr)
 options(stringsAsFactors = FALSE)
@@ -54,6 +54,7 @@ Let's compare all these methods.
 scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
+                shape_by = "individual",
                 exprs_values = "counts")
 ```
 
@@ -62,6 +63,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
 scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
+                shape_by = "individual",
                 exprs_values = "cpm")
 ```
 
@@ -70,6 +72,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
 scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
+                shape_by = "individual",
                 exprs_values = "exprs")
 ```
 
@@ -199,6 +202,7 @@ Plot the results as a PCA plot:
 scater::plotPCA(umi.qc.ann,
                 colour_by = "batch",
                 size_by = "total_features",
+                shape_by = "individual",
                 exprs_values = "fpkm")
 ```
 

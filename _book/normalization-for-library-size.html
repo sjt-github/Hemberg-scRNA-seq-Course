@@ -208,6 +208,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="12.7" data-path="normalization-for-library-size.html"><a href="normalization-for-library-size.html#exercise-3"><i class="fa fa-check"></i><b>12.7</b> Exercise</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="normalization-for-library-size-reads.html"><a href="normalization-for-library-size-reads.html"><i class="fa fa-check"></i><b>13</b> Normalization for library size (Reads)</a></li>
+<li class="chapter" data-level="14" data-path="remove-confounders-using-controls.html"><a href="remove-confounders-using-controls.html"><i class="fa fa-check"></i><b>14</b> Remove confounders using controls</a><ul>
+<li class="chapter" data-level="14.1" data-path="remove-confounders-using-controls.html"><a href="remove-confounders-using-controls.html#introduction-5"><i class="fa fa-check"></i><b>14.1</b> Introduction</a></li>
+<li class="chapter" data-level="14.2" data-path="remove-confounders-using-controls.html"><a href="remove-confounders-using-controls.html#brennecke-method"><i class="fa fa-check"></i><b>14.2</b> Brennecke method</a></li>
+<li class="chapter" data-level="14.3" data-path="remove-confounders-using-controls.html"><a href="remove-confounders-using-controls.html#remove-unwanted-variation"><i class="fa fa-check"></i><b>14.3</b> Remove Unwanted Variation</a></li>
+<li class="chapter" data-level="14.4" data-path="remove-confounders-using-controls.html"><a href="remove-confounders-using-controls.html#effectiveness-1"><i class="fa fa-check"></i><b>14.4</b> Effectiveness 1</a></li>
+<li class="chapter" data-level="14.5" data-path="remove-confounders-using-controls.html"><a href="remove-confounders-using-controls.html#effectiveness-2"><i class="fa fa-check"></i><b>14.5</b> Effectiveness 2</a></li>
+<li class="chapter" data-level="14.6" data-path="remove-confounders-using-controls.html"><a href="remove-confounders-using-controls.html#exercise-4"><i class="fa fa-check"></i><b>14.6</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="remove-confounders-using-controls-reads.html"><a href="remove-confounders-using-controls-reads.html"><i class="fa fa-check"></i><b>15</b> Remove confounders using controls (Reads)</a></li>
 <li class="divider"></li>
 <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2016</a></li>
 
@@ -241,13 +250,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Ideally, we would like to compensate for all of these differences and biases when comparing data from two different experiments.</p>
 <p>Many methods to correct for library size have been developped for bulk RNA-seq and can be equally applied to scRNA-seq (eg. UQ, SF, CPM, RPKM, FPKM, TPM). Some quantification methods (eg. <a href="http://cole-trapnell-lab.github.io/cufflinks/">Cufflinks</a>, <a href="http://deweylab.github.io/RSEM/">RSEM</a>) incorporated library size when determining gene expression estimates thus do not require this normalization.</p>
 <p>We will continue to work with the Blischak data that was used in the previous chapter and show how scater makes it easy to perform different types of size-factor normalizations.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scater, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
-<span class="kw">library</span>(knitr)
-<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-opts_chunk$<span class="kw">set</span>(<span class="dt">out.width=</span><span class="st">&#39;90%&#39;</span>, <span class="dt">fig.align =</span> <span class="st">&#39;center&#39;</span>)
-umi &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;blischak/umi.rds&quot;</span>)
-umi.qc &lt;-<span class="st"> </span>umi[<span class="kw">fData</span>(umi)$use, <span class="kw">pData</span>(umi)$use]
-endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(umi.qc)$is_feature_control</code></pre></div>
 </div>
 <div id="normalisations" class="section level2">
 <h2><span class="header-section-number">12.3</span> Normalisations</h2>

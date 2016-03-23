@@ -29,7 +29,7 @@ To illustrate how one can standardise the analysis of scRNA-seq data we will als
 
 ## Blischak dataset
 
-```{r message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
 library(knitr)
 options(stringsAsFactors = FALSE)

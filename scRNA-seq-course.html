@@ -214,6 +214,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#exercise-3"><span class="toc-section-number">12.7</span> Exercise</a></li>
 </ul></li>
 <li><a href="#normalization-for-library-size-reads"><span class="toc-section-number">13</span> Normalization for library size (Reads)</a></li>
+<li><a href="#remove-confounders-using-controls"><span class="toc-section-number">14</span> Remove confounders using controls</a><ul>
+<li><a href="#introduction-5"><span class="toc-section-number">14.1</span> Introduction</a></li>
+<li><a href="#brennecke-method"><span class="toc-section-number">14.2</span> Brennecke method</a></li>
+<li><a href="#remove-unwanted-variation"><span class="toc-section-number">14.3</span> Remove Unwanted Variation</a></li>
+<li><a href="#effectiveness-1"><span class="toc-section-number">14.4</span> Effectiveness 1</a></li>
+<li><a href="#effectiveness-2"><span class="toc-section-number">14.5</span> Effectiveness 2</a></li>
+<li><a href="#exercise-4"><span class="toc-section-number">14.6</span> Exercise</a></li>
+</ul></li>
+<li><a href="#remove-confounders-using-controls-reads"><span class="toc-section-number">15</span> Remove confounders using controls (Reads)</a></li>
 </ul>
 <!--bookdown:toc2:end-->
       </nav>
@@ -263,8 +272,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Other than that, before running the course exercises, all you need to do is to install the following packages in your R:</p>
 <p><a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a> for installing packages from GitHub:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</code></pre></div>
-<p><a href="https://github.com/hemberg-lab/scRNA.seq.course">scRNA.seq.course</a> - the main course package (it also contains all materials and slides in <strong>inst/materials</strong> folder):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;hemberg-lab/scRNA.seq.course&quot;</span>)</code></pre></div>
+<p><a href="https://github.com/hemberg-lab/scRNA.seq.funcs">scRNA.seq.funcs</a> - R package containing our own functions used in this course:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;hemberg-lab/scRNA.seq.funcs&quot;</span>)</code></pre></div>
 <p><a href="https://cran.r-project.org/web/packages/mvoutlier/index.html">mvoutlier</a> - for an automatic outlier detection in the <a href="https://github.com/davismcc/scater">scater</a> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;mvoutlier&quot;</span>)</code></pre></div>
 <p><a href="https://github.com/tallulandrews/M3D">M3D</a> for identification of important and DE genes, developed by <a href="http://www.sanger.ac.uk/people/directory/andrews-tallulah-s">Tallulah Andrews</a>:</p>
@@ -1844,13 +1853,6 @@ Let’s first look again at the PCA plot of the QCed dataset:
 <p>Ideally, we would like to compensate for all of these differences and biases when comparing data from two different experiments.</p>
 <p>Many methods to correct for library size have been developped for bulk RNA-seq and can be equally applied to scRNA-seq (eg. UQ, SF, CPM, RPKM, FPKM, TPM). Some quantification methods (eg. <a href="http://cole-trapnell-lab.github.io/cufflinks/">Cufflinks</a>, <a href="http://deweylab.github.io/RSEM/">RSEM</a>) incorporated library size when determining gene expression estimates thus do not require this normalization.</p>
 <p>We will continue to work with the Blischak data that was used in the previous chapter and show how scater makes it easy to perform different types of size-factor normalizations.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scater, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
-<span class="kw">library</span>(knitr)
-<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-opts_chunk$<span class="kw">set</span>(<span class="dt">out.width=</span><span class="st">&#39;90%&#39;</span>, <span class="dt">fig.align =</span> <span class="st">&#39;center&#39;</span>)
-umi &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;blischak/umi.rds&quot;</span>)
-umi.qc &lt;-<span class="st"> </span>umi[<span class="kw">fData</span>(umi)$use, <span class="kw">pData</span>(umi)$use]
-endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(umi.qc)$is_feature_control</code></pre></div>
 </div>
 <div id="normalisations" class="section level2">
 <h2><span class="header-section-number">12.3</span> Normalisations</h2>
@@ -2085,6 +2087,97 @@ Plot the results as a PCA plot:
 </p>
 </div>
 <!--chapter:end:12-exprs-norm-reads.Rmd-->
+</div>
+<div id="remove-confounders-using-controls" class="section level1">
+<h1><span class="header-section-number">14</span> Remove confounders using controls</h1>
+<div id="introduction-5" class="section level2">
+<h2><span class="header-section-number">14.1</span> Introduction</h2>
+<p>In the previous chapter we saw that the library size normalisation is able to remove major confounders. Let us see whether further use of the controls (ERCC and MT) can provide us with more insights into the data.</p>
+<p>Several methods (eg. <a href="https://github.com/catavallejos/BASiCS">BASiCS</a>, <a href="https://github.com/PMBio/scLVM">scLVM</a>, <a href="http://bioconductor.org/packages/release/bioc/html/RUVSeq.html">RUV</a>) have been developed for normalisation using ERCCs using different noise models and different fitting procedures.</p>
+<p>We will demonstrate some of the methods starting from the simplest one proposed by <a href="http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html">Brennecke et al.</a>, which identifies genes with significant variation above technical noise (ERCCs).</p>
+</div>
+<div id="brennecke-method" class="section level2">
+<h2><span class="header-section-number">14.2</span> Brennecke method</h2>
+<p>To use the method, we first normalize for library size then calculate the mean and the square coefficient of variation (variation divided by the squared mean expression). A curve is fit for the relationship between these two variables for the ERCC spike-in (subject to just technical variation) then a chi-square test is used to find genes significantly above the curve. This has been provided for you as the Brenneck_getVariableGenes(counts, spikes) function.</p>
+<pre><code>## Warning in scRNA.seq.funcs::Brennecke_getVariableGenes(assayData(umi.qc)
+## $norm_counts, : Only 21 spike-ins to be used in fitting, may result in poor
+## fit.</code></pre>
+<div class="figure" style="text-align: center">
+<img src="scRNA-seq-course_files/figure-html/rm-conf-brennecke-1.png" alt="(\#fig:rm-conf-brennecke)Results of using the Brennecke method on the Blischak dataset" width="90%" />
+<p class="caption">
+(#fig:rm-conf-brennecke)Results of using the Brennecke method on the Blischak dataset
+</p>
+</div>
+<p>In the figure above blue points are the ERCC spike-ins. The red curve is the fitted technical noise model and the dashed line is the 95% CI. Pink dots are the genes with significant biological variability after multiple-testing correction. Since our dataset is relatively homogeneous only 148 genes are identified as significantly variable.</p>
+</div>
+<div id="remove-unwanted-variation" class="section level2">
+<h2><span class="header-section-number">14.3</span> Remove Unwanted Variation</h2>
+<p>Factors contributing to technical noise frequently appear as “batch effects” where cells processed on different days or by different technicians systematically vary from one another. Removing technical noise and correcting for batch effects can frequently be performed using the same tool or slight variants on it. We will be considering the <a href="http://bioconductor.org/packages/release/bioc/html/RUVSeq.html">Remove Unwanted Variation (RUV)</a> method which uses <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">singular value decomposition</a> (similar to PCA) on subsets of the dataset which should be invariant (e.g. <a href="https://www.thermofisher.com/order/catalog/product/4456740">ERCC spike-ins</a>). Then the method removes the identified unwanted factors.</p>
+</div>
+<div id="effectiveness-1" class="section level2">
+<h2><span class="header-section-number">14.4</span> Effectiveness 1</h2>
+<p>We evaluate the effectiveness of the normalization by inspecting the PCA plot where shape corresponds the technical replicate and colour corresponds to different biological samples (individuals from whom the iPSC lines where derived). Separation of biological samples and interspersed batches indicates that technical variation has been removed.</p>
+<div class="figure" style="text-align: center">
+<img src="scRNA-seq-course_files/figure-html/rm-conf-pca-rle-1.png" alt="(\#fig:rm-conf-pca-rle)PCA plot of the blischak data after RLE normalisation" width="90%" />
+<p class="caption">
+(#fig:rm-conf-pca-rle)PCA plot of the blischak data after RLE normalisation
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="scRNA-seq-course_files/figure-html/rm-conf-pca-rle-ruv-1.png" alt="(\#fig:rm-conf-pca-rle-ruv)PCA plot of the blischak data after RLE and RUV normalisations" width="90%" />
+<p class="caption">
+(#fig:rm-conf-pca-rle-ruv)PCA plot of the blischak data after RLE and RUV normalisations
+</p>
+</div>
+</div>
+<div id="effectiveness-2" class="section level2">
+<h2><span class="header-section-number">14.5</span> Effectiveness 2</h2>
+<p>We can also examine the relative log expression (RLE) across cells to confirm technical noise has been removed from the dataset.</p>
+<div class="figure" style="text-align: center">
+<img src="scRNA-seq-course_files/figure-html/rm-conf-rle-comp-1.png" alt="(\#fig:rm-conf-rle-comp)Comparison of the relative log expression of the blischak data before and after the RUV normalisation" width="90%" />
+<p class="caption">
+(#fig:rm-conf-rle-comp)Comparison of the relative log expression of the blischak data before and after the RUV normalisation
+</p>
+</div>
+</div>
+<div id="exercise-4" class="section level2">
+<h2><span class="header-section-number">14.6</span> Exercise</h2>
+<p>Perform the same analysis with read counts of the Blischak data. Use <code>blischak/reads.rds</code> file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter). Additionally, experiment with other combinations of normalizations and compare the results.</p>
+<!--chapter:end:13-remove-conf.Rmd-->
+</div>
+</div>
+<div id="remove-confounders-using-controls-reads" class="section level1">
+<h1><span class="header-section-number">15</span> Remove confounders using controls (Reads)</h1>
+<pre><code>## Warning in scRNA.seq.funcs::Brennecke_getVariableGenes(assayData(reads.qc)
+## $norm_counts, : Only 17 spike-ins to be used in fitting, may result in poor
+## fit.</code></pre>
+<pre><code>## Warning in xy.coords(x, y, xlabel, ylabel, log): 7 x values &lt;= 0 omitted
+## from logarithmic plot</code></pre>
+<div class="figure" style="text-align: center">
+<img src="scRNA-seq-course_files/figure-html/rm-conf-brennecke-reads-1.png" alt="(\#fig:rm-conf-brennecke-reads)Results of using the Brennecke method on the Blischak dataset" width="90%" />
+<p class="caption">
+(#fig:rm-conf-brennecke-reads)Results of using the Brennecke method on the Blischak dataset
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="scRNA-seq-course_files/figure-html/rm-conf-pca-rle-reads-1.png" alt="(\#fig:rm-conf-pca-rle-reads)PCA plot of the blischak data after RLE normalisation" width="90%" />
+<p class="caption">
+(#fig:rm-conf-pca-rle-reads)PCA plot of the blischak data after RLE normalisation
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="scRNA-seq-course_files/figure-html/rm-conf-pca-rle-ruv-reads-1.png" alt="(\#fig:rm-conf-pca-rle-ruv-reads)PCA plot of the blischak data after RLE and RUV normalisations" width="90%" />
+<p class="caption">
+(#fig:rm-conf-pca-rle-ruv-reads)PCA plot of the blischak data after RLE and RUV normalisations
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="scRNA-seq-course_files/figure-html/rm-conf-rle-comp-reads-1.png" alt="(\#fig:rm-conf-rle-comp-reads)Comparison of the relative log expression of the blischak data before and after the RUV normalisation" width="90%" />
+<p class="caption">
+(#fig:rm-conf-rle-comp-reads)Comparison of the relative log expression of the blischak data before and after the RUV normalisation
+</p>
+</div>
+<!--chapter:end:14-remove-conf-reads.Rmd-->
 <div id="refs" class="references">
 
 </div>
