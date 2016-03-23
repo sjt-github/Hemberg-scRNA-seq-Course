@@ -4,7 +4,7 @@ git config --global user.name "wikiselev"
 
 # clone the repository to the book-output directory
 git clone -b master \
-  https://github.com/wikiselev/bookdown-demo.git \
+  https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git \
   book-output
 cd book-output
 rm -rf *
