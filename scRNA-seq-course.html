@@ -154,7 +154,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li><a href="#compare-filterings"><span class="toc-section-number">6.7</span> Compare filterings</a></li>
 <li><a href="#save-the-data"><span class="toc-section-number">6.8</span> Save the data</a></li>
-<li><a href="#big-exercise"><span class="toc-section-number">6.9</span> Big exercise</a></li>
+<li><a href="#exercise"><span class="toc-section-number">6.9</span> Exercise</a></li>
 </ul></li>
 <li><a href="#expression-qc-reads"><span class="toc-section-number">7</span> Expression QC (Reads)</a></li>
 <li><a href="#expression-overview"><span class="toc-section-number">8</span> Expression overview</a><ul>
@@ -175,7 +175,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#before-qc-3"><span class="toc-section-number">8.5.1</span> Before QC</a></li>
 <li><a href="#after-qc-3"><span class="toc-section-number">8.5.2</span> After QC</a></li>
 </ul></li>
-<li><a href="#exercise"><span class="toc-section-number">8.6</span> Exercise</a></li>
+<li><a href="#exercise-1"><span class="toc-section-number">8.6</span> Exercise</a></li>
 </ul></li>
 <li><a href="#expression-overview-reads"><span class="toc-section-number">9</span> Expression overview (Reads)</a></li>
 <li><a href="#confounding-factors"><span class="toc-section-number">10</span> Confounding factors</a><ul>
@@ -187,7 +187,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li><a href="#explanatory-variables"><span class="toc-section-number">10.3</span> Explanatory variables</a></li>
 <li><a href="#other-confounders"><span class="toc-section-number">10.4</span> Other confounders</a></li>
-<li><a href="#exercise-1"><span class="toc-section-number">10.5</span> Exercise</a></li>
+<li><a href="#exercise-2"><span class="toc-section-number">10.5</span> Exercise</a></li>
 </ul></li>
 <li><a href="#confounding-factors-reads"><span class="toc-section-number">11</span> Confounding factors (Reads)</a></li>
 <li><a href="#normalization-for-library-size"><span class="toc-section-number">12</span> Normalization for library size</a><ul>
@@ -211,7 +211,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#fpkm"><span class="toc-section-number">12.6.5</span> FPKM</a></li>
 <li><a href="#tpm"><span class="toc-section-number">12.6.6</span> TPM</a></li>
 </ul></li>
-<li><a href="#exercise-2"><span class="toc-section-number">12.7</span> Exercise</a></li>
+<li><a href="#exercise-3"><span class="toc-section-number">12.7</span> Exercise</a></li>
 </ul></li>
 <li><a href="#normalization-for-library-size-reads"><span class="toc-section-number">13</span> Normalization for library size (Reads)</a></li>
 </ul>
@@ -1136,8 +1136,8 @@ limma::<span class="kw">vennDiagram</span>(venn.diag,
 <p>Save the data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveRDS</span>(umi, <span class="dt">file =</span> <span class="st">&quot;blischak/umi.rds&quot;</span>)</code></pre></div>
 </div>
-<div id="big-exercise" class="section level2">
-<h2><span class="header-section-number">6.9</span> Big exercise</h2>
+<div id="exercise" class="section level2">
+<h2><span class="header-section-number">6.9</span> Exercise</h2>
 <p>Perform exactly the same QC analysis with read counts of the same Blischak data. Use <code>blischak/reads.txt</code> file to load the reads. Once you have finished please compare your results to ours (next chapter).</p>
 <!--chapter:end:05-exprs-qc.Rmd-->
 </div>
@@ -1675,7 +1675,7 @@ limma::<span class="kw">vennDiagram</span>(venn.diag,
 </div>
 </div>
 </div>
-<div id="exercise" class="section level2">
+<div id="exercise-1" class="section level2">
 <h2><span class="header-section-number">8.6</span> Exercise</h2>
 <p>Perform the same analysis with read counts of the Blischak data. Use <code>blischak/reads.rds</code> file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).</p>
 <!--chapter:end:07-exprs-overview.Rmd-->
@@ -1797,7 +1797,7 @@ Let’s first look again at the PCA plot of the QCed dataset:
 <h2><span class="header-section-number">10.4</span> Other confounders</h2>
 <p>In addition to correcting for batch, there are other factors that one may want to compensate for. As with batch correction, these adjustments require extrinsic information. One popular method is <a href="https://github.com/PMBio/scLVM">scLVM</a> which allows you to identify and subtract the effect from processes such as cell-cycle or apoptosis.</p>
 </div>
-<div id="exercise-1" class="section level2">
+<div id="exercise-2" class="section level2">
 <h2><span class="header-section-number">10.5</span> Exercise</h2>
 <p>Perform the same analysis with read counts of the Blischak data. Use <code>blischak/reads.rds</code> file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).</p>
 <!--chapter:end:09-confounders.Rmd-->
@@ -1998,7 +1998,7 @@ Plot the results as a PCA plot:
 </div>
 </div>
 </div>
-<div id="exercise-2" class="section level2">
+<div id="exercise-3" class="section level2">
 <h2><span class="header-section-number">12.7</span> Exercise</h2>
 <p>Perform the same analysis with read counts of the Blischak data. Use <code>blischak/reads.rds</code> file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).</p>
 <!--chapter:end:11-exprs-norm.Rmd-->
