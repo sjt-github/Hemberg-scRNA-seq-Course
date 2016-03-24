@@ -1,10 +1,15 @@
 language: R
 sudo: false
 cache: packages
+bioc_required: true
 
 install:
   - Rscript -e "if (!require('devtools')) install.packages('devtools')"
+  - Rscript -e "if (!require('knitr')) install.packages('knitr')"
   - Rscript -e "if (!require('bookdown')) devtools::install_github('rstudio/bookdown')"
+  - Rscript -e "if (!require('scater')) devtools::install_github('davismcc/scater')"
+  - Rscript -e "if (!require('scRNA.seq.funcs')) devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
+  - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')'}"
 
 before_script:
   - chmod +x ./_build.sh
