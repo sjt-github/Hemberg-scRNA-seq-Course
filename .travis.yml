@@ -1,7 +1,7 @@
 language: r
 r:
   - devel
-sudo: false
+sudo: true
 cache: packages
 bioc_required: true
 
