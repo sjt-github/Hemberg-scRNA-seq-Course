@@ -73,7 +73,7 @@ scater::plotQC(umi.qc[endog_genes, ],
 
 scater can also compute the marginal $R^2$ for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal $R^2$ values for the variables.
 
-```{r confound-find-expl-vars, fig.cap = "Explanatory variables", fig.asp=1}
+```{r confound-find-expl-vars, fig.cap = "Explanatory variables"}
 scater::plotQC(umi.qc[endog_genes, ],
                type = "expl",
                exprs_values = "counts",

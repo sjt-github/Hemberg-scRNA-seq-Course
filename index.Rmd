@@ -18,7 +18,7 @@ In this course we will be surveying the existing problems as well as the availab
 
 ## Registration  
 
-<a href="http://training.csx.cam.ac.uk/bioinformatics/event/1626698" target="blank">http://training.csx.cam.ac.uk/bioinformatics/event/1626698</a>
+<a href="http://training.csx.cam.ac.uk/bioinformatics/event/1755391" target="blank">http://training.csx.cam.ac.uk/bioinformatics/event/1755391</a>
 
 ## GitHub
 <a href="https://github.com/hemberg-lab/scRNA.seq.course" target="blank">https://github.com/hemberg-lab/scRNA.seq.course</a>
