@@ -2,8 +2,9 @@ language: R
 sudo: false
 cache: packages
 
-r_github_packages:
-  - rstudio/bookdown
+install:
+  - Rscript -e "if (!require('devtools')) install.packages('devtools')"
+  - Rscript -e "if (!require('bookdown')) devtools::install_github('rstudio/bookdown')"
 
 before_script:
   - chmod +x ./_build.sh
