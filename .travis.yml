@@ -1,9 +1,11 @@
 language: r
 r:
   - devel
-sudo: true
-cache: packages
-bioc_required: true
+sudo: false
+cache:
+  packages: yes
+  directories:
+    - $TRAVIS_BUILD_DIR/_book/_bookdown_files
 
 install:
   - Rscript -e "if (!require('devtools')) install.packages('devtools')"
