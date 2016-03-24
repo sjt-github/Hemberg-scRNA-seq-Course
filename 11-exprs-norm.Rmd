@@ -23,11 +23,14 @@ Many methods to correct for library size have been developped for bulk RNA-seq a
 
 We will continue to work with the Blischak data that was used in the previous chapter and show how scater makes it easy to perform different types of size-factor normalizations.
 
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(out.width='90%', fig.align = 'center')
+```
+
 ```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
-library(knitr)
 options(stringsAsFactors = FALSE)
-opts_chunk$set(out.width='90%', fig.align = 'center')
 umi <- readRDS("blischak/umi.rds")
 umi.qc <- umi[fData(umi)$use, pData(umi)$use]
 endog_genes <- !fData(umi.qc)$is_feature_control

@@ -29,11 +29,14 @@ To illustrate how one can standardise the analysis of scRNA-seq data we will als
 
 ## Blischak dataset
 
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(out.width='90%', fig.align = 'center')
+```
+
 ```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
-library(knitr)
 options(stringsAsFactors = FALSE)
-opts_chunk$set(out.width='90%', fig.align = 'center')
 ```
 
 Load the data and annotations:
