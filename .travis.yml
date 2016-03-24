@@ -9,6 +9,7 @@ install:
   - Rscript -e "if (!require('devtools')) install.packages('devtools')"
   - Rscript -e "if (!require('knitr')) install.packages('knitr')"
   - Rscript -e "if (!require('mvoutlier')) install.packages('mvoutlier')"
+  - Rscript -e "if (!require('Rtsne')) install.packages('Rtsne')"
   - Rscript -e "if (!require('bookdown')) devtools::install_github('rstudio/bookdown')"
   - Rscript -e "if (!require('scater')) devtools::install_github('davismcc/scater')"
   - Rscript -e "if (!require('scRNA.seq.funcs')) devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
