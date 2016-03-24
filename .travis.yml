@@ -13,6 +13,7 @@ install:
   - Rscript -e "if (!require('scater')) devtools::install_github('davismcc/scater')"
   - Rscript -e "if (!require('scRNA.seq.funcs')) devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
   - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
+  - Rscript -e "if (!require('destiny')) {source('https://bioconductor.org/biocLite.R');biocLite('destiny')}"
 
 before_script:
   - chmod +x ./_build.sh
