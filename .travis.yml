@@ -1,9 +1,16 @@
-language: r
+## Sample .travis.yml file for use with metacran/r-builder
+## See https://github.com/metacran/r-builder for details.
 
-r_github_packages:
-  - rstudio/bookdown
+language: c
+sudo: required
 
-install: true
+before_install:
+  - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
+  - chmod 755 pkg-build.sh
+  - ./pkg-build.sh bootstrap
+
+install:
+  - ./pkg-build.sh rstudio/bookdown
 
 before_script:
   - chmod +x ./_build.sh
