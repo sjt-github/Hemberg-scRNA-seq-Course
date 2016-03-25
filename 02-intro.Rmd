@@ -7,7 +7,7 @@ knit: bookdown::preview_chapter
 ## Bulk RNA-seq
 
 * A major breakthrough (replaced microarrays) in the late 00's and has been widely used since
-* Provides an __average expression level__ for each gene from a large population of input cells
+* Measures the __average expression level__ for each gene across a large population of input cells
 * Useful for comparative transcriptomics, e.g. samples of the same tissue from different species
 * Useful for quantifying expression signatures from ensembles, e.g. in disease studies
 * __Insufficient__ for studying heterogeneous systems, e.g. early development studies, complex tissues (brain)
@@ -16,8 +16,8 @@ knit: bookdown::preview_chapter
 ## scRNA-seq
 
 * A __new__ technology, first publication by [Tang et al](http://www.nature.com/nmeth/journal/v6/n5/abs/nmeth.1315.html) in 2009
-* Instead of providing an average of expression of a population of cells, scRNA-seq provides a __distribution of expression levels__ from a population of cells
-* Allows to study new biological questions in which __cell-specific changes in transcriptome are important__, e.g. cell type identification, inference of gene regulatory networks across the cells, stochastic component of transcription
+* Measures the __distribution of expression levels__ for each gene across a population of cells
+* Allows to study new biological questions in which __cell-specific changes in transcriptome are important__, e.g. cell type identification, heterogeneity of cell responses, stochasticity of gene expression, inference of gene regulatory networks across the cells.
 * Datasets range __from $10^2$ to $10^4$ cells__ and increase in size every year
 * Currently there are several different protocols in use, e.g. [SMART-seq2](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2639.html), [CELL-seq](http://www.cell.com/cell-reports/abstract/S2211-1247%2812%2900228-8) and [Drop-seq](http://mccarrolllab.com/dropseq/)
 * Several computational analysis methods from bulk RNA-seq __can__ be used
@@ -31,14 +31,10 @@ image from [Wikipedia - Single cell sequencing](https://en.wikipedia.org/wiki/Si
 
 Overall, experimental scRNA-seq protocols are similar to the methods used for bulk RNA-seq. For a discussion on experimental methods, please see reviews by [Saliba et al](http://nar.oxfordjournals.org/content/42/14/8845), [Handley et al](http://www.sciencedirect.com/science/article/pii/S1097276515003068)  or [Kolodziejczyk et al](http://www.sciencedirect.com/science/article/pii/S1097276515002610).
 
-## Analysis
+## Computational Analysis
 
 This course is concerned with the computational analysis of the data
-obtained from scRNA-seq experiments. Even though the format of the
-data is the same as for bulk RNA-seq, the fact that individual cells
-are sampled means that the data __should__ be analyzed differently. We
-will provide an overview of how to process a scRNA-seq sample and how
-to analyze the data to provide biological insights.
+obtained from scRNA-seq experiments. The first steps (yellow) are general for any highthroughput sequencing data. Later steps (orange) require a mix of existing RNASeq analysis methods and novel methods to address the technical difference of scRNASeq. Finally the biological interpretation __should__ be analyzed with methods specific to scRNASeq.
 
 ![](figures/flowchart.png)
 
@@ -57,10 +53,10 @@ In both cases the discrepancies are introduced due to low starting transcript am
 
 To address challenges in technical variation between scRNA sequencing libraries two quantitative standards were introduced. They allow to normalize gene expression levels across different cells.
 
-### ERCC _spike-ins_
+### Spike-ins
 
-One standard, strongly recommended for all scRNA-seq experiments is to use extrinsic _spike-in_ molecules. These molecules are added to the lysate before the reverse transcription. The most popular and widely used artificial spike-ins are from [External RNA Control Consortium (ERCC)](https://www.thermofisher.com/order/catalog/product/4456740). It contains 92 synthetic spikes based on bacterial sequences. Normalization using _spike-ins_ is based on the fact that the number of molecules of each _spike-in_ RNA species should be the same across all single-cell libraries.
+Spike-ins are extrinsic RNA molecules of known concentration which are added to the lysate of each cell prior to the reverse transcription reaction. The most popular and widely used spike-ins are synthetic spikes from the [External RNA Control Consortium (ERCC)](https://www.thermofisher.com/order/catalog/product/4456740). This set of 96 synthetic mRNAs of differing length and GC content based on bacterial sequences ([Jiang et al.](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166838/)).
 
 ### UMIs
 
-Another method of standartisation is to use [Unique Molecular Identifiers (UMIs)](http://www.nature.com/nmeth/journal/v9/n1/full/nmeth.1778.html). Instead of sequencing the amplified reads from a cell library, it allows for sequencing reads derived solely from 3' or 5' end of the amplified transcript. UMIs are added as barcodes to the individual RNA molecules. This approach provides an estimate of the number of transcripts that is independent of amplification biases.
+Another method of standardisation is to use [Unique Molecular Identifiers (UMIs)](http://www.nature.com/nmeth/journal/v9/n1/full/nmeth.1778.html). These are 4-20 bp barcode sequences which are added to the 3' or 5' end of each transcript prior to amplification (typically during reverse transcription). This is usually followed by targetted sequencing of the respective end of the transcripts. These barcodes enable the estimate of the number of transcripts without amplification biases.
