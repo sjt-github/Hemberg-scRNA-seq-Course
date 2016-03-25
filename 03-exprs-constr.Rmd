@@ -6,33 +6,27 @@ knit: bookdown::preview_chapter
 
 ## Reads QC
 
-The output from a scRNA-seq experiment is a large collection of short
-cDNA reads. The first step is to ensure that the reads are of high
-quality. In application to scRNA-seq, this can be performed by using standard bulk RNA-seq QC tools, such as [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) or [Kraken](http://www.ebi.ac.uk/research/enright/software/kraken). Currently, there are no specialized tools for scRNA-seq
-available, so we use
-[FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
+The output from a scRNA-seq experiment is a large collection of high throughput sequencing reads. The first step is to ensure that the reads are of high quality. This can be performed by using standard tools, such as [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) or [Kraken](http://www.ebi.ac.uk/research/enright/software/kraken). 
 
 Assuming that our reads are in experiment.bam, we run FastQC as
 ```
 $<path_to_fastQC>/fastQC experiment.bam
 ```
 
-Below is an example of the output from FastQC for a dataset of 125 bp
-reads. Here, the quality of the reads is overall high, so we can
-proceed the analysis with confidence.
+Below is an example of the output from FastQC for a dataset of 125 bp reads. It reveals a technical error which resulted in a couple bases failing to be read correctly in the centre of the read. However, since the rest of the read was of high quality this had a negligible effect on mapping efficiency.
 
 ![](figures/per_base_quality.png)
 
-Additionally, the data can be visualized using the [Integrative Genomics Browser (IGV)](https://www.broadinstitute.org/igv/).
+Additionally, the data can be visualized using the [Integrative Genomics Browser (IGV)](https://www.broadinstitute.org/igv/) or [SeqMonk](http://www.bioinformatics.babraham.ac.uk/projects/seqmonk/).
 
 ## Reads alignment
 
-Once the low-quality reads have been removed, the remaining reads can
-be mapped to a reference genome. Again, there are no special purpose
-methods for this, so we can use the
+After trimming low quality bases from reads, the remaining sequences can
+be mapped to a reference genome. Again, there are no need for a special purpose
+method for this, so we can use the
 [STAR](https://github.com/alexdobin/STAR) or the [TopHat](https://ccb.jhu.edu/software/tophat/index.shtml) aligner.
 
-An example of how to map reads.bam to using STAR hg38 is
+An example of how to map reads.bam to using STAR is
 
 ```
 $<path_to_STAR>/STAR --runThreadN 1 --runMode alignReads
@@ -42,7 +36,7 @@ $<path_to_STAR>/STAR --runThreadN 1 --runMode alignReads
 
 __Note__, if the _spike-ins_ are used, the reference sequence should be augmented with the DNA sequence of the _spike-in_ molecules before mapping.
 
-__Note__, when UMIs are used, their barcodes should be removed from every read.
+__Note__, when UMIs are used, their barcodes should be removed the read sequence and is typically added to the read name.
 
 Once we have mapped the reads for each cell to the reference genome,
 we need to make sure that a sufficient number of reads from each cell
@@ -61,8 +55,8 @@ they have been sorted in ascending order by the total number of reads
 per cell. The three red arrows indicate cells that are outliers in
 terms of their coverage and they should be removed from further
 analysis. The two yellow arrows point to cells with a surprisingly
-large number of unmapped reads. However, we deem the discrepancy as
-small and we retain the cells for now.
+large number of unmapped reads, these cells were later removed during 
+cell QC due to a high proportion of ribosomal RNA reads. 
 
 ![](figures/Bergiers_exp1_mapping_by_cell.png)
 
@@ -93,4 +87,4 @@ developed for bulk RNA-seq data, e.g. [HT-seq](http://www-huber.embl.de/users/an
 <featureCounts_path>/featureCounts -Q 30 -p -a genome.gtf -o outputfile input.bam
 ```
 
-__Note__, when UMIs are used, the expression counts can be collapsed by summing the number of unique barcodes associated with all reads mapped to a given gene.
+__Note__, when UMIs are used, the expression counts can be collapsed by summing the number of unique barcodes associated with all reads mapped to a given gene. [UMI-tools](https://github.com/CGATOxford/UMI-tools) provides several methods to do this collapsing accounting for possible sequencing errors.
