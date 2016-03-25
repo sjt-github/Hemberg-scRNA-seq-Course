@@ -51,24 +51,6 @@ scater::plotQC(umi.qc[endog_genes, ],
 
 Indeed, we can see that PC1 can be completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
 
-### Control ERCCs
-
-```{r confound-find-pcs-erccs, fig.cap = "PC correlation with the percentage of reads in ERCCs", fig.asp=1}
-scater::plotQC(umi.qc[endog_genes, ],
-               type = "find-pcs",
-               variable = "pct_counts_feature_controls_ERCC")
-```
-
-### Control MTs
-
-```{r confound-find-pcs-mts, fig.cap = "PC correlation with the percentage of reads in MT genes", fig.asp=1}
-scater::plotQC(umi.qc[endog_genes, ],
-               type = "find-pcs",
-               variable = "pct_counts_feature_controls_MT")
-```
-
-
-
 ## Explanatory variables
 
 scater can also compute the marginal $R^2$ for each variable when fitting a linear model regressing expression values for each gene against just that variable, and display a density plot of the gene-wise marginal $R^2$ values for the variables.
