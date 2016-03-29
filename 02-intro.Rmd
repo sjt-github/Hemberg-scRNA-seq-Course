@@ -21,7 +21,7 @@ knit: bookdown::preview_chapter
 * Datasets range __from $10^2$ to $10^4$ cells__ and increase in size every year
 * Currently there are several different protocols in use, e.g. [SMART-seq2](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2639.html), [CELL-seq](http://www.cell.com/cell-reports/abstract/S2211-1247%2812%2900228-8) and [Drop-seq](http://mccarrolllab.com/dropseq/)
 * Several computational analysis methods from bulk RNA-seq __can__ be used
-* __In most cases__ requires adaptation of the existing methods or development of new ones
+* __In most cases__ computational analysis requires adaptation of the existing methods or development of new ones
 
 ## Protocol
 
@@ -34,7 +34,7 @@ Overall, experimental scRNA-seq protocols are similar to the methods used for bu
 ## Computational Analysis
 
 This course is concerned with the computational analysis of the data
-obtained from scRNA-seq experiments. The first steps (yellow) are general for any highthroughput sequencing data. Later steps (orange) require a mix of existing RNASeq analysis methods and novel methods to address the technical difference of scRNASeq. Finally the biological interpretation __should__ be analyzed with methods specific to scRNASeq.
+obtained from scRNA-seq experiments. The first steps (yellow) are general for any highthroughput sequencing data. Later steps (orange) require a mix of existing RNASeq analysis methods and novel methods to address the technical difference of scRNASeq. Finally the biological interpretation __should__ be analyzed with methods specifically developed for scRNASeq.
 
 ![](figures/flowchart.png)
 
@@ -47,11 +47,11 @@ The main difference between bulk and single cell RNA-seq is that each sequencing
 * __Amplification__ (up to 1 million fold)
 * __Gene 'dropouts'__ in which a gene is observed at a moderate expression level in one cell but is not detected in another cell ([Kharchenko et al](http://www.nature.com/nmeth/journal/v11/n7/full/nmeth.2967.html)).
 
-In both cases the discrepancies are introduced due to low starting transcript amount (from one cell only) and have yet to be addressed by improving the experimental protocol.
+In both cases the discrepancies are introduced due to low starting amounts of transcripts since the RNA comes from one cell only. Improving the transcript capture efficiency and reducing the amplification bias are currently active areas of research.
 
 ## Controls
 
-To address challenges in technical variation between scRNA sequencing libraries two quantitative standards were introduced. They allow to normalize gene expression levels across different cells.
+To provide better estimates of the technical variation between scRNA sequencing libraries two quantitative standards are frequently used. The aim of using spike-ins and UMIs is to facilitate normalization of gene expression levels across different cells.
 
 ### Spike-ins
 
@@ -59,4 +59,4 @@ Spike-ins are extrinsic RNA molecules of known concentration which are added to 
 
 ### UMIs
 
-Another method of standardisation is to use [Unique Molecular Identifiers (UMIs)](http://www.nature.com/nmeth/journal/v9/n1/full/nmeth.1778.html). These are 4-20 bp barcode sequences which are added to the 3' or 5' end of each transcript prior to amplification (typically during reverse transcription). This is usually followed by targetted sequencing of the respective end of the transcripts. These barcodes enable the estimate of the number of transcripts without amplification biases.
+Another method of standardisation is to use [Unique Molecular Identifiers (UMIs)](http://www.nature.com/nmeth/journal/v9/n1/full/nmeth.1778.html). These are 4-20 bp barcode sequences which are added to the 3' or 5' end of each transcript prior to amplification (typically during reverse transcription). This is usually followed by targetted sequencing of the respective end of the transcripts. The barcodes make it possible to quantify the number of transcripts prior to the amplification step.
