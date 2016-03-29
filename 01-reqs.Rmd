@@ -1,15 +1,15 @@
 
 # Technical requirements
 
-We tried to make this course purely [R-based](https://www.r-project.org/). However, one of the methods that we describe ([SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)) is only partly R-based. It makes a simple _python_ call from R and requires a user to have rights to write to the current directory. You also need to download [this file](http://bioinfo.uncc.edu/SNNCliq/Cliq.txt) and put it in `~/snn-cliq/` directory.
+This course is based on the popular programming language [R](https://www.r-project.org/). However, one of the methods that we describe ([SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)) is only partly R-based. It makes a simple _python_ call from R and requires a user to have write permissions to the current directory. You also need to download [this file](http://bioinfo.uncc.edu/SNNCliq/Cliq.txt) and put it in the `~/snn-cliq/` directory.
 
-Other than that, before running the course exercises, all you need to do is to install the following packages in your R:
+Before running the course exercises, you also need to install the following R packages:
 
 [devtools](https://cran.r-project.org/web/packages/devtools/index.html) for installing packages from GitHub:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 install.packages("devtools")
 ```
-[scRNA.seq.funcs](https://github.com/hemberg-lab/scRNA.seq.funcs) - R package containing our own functions used in this course:
+[scRNA.seq.funcs](https://github.com/hemberg-lab/scRNA.seq.funcs) - R package containing our functions used in this course:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 devtools::install_github("hemberg-lab/scRNA.seq.funcs")
 ```
@@ -43,14 +43,14 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("limma")
 ```
 
-[DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) for calculation of DE genes:
+[DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) for identification of differentially expressed genes:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
 biocLite("DESeq2")
 ```
 
-[scde](http://hms-dbmi.github.io/scde/) for calculation of DE genes:
+[scde](http://hms-dbmi.github.io/scde/) for identification of differentially expressed genes:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 devtools::install_github("hms-dbmi/scde", build_vignettes = FALSE)
 ```
@@ -63,12 +63,12 @@ sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /
 
 * See the [help page](http://hms-dbmi.github.io/scde/help.html) for additional support.
 
-[pheatmap](https://cran.r-project.org/web/packages/pheatmap/index.html) for plotting good looking heatmaps:
+[pheatmap](https://cran.r-project.org/web/packages/pheatmap/index.html) for plotting heatmaps:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 install.packages("pheatmap")
 ```
 
-[pcaMethods](http://bioconductor.org/packages/release/bioc/html/pcaMethods.html) required by __pcaReduce__ package below for unsupervised clustering of scRNA-seq data:
+[pcaMethods](http://bioconductor.org/packages/release/bioc/html/pcaMethods.html) required by the __pcaReduce__ package below for unsupervised clustering of scRNA-seq data:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
