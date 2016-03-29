@@ -383,6 +383,8 @@ Save the data:
 saveRDS(umi, file = "blischak/umi.rds")
 ```
 
+If you want to further check yourself you can download our [`umi`](http://genat.uk/bookdown-demo/blischak/umi.rds) object. If you followed the steps above it should be exactly the same as yours.
+
 ## Exercise
 
 Perform exactly the same QC analysis with read counts of the same Blischak data. Use `blischak/reads.txt` file to load the reads. Once you have finished please compare your results to ours (next chapter).

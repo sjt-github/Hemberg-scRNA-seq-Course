@@ -255,3 +255,5 @@ dim(reads[fData(reads)$use, pData(reads)$use])
 ```{r}
 saveRDS(reads, file = "blischak/reads.rds")
 ```
+
+If you want to further check yourself you can download our [`reads`](http://genat.uk/bookdown-demo/blischak/reads.rds) object. If you followed the steps above it should be exactly the same as yours.
