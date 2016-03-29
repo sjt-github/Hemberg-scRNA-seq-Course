@@ -101,8 +101,9 @@ been broken or failed to capture a cell, thus should be removed.
 ```{r total-counts-hist, fig.cap = "Histogram of library sizes for all cells"}
 hist(
     umi$total_counts,
-    breaks = 100, title="Total UMI Counts"
+    breaks = 100
 )
+abline(v = 25000, col = "red")
 ```
 
 __Exercise__
@@ -114,7 +115,6 @@ total number of molecules for each cell should follow?
 __Answer__
 ```{r}
 filter_by_total_counts <- (umi$total_counts > 25000)
-abline(v=25000, col="red")
 ```
 
 ```{r}
@@ -135,9 +135,9 @@ or dead prior to capture.
 ```{r total-features-hist, fig.cap = "Histogram of the number of detected genes in all cells"}
 hist(
     umi$total_features,
-    breaks = 100, title= "Number of Detected Genes"
+    breaks = 100
 )
-abline(v=7000, col="red")
+abline(v = 7000, col = "red")
 ```
 
 Here we see that most cells have between 7,000-10,000 detected genes,
