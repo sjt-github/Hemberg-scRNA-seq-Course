@@ -7,7 +7,7 @@ git clone -b gh-pages \
   https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git \
   book-output
 cd book-output
-cp -r blischak .
+cp -r ../blischak .
 cp -r ../_book/* ./
 rm -rf _bookdown_files
 git add *
