@@ -6,18 +6,18 @@ knit: bookdown::preview_chapter
 
 ## Introduction
 
-[scater](https://github.com/davismcc/scater) is a single-cell analysis toolkit for expression with R. This package contains useful tools for the analysis of single-cell gene expression data using the statistical software R. The package places an emphasis on tools for quality control, visualisation and pre-processing of data before further downstream analysis.
+[scater](https://github.com/davismcc/scater) is a R package single-cell RNA-seq analysis. The package contains several useful methods for quality control, visualisation and pre-processing of data prior to further downstream analysis.
 
-[scater](https://github.com/davismcc/scater) enables the following:
+[scater](https://github.com/davismcc/scater) features the following functionality:
 
 * Automated computation of QC metrics
 * Transcript quantification from read data with pseudo-alignment
 * Data format standardisation
-* Rich visualisations for exploratory analysis
+* Rich visualizations for exploratory analysis
 * Seamless integration into the Bioconductor universe
 * Simple normalisation methods
 
-We highly recommend to use [scater](https://github.com/davismcc/scater) for any single-cell RNA-seq analysis you will be doing in the future. [scater](https://github.com/davismcc/scater) is the basis of the first part of the course and therefore we will spend some time explaining its details.
+We highly recommend to use [scater](https://github.com/davismcc/scater) for all single-cell RNA-seq analyses and [scater](https://github.com/davismcc/scater) is the basis of the first part of the course.
 
 ## scater workflow
 
@@ -45,4 +45,4 @@ In scater we organise single-cell expression data in objects of the __SCESet__ c
 
 For more details about other features inherited from Bioconductor’s __ExpressionSet__ class, type `?ExpressionSet` at the R prompt.
 
-When your data is wrapped in the __SCESet__ class, [scater](https://github.com/davismcc/scater) will do the dirty job of calculating different properties of the data automatically. You will see how it works in the next chapters.
+When the data are encapsulated in the __SCESet__ class, [scater](https://github.com/davismcc/scater) will automatically calculate several different properties. This will be demonstrated in the subsequent chapters.
