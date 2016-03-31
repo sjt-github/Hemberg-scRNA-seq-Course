@@ -2,4 +2,6 @@
 .Rhistory
 .RData
 .*.Rnb.cached
-push.sh
+.DS_*
+*/.DS_*
+*.Rproj
