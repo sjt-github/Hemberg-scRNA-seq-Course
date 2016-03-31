@@ -20,11 +20,11 @@ opts_chunk$set(fig.align = "center", echo=FALSE)
     
 ## scRNA-seq
 
-* A __new__ technology, first publication by [Tang et al](http://www.nature.com/nmeth/journal/v6/n5/abs/nmeth.1315.html) in 2009
+* A __new__ technology, first publication by [@Tang2009-bu]
 * Measures the __distribution of expression levels__ for each gene across a population of cells
 * Allows to study new biological questions in which __cell-specific changes in transcriptome are important__, e.g. cell type identification, heterogeneity of cell responses, stochasticity of gene expression, inference of gene regulatory networks across the cells.
 * Datasets range __from $10^2$ to $10^4$ cells__ and increase in size every year
-* Currently there are several different protocols in use, e.g. [SMART-seq2](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2639.html), [CELL-seq](http://www.cell.com/cell-reports/abstract/S2211-1247%2812%2900228-8) and [Drop-seq](http://mccarrolllab.com/dropseq/)
+* Currently there are several different protocols in use, e.g. SMART-seq2 [@Picelli2013-sb], CELL-seq [@Hashimshony2012-kd] and Drop-seq [@Macosko2015-ix]
 * Several computational analysis methods from bulk RNA-seq __can__ be used
 * __In most cases__ computational analysis requires adaptation of the existing methods or development of new ones
 
