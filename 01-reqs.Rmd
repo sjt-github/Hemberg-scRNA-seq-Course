@@ -1,3 +1,6 @@
+---
+knit: bookdown::preview_chapter
+---
 
 # Technical requirements
 
