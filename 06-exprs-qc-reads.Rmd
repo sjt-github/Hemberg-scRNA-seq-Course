@@ -57,33 +57,12 @@ reads <- scater::calculateQCMetrics(
 )
 ```
 
-```{r dropout-overview-reads, fig.cap = "Dropout rate vs mean expression"}
-scater::plotQC(reads, type = "exprs-freq-vs-mean")
-```
-
-```{r top50-gene-expr-reads, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
-scater::plotQC(reads, type = "highest-expression")
-```
-
-```{r}
-filter_genes <- apply(counts(reads), 1, function(x) length(x[x > 1]) >= 2)
-fData(reads)$use <- filter_genes
-```
-
-```{r}
-knitr::kable(
-    as.data.frame(table(filter_genes)),
-    booktabs = TRUE,
-    row.names = FALSE,
-    caption = 'The number of genes removed by gene filter (FALSE)'
-)
-```
-
 ```{r total-counts-hist-reads, fig.cap = "Histogram of library sizes for all cells"}
 hist(
     reads$total_counts,
     breaks = 100
 )
+abline(v = 1.3e6, col = "red")
 ```
 
 ```{r}
@@ -104,10 +83,11 @@ hist(
     reads$total_features,
     breaks = 100
 )
+abline(v = 7000, col = "red")
 ```
 
 ```{r}
-filter_by_expr_features <- (reads$total_features > 5000)
+filter_by_expr_features <- (reads$total_features > 7000)
 ```
 
 ```{r}
@@ -246,6 +226,28 @@ venn.diag <- limma::vennCounts(cbind(colnames(reads) %in% def,
 limma::vennDiagram(venn.diag,
                    names = c("Default", "Automatic", "Manual"),
                    circle.col = c("magenta", "blue", "green"))
+```
+
+```{r dropout-overview-reads, fig.cap = "Dropout rate vs mean expression"}
+scater::plotQC(reads, type = "exprs-freq-vs-mean")
+```
+
+```{r top50-gene-expr-reads, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
+scater::plotQC(reads, type = "highest-expression")
+```
+
+```{r}
+filter_genes <- apply(counts(reads), 1, function(x) length(x[x > 1]) >= 2)
+fData(reads)$use <- filter_genes
+```
+
+```{r}
+knitr::kable(
+    as.data.frame(table(filter_genes)),
+    booktabs = TRUE,
+    row.names = FALSE,
+    caption = 'The number of genes removed by gene filter (FALSE)'
+)
 ```
 
 ```{r}

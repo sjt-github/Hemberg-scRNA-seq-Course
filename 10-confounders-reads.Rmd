@@ -27,18 +27,6 @@ scater::plotQC(reads.qc[endog_genes, ],
                variable = "total_features")
 ```
 
-```{r confound-find-pcs-erccs-reads, fig.cap = "PC correlation with the percentage of reads in ERCCs", fig.asp=1}
-scater::plotQC(reads.qc[endog_genes, ],
-               type = "find-pcs",
-               variable = "pct_counts_feature_controls_ERCC")
-```
-
-```{r confound-find-pcs-mts-reads, fig.cap = "PC correlation with the percentage of reads in MT genes", fig.asp=1}
-scater::plotQC(reads.qc[endog_genes, ],
-               type = "find-pcs",
-               variable = "pct_counts_feature_controls_MT")
-```
-
 ```{r confound-find-expl-vars-reads, fig.cap = "Explanatory variables", fig.asp=1, eval=FALSE}
 scater::plotQC(reads.qc[endog_genes, ],
                type = "expl",
