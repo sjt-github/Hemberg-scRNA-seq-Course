@@ -109,7 +109,7 @@ scater::plotTSNE(umi.qc[endog_genes, ],
 Furthermore tSNE requires you to provide a value of "perplexity" which reflects the number of neighbours used to build the nearest-neighbour network; a high value creates a dense network which clumps cells together while a low value makes the network more sparse allowing groups of cells to separate from each other. __scater__ uses a default perplexity of the total number of cells divided by five (rounded down).
 
 __Exercise 2__
-How do the tSNE plots change when a perplexity of 10 or 500 is used?
+How do the tSNE plots change when a perplexity of 10 or 200 is used?
 
 __Our answer__
 
