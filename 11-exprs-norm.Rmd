@@ -223,9 +223,8 @@ scater::plotPCA(umi.qc.ann,
 
 __Note:__ The PCA primarily looks for difference between cells. Since gene lenth is the same across cells for each gene FPKM is almost identical to the CPM plot (it is just rotated). However, if we plot the mean expression vs gene length it is apparent that normalizing for gene length should not be performed for this dataset.
 ```{r length-vs-mean, fig.cap = "Gene length vs Mean Expression for the raw data"}
-plot(eff_length, rowMeans(umi.qc.ann))
+plot(eff_length, rowMeans(counts(umi.qc.ann)))
 ```
-
 
 TPM normalisation produce a zero-matrix, we are not sure why, it maybe a bug in scater.
 
