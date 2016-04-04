@@ -227,19 +227,19 @@ You would expect to see a group corresponding to the smaller cells (normal) with
 
 ## Cell filtering
 
-### Default
+### Default Thresholds
 
-By default scater will use 5-times the median absolute deviations _(How is "deviation" defined?)_ from the median value as a threshold to filter cells according to the number of detected genes, total counts and percent of counts assigned to control genes _(is this true? It seems odd that they would use a different method for this measure than the other)_ . In addition to any cells that have been marked as controls.
+By default scater will use 5-times the median absolute difference from the median value as a threshold to filter cells according to the number of detected genes, total counts. In addition to filtering out cells with >80% of counts assigned to control genes and any cells that have been marked as controls.
 
 ```{r}
 umi$use_default <- (
     # remove cells with unusual numbers of genes
     !umi$filter_on_total_features &
-    # sufficient molecules counted
+    # remove cells with unusual numbers molecules counted
     !umi$filter_on_total_counts &
-    # sufficient endogenous RNA
+    # < 80% ERCC spike-in
     !umi$filter_on_pct_counts_feature_controls_ERCC &
-    # remove cells with unusual number of reads in MT genes
+    # < 80% mitochondrial
     !umi$filter_on_pct_counts_feature_controls_MT &
     # controls shouldn't be used in downstream analysis
     !umi$is_cell_control
@@ -347,7 +347,7 @@ One can also look at the number of reads consumed by the top 50 expressed genes.
 scater::plotQC(umi, type = "highest-expression")
 ```
 
-The distribution relatively flat indicating good coverage of the full transcriptome of these cell.
+The distribution relatively flat indicating good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
 
 
 ## Gene filtering
