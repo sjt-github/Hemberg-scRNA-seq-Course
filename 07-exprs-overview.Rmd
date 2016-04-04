@@ -124,7 +124,7 @@ scater::plotTSNE(umi.qc[endog_genes, ],
                  rand_seed = 123456)
 ```
 
-```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the blischak data (perplexity = 500)", echo=FALSE}
+```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the blischak data (perplexity = 200)", echo=FALSE}
 scater::plotTSNE(umi.qc[endog_genes, ],
                  ntop = 500,
                  perplexity = 200,
