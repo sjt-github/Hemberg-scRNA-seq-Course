@@ -229,7 +229,7 @@ You would expect to see a group corresponding to the smaller cells (normal) with
 
 ### Default Thresholds
 
-By default scater will use 5-times the median absolute difference from the median value as a threshold to filter cells according to the number of detected genes, total counts. In addition to filtering out cells with >80% of counts assigned to control genes and any cells that have been marked as controls.
+Results from the biological analysis of single-cell RNA-seq data are often strongly influenced by outliers. Thus, it is important to include multiple filters. A robust way of detecting outliers is through the median absolute difference which is defined as $d_i = |r_i - m|$, where $r_i$ is the number of reads in cell $i$ and $m$ is the median number of reads across the all cells in the sample. By default, scater removes all cells where $d_i>$median($d_i$). A similar filter is used for the number of detected genes. Furthermore, scater removes all cells where $>$80% of counts were assigned to control genes and any cells that have been marked as controls.
 
 ```{r}
 umi$use_default <- (
@@ -268,6 +268,8 @@ By default, the following metrics are used for PCA-based outlier detection:
 * __log10_counts_endogenous_features__
 * __log10_counts_feature_controls__
 
+scater first creates a matrix where the rows represent cells and the columns represent the different QC metrics. Here, the PCA plot provides a 2D representation of cells ordered by their quality metrics. The outliers are then detected using methods from the mvoutlier package. 
+
 ```{r auto-cell-filt, fig.align='center', fig.cap="PCA plot used for automatic detection of cell outliers", message=FALSE, warning=FALSE, out.width='90%'}
 umi <-
 scater::plotPCA(umi,
@@ -289,7 +291,7 @@ knitr::kable(
 
 ### Manual
 
-However, since we performed a more detailed analysis, visualized different features and defined our own filters we can use them instead of the default ones:
+Another option in scater is to use your own filters. We define filters based on our previous analysis:
 
 ```{r}
 umi$use <- (
@@ -337,22 +339,24 @@ limma::vennDiagram(venn.diag,
 
 If your answer is different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/05-exprs-qc.Rmd) (you need to search for this exercise in the opened file).
 
-## Gene filtering
+## Gene analysis
 
 ### Gene expression
 
-One can also look at the number of reads consumed by the top 50 expressed genes.
+In addition to removing cells with poor quality, it is usually a good idea to exclude genes where we suspect that technical artefacts may have skewed the results. Moreover, inspection of the gene expression profiles may provide insights about how the experimental procedures could be imporved.
+
+It is often instructive to consider the number of reads consumed by the top 50 expressed genes.
 
 ```{r top50-gene-expr, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
 scater::plotQC(umi, type = "highest-expression")
 ```
 
-The distribution relatively flat indicating good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
+The distribution relatively flat indicating (but not guaraneeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
 
 
-## Gene filtering
+### Gene filtering
 
-We can remove genes whose expression level is considered __"undetectable"__. We define a detectable gene expression level, in which at least two cells contain more than 1 read mapping to the gene. If we were considering read counts rather than UMI counts typically at least five reads in at least two cells is considered the threshold for detectability. Note that genes must be filtered after cell filtering since some genes may be only detected in poor quality cells.
+It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It also important to keep in mind that genes must be filtered after cell filtering since some genes may be only detected in poor quality cells.
 
 ```{r}
 filter_genes <- apply(counts(umi), 1, function(x) length(x[x > 1]) >= 2)
