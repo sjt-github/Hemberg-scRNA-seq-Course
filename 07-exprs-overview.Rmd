@@ -20,6 +20,10 @@ library(scater, quietly = TRUE)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("blischak/umi.rds")
 umi.qc <- umi[fData(umi)$use, pData(umi)$use]
+# after QC we could get some genes with only 0 values
+# we need to remove those
+keep_feature <- rowSums(is_exprs(umi.qc)) > 0
+umi.qc <- umi.qc[keep_feature, ]
 endog_genes <- !fData(umi.qc)$is_feature_control
 ```
 
