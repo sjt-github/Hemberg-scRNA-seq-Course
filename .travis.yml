@@ -6,13 +6,6 @@ cache:
   packages: yes
   directories:
     - $TRAVIS_BUILD_DIR/_book/_bookdown_files
-    
-r_packages:
-  - devtools
-  - knitr
-  - mvoutlier
-  - Rtsne
-  - statmod
 
 bioc_packages:
   - RUVSeq
