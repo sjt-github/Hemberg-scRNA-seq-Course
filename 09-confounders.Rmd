@@ -50,7 +50,8 @@ Let's test whether some of the variables correlate with any of the PCs.
 ```{r confound-find-pcs-total-features, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
 scater::plotQC(umi.qc[endog_genes, ],
                type = "find-pcs",
-               variable = "total_features")
+               variable = "total_features",
+                exprs_values = "counts")
 ```
 
 Indeed, we can see that PC1 can be completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
@@ -81,6 +82,10 @@ adjustments require extrinsic information. One popular method is
 [scLVM](https://github.com/PMBio/scLVM) which allows you to identify
 and subtract the effect from processes such as cell-cycle or
 apoptosis.
+
+In addition, protocols may differ in terms of their coverage of each transcript, 
+their bias based on the average content of __A/T__ nucleotides, or their ability to capture short transcripts.
+Ideally, we would like to compensate for all of these differences and biases.
 
 ## Exercise
 
