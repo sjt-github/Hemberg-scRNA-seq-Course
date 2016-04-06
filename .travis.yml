@@ -3,21 +3,24 @@ r:
   - devel
 sudo: false
 cache:
-  packages: no
+  packages: yes
   directories:
     - $TRAVIS_BUILD_DIR/_book/_bookdown_files
+    
+r_packages:
+  - devtools
+  - knitr
+  - mvoutlier
+  - Rtsne
+  - statmod
 
-install:
-  - Rscript -e "if (!require('devtools')) install.packages('devtools')"
-  - Rscript -e "if (!require('knitr')) install.packages('knitr')"
-  - Rscript -e "if (!require('mvoutlier')) install.packages('mvoutlier')"
-  - Rscript -e "if (!require('Rtsne')) install.packages('Rtsne')"
-  - Rscript -e "if (!require('statmod')) install.packages('statmod')"
-  - Rscript -e "if (!require('bookdown')) devtools::install_github('rstudio/bookdown')"
-  - Rscript -e "if (!require('scater')) devtools::install_github('davismcc/scater', build_vignettes = TRUE)"
-  - Rscript -e "if (!require('scRNA.seq.funcs')) devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
-  - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
-  - Rscript -e "if (!require('destiny')) {source('https://bioconductor.org/biocLite.R');biocLite('destiny')}"
+bioc_packages:
+  - RUVSeq
+
+r_github_packages:
+  - rstudio/bookdown
+  - davismcc/scater
+  - hemberg-lab/scRNA.seq.funcs
 
 before_script:
   - chmod +x ./_build.sh
