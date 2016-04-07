@@ -5,3 +5,4 @@
 .DS_*
 */.DS_*
 *.Rproj
+.Rbuildignore
