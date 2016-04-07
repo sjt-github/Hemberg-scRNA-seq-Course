@@ -50,7 +50,8 @@ Let's test whether some of the variables correlate with any of the PCs.
 ```{r confound-find-pcs-total-features, fig.cap = "PC correlation with the number of detected genes", fig.asp=1}
 scater::plotQC(umi.qc[endog_genes, ],
                type = "find-pcs",
-               variable = "total_features")
+               variable = "total_features",
+               exprs_values = "counts")
 ```
 
 Indeed, we can see that PC1 can be completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
