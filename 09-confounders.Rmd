@@ -83,6 +83,10 @@ adjustments require extrinsic information. One popular method is
 and subtract the effect from processes such as cell-cycle or
 apoptosis.
 
+In addition, protocols may differ in terms of their coverage of each transcript, 
+their bias based on the average content of __A/T__ nucleotides, or their ability to capture short transcripts.
+Ideally, we would like to compensate for all of these differences and biases.
+
 ## Exercise
 
 Perform the same analysis with read counts of the Blischak data. Use `blischak/reads.rds` file to load the reads SCESet object. Once you have finished please compare your results to ours (next chapter).
