@@ -239,7 +239,8 @@ scater::plotQC(reads, type = "highest-expression")
 ```
 
 ```{r}
-filter_genes <- apply(counts(reads), 1, function(x) length(x[x > 1]) >= 2)
+filter_genes <- apply(counts(reads[, pData(reads)$use]), 1, 
+                      function(x) length(x[x > 1]) >= 2)
 fData(reads)$use <- filter_genes
 ```
 
