@@ -17,11 +17,11 @@ install:
   - Rscript -e "if (!require('ggplot2')) install.packages('ggplot2')"
   - Rscript -e "if (!require('bookdown')) devtools::install_github('rstudio/bookdown')"
   - Rscript -e "if (!require('BiocInstaller')) {source('https://bioconductor.org/biocLite.R');biocLite('BiocInstaller')}"
+  - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
   - Rscript -e "if (!require('scater')) devtools::install_github('davismcc/scater', build_vignettes = TRUE)"
   - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
   - Rscript -e "if (!require('scRNA.seq.funcs')) devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
   - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
-  - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
   - Rscript -e "if (!require('SC3')) {source('https://bioconductor.org/biocLite.R');biocLite('SC3')}"
 
 
