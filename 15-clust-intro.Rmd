@@ -31,23 +31,19 @@ significantly reduce the amount of noise. An additional benefit is
 that it is typically much easier to visualize the data in a 2 or
 3-dimensional subspace. Here we will introduce some of the popular dimensionality reduction methods.
 
-### PCA {#clust-pca}
+### PCA
 
-[Principal component analysis (PCA)](https://en.wikipedia.org/wiki/Principal_component_analysis) is a statistical procedure that uses a transformation to convert a set of observations into a set of values of linearly uncorrelated variables called principal components (PCs). The number of principal components is less than or equal to the number of original variables.
-
-PCA is defined in such a way that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components.
-
-```{r clust-pca, out.width = '100%', fig.cap="Schematic representation of PCA dimensionality reduction (taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html))"}
-knitr::include_graphics("figures/pca.png")
-```
+PCA analysis was introduced in chapter \@ref(visual-pca).
 
 ### Spectral
 
 Spectral decomposition is the factorization of a matrix into a canonical form, whereby the matrix is represented in terms of its eigenvalues and eigenvectors.
 
-In application to scRNA-seq data, the matrix can be either an input expression matrix, or matrix of distances between the cells. The computed eigenvectors are similar to the projections of the data to PCs (chapter \@ref(clust-pca)).
+In application to scRNA-seq data, the matrix can be either an input expression matrix, or matrix of distances between the cells. The computed eigenvectors are similar to the projections of the data to PCs (chapter \@ref(visual-pca).).
 
 ### tSNE
+
+tSNE analysis was introduced in chapter \@ref(visual-tsne).
 
 ## Clustering methods
 
@@ -119,6 +115,11 @@ on the concept of identifying groups of tightly connected nodes.
 * Utilises _k_-means
 * Additionally performs the consensus clustering
 
-### tSNE+_k_-means
+### tSNE + _k_-means
+
+* Based on tSNE maps
+* Utilises _k_-means
 
 ### [SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)
+
+* Based on finding the so-called "cliques" in a graph

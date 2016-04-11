@@ -6,7 +6,7 @@ knit: bookdown::preview_chapter
 
 ## Introduction
 
-In this chapter we will continue to work with the filtered __blischak__ dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. 
+In this chapter we will continue to work with the filtered __blischak__ dataset produced in the previous chapter. We will explore different ways of visualizing the data to allow you to asses what happened to the expression matrix after the quality control step. [scater](https://github.com/davismcc/scater) package provides several very useful functions to simplify visualisation. 
 
 One important aspect of single-cell RNA-seq is to control for batch effects. Batch effects are technical artefacts that are added to the samples during handling. For example, if two sets of samples were prepared in different labs or even on different days in the same lab, then we may observe greater similarities between the samples that were handled together. In the worst case scenario, batch effects may be [mistaken](http://f1000research.com/articles/4-121/v1) for true biological variation. The Blischak data allows us to explore these issues in a controlled manner since some of the salient aspects of how the samples were handled have been recorded. Ideally, we expect to see batches from the same individual grouping together and distinct groups corresponding to each individual. 
 
@@ -23,9 +23,17 @@ umi.qc <- umi[fData(umi)$use, pData(umi)$use]
 endog_genes <- !fData(umi.qc)$is_feature_control
 ```
 
-## PCA plot
+## PCA plot {#visual-pca}
 
-The easiest thing to overview the data is to transform it using the principal component analysis and then visualize the first two principal components. Again the [scater](https://github.com/davismcc/scater) package provides several very useful functions to make this analysis straightforward. 
+The easiest thing to overview the data is to transform it using the principal component analysis and then visualize the first two principal components.
+
+[Principal component analysis (PCA)](https://en.wikipedia.org/wiki/Principal_component_analysis) is a statistical procedure that uses a transformation to convert a set of observations into a set of values of linearly uncorrelated variables called principal components (PCs). The number of principal components is less than or equal to the number of original variables.
+
+PCA is defined in such a way that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components.
+
+```{r clust-pca, out.width = '100%', fig.cap="Schematic representation of PCA dimensionality reduction (taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html))"}
+knitr::include_graphics("figures/pca.png")
+```
 
 ### Before QC
 
@@ -78,11 +86,9 @@ scater::plotPCA(umi.qc[endog_genes, ],
 
 If your answers are different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/07-exprs-overview.Rmd) (you need to search for this exercise in the opened file).
 
-## tSNE map
+## tSNE map {#visual-tsne}
 
 An alternative to PCA for visualizing scRNASeq data is a tSNE plot. [tSNE](https://lvdmaaten.github.io/tsne/) (t-Distributed Stochastic Neighbor Embedding) combines dimensionality reduction (e.g. PCA) with random walks on the nearest-neighbour network to map high dimensional data (i.e. our 14,214 dimensional expression matrix) to a 2-dimensional space while preserving local distances between cells. In contrast with PCA, tSNE is a stochastic algorithm which means running the method multiple times on the same dataset will result in different plots. In the code below we fix the "seed" of the random-number generator so that we always get the same plot. 
-
-
 
 ### Before QC
 
