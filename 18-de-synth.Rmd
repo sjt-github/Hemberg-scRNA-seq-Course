@@ -27,7 +27,7 @@ modify it by multiplying by a normally distributed random factor.
 
 ```{r synthetic-sample}
 nGenes <- 1e2
-nCells <- 100
+nCells <- 50
 mult <- 2^(rnorm(nGenes, 0, 2))
 synData <- scRNA.seq.funcs::GeneratePoiBetaSamples(
     ks = 10^(rnorm(nGenes, 3, .5)),
