@@ -263,7 +263,8 @@ minSCDEInds <- apply(pValsSCDECombined, 2, which.min)
 pValsSCDE <- apply(pValsSCDECombined, 2, min)
 meanFoldChangeSCDE <- diag(rbind(resSCDE1$mle, resSCDE2$mle)[minSCDEInds, ])
 predSCDE <- ROCR::prediction(pValsSCDE, as.numeric(abs(log2(mult)) <= 2))
-plot(predSCDE)
+perfSCDE <- performance(predSCDE, "tpr", "fpr")
+plot(perfSCDE)  
 aucObjSCDE <- ROCR::performance(predSCDE, "auc")
 aucObjSCDE@y.values[[1]]
 ```
