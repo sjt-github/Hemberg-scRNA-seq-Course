@@ -2,7 +2,7 @@
 knit: bookdown::preview_chapter
 ---
 
-# Clustering analysis
+# Clustering analysis {#clust-methods}
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -78,7 +78,7 @@ case when all check boxes are checked.
 
 To run [pcaReduce](https://github.com/JustinaZ/pcaReduce) on the same dataset, use the following commands
 
-```{r clust-pca-reduce3, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$."}
+```{r clust-pca-reduce3, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$"}
 # use the same gene filter as in SC3
 input <- scRNA.seq.funcs::gene_filter(patient.data, 0.06)
 # log transform before the analysis
