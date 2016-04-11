@@ -134,7 +134,7 @@ To facilitate the plotting, we use the package "ROCR"
 ```{r synthetic-roc-curve-ks, fig.cap = "Different distributions of read counts for a single genes across 100 cells based on the Poisson-Beta model corresponding to different paramete sets"}
 pred <- ROCR::prediction(pVals, as.numeric(abs(log2(mult)) <= 2))
 perf <- ROCR::performance(pred, "tpr", "fpr")
-plot(perf)  
+ROCR::plot(perf)  
 ```
 
 Often we are interested in comparing several ROC curves. To carry out
@@ -175,7 +175,7 @@ Check the performance of DESeq2:
 pValsDESeq <- resDESeq$padj
 predDESeq <- prediction(pValsDESeq, as.numeric(abs(log2(mult)) <= 2))
 perfDESeq <- performance(predDESeq, "tpr", "fpr")
-plot(perfDESeq)  
+ROCR::plot(perfDESeq)  
 aucObjDESeq <- performance(predDESeq, "auc")
 aucObjDESeq@y.values[[1]]
 ```
@@ -264,7 +264,7 @@ pValsSCDE <- apply(pValsSCDECombined, 2, min)
 meanFoldChangeSCDE <- diag(rbind(resSCDE1$mle, resSCDE2$mle)[minSCDEInds, ])
 predSCDE <- ROCR::prediction(pValsSCDE, as.numeric(abs(log2(mult)) <= 2))
 perfSCDE <- performance(predSCDE, "tpr", "fpr")
-plot(perfSCDE)  
+ROCR::plot(perfSCDE)  
 aucObjSCDE <- ROCR::performance(predSCDE, "auc")
 aucObjSCDE@y.values[[1]]
 ```
@@ -320,58 +320,119 @@ variance, but not the mean. To generate the synthetic data, use the
 following command:
 ```{r synthetic-sample-fixed-mean, echo=TRUE}
 nGenes <- 1e2
-nCells <- 100
+nCells <- 50
 mult <- 2^(rnorm(nGenes, 0, 2))
-synData <- scRNA.seq.course::GeneratePoiBetaSamples(ks = 10^(rnorm(nGenes, 3, .5)),
-                                  as = 10^(rnorm(nGenes, -1, .5)),
-                                  bs = 10^(rnorm(nGenes, 0, .5)),
-                                  mult,
-                                  nGenes,
-                                  nCells,
-				  meanFixed = TRUE)
+synData <- scRNA.seq.funcs::GeneratePoiBetaSamples(
+    ks = 10^(rnorm(nGenes, 3, .5)),
+    as = 10^(rnorm(nGenes, -1, .5)),
+    bs = 10^(rnorm(nGenes, 0, .5)),
+    mult,
+    nGenes,
+    nCells,
+    meanFixed = TRUE
+)
 g <- synData$sample1
 g2 <- synData$sample2
 ```
 
-__Exercise:__ Run the KS, DESeq2 and SCDE methods on the synthetic
-data that was just generated and compare the AUC values. Which method
-performs the best? Why do some methods perform differently for this
-scenario? What are the properties of the genes that are identified as
-DE?
-
-```{r, message=FALSE, warning=FALSE, include=FALSE}
-# do NOT delete this
-# Comparison of KS-test and DESeq2
-nGenes <- 1e2
-nCells <- 1e2
-mult <- 2^(rnorm(nGenes, 0, 2))
-synData <- scRNA.seq.course::GeneratePoiBetaSamples(ks = 10^(rnorm(nGenes, 3, .5)),
-                                  as = 10^(rnorm(nGenes, -1, .5)),
-                                  bs = 10^(rnorm(nGenes, 0, .5)),
-                                  mult,
-                                  nGenes,
-                                  nCells,
-		                  meanFixed = TRUE)
-g <- synData$sample1
-g2 <- synData$sample2
+__Our answer__:
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# KS-test
 pVals <- rep(1, nGenes)
-for (i in 1:nGenes) { pVals[i] <- ks.test(g[i,], g2[i,])$p.value*nGenes }
-aucKSFixed <- ROCR::performance(ROCR::prediction(pVals, as.numeric(abs(log2(mult))<=2)),"auc")@y.values[[1]]
+for (i in 1:nGenes) {
+    res <- ks.test(g[i,], g2[i,])
+    # Bonferroni correction
+    pVals[i] <- res$p.value*nGenes
+}
+pred <- ROCR::prediction(pVals, as.numeric(abs(log2(mult)) <= 2))
+perf <- ROCR::performance(pred, "tpr", "fpr")
+ROCR::plot(perf)  
+aucObj <- ROCR::performance(pred, "auc")
+aucObj@y.values[[1]]
+
+# DESeq2
 cnts <- cbind(g, g2)
 cond <- factor(c(rep("A", ncol(g)),
                  rep("B", ncol(g2))))
 dds <- DESeq2::DESeqDataSetFromMatrix(cnts + 1, DataFrame(cond), ~ cond)
 dds <- DESeq2::DESeq(dds)
 resDESeq <- results(dds)
-aucDESeq2Fixed <- ROCR::performance(prediction(resDESeq$padj,
-                        as.numeric(abs(log2(mult))<=2)),"auc")@y.values[[1]]
+predDESeq <- ROCR::prediction(resDESeq$padj, as.numeric(abs(log2(mult)) <= 2))
+perfDESeq <- ROCR::performance(predDESeq, "tpr", "fpr")
+ROCR::plot(perfDESeq)  
+aucObj <- ROCR::performance(predDESeq, "auc")
+aucObj@y.values[[1]]
+
+# SCDE
+cnts <- cbind(g, g2)
+cnts <- apply(cnts, 2, function(x) {storage.mode(x) <- 'integer'; x})
+cond <- factor(c(rep("A", ncol(g)),
+                 rep("B", ncol(g2))))
+names(cond) <- 1:length(cnts[1, ])
+colnames(cnts) <- 1:length(cnts[1, ]) 
+o.ifm <- scde::scde.error.models(counts = cnts,
+                                 groups = cond,
+                                 n.cores = 1,
+                                 threshold.segmentation = TRUE,
+                                 save.crossfit.plots = FALSE,
+                                 save.model.plots = FALSE,
+                                 verbose = 0,
+                                 min.size.entries = 20)
+priors <- scde::scde.expression.prior(models = o.ifm,
+                                      counts = cnts,
+                                      length.out = 400,
+                                      show.plot = F)
+resSCDE1 <- scde::scde.expression.difference(o.ifm,
+                                             cnts,
+                                             priors,
+                                             groups = cond,
+                                             n.randomizations = 100,
+                                             n.cores = 1,
+                                             verbose = 0)
+pValsSCDE1 <- pnorm(resSCDE1$cZ, lower.tail = FALSE) 
+# Need to run the other way as well 
+cnts2 <- cbind(g2, g)
+cnts2 <- apply(cnts2, 2, function(x) {storage.mode(x) <- 'integer'; x})
+names(cond) <- 1:length(cnts2[1, ])
+colnames(cnts2) <- 1:length(cnts2[1, ]) 
+o.ifm <- scde::scde.error.models(counts = cnts2,
+                                 groups = cond,
+                                 n.cores = 1,
+                                 threshold.segmentation = TRUE,
+                                 save.crossfit.plots = FALSE,
+                                 save.model.plots = FALSE,
+                                 verbose = 0,
+                                 min.size.entries=20)
+priors <- scde::scde.expression.prior(models = o.ifm,
+                                      counts = cnts2,
+                                      length.out = 400,
+                                      show.plot = FALSE)
+resSCDE2 <- scde::scde.expression.difference(o.ifm,
+                                             cnts2,
+                                             priors,
+                                             groups=cond,
+                                             n.randomizations=100,
+                                             n.cores=1,
+                                             verbose=0)
+pValsSCDE2 <- pnorm(resSCDE2$cZ, lower.tail = FALSE) 
+
+pValsSCDECombined <- rbind(pValsSCDE1, pValsSCDE2)
+minSCDEInds <- apply(pValsSCDECombined, 2, which.min)
+pValsSCDE <- apply(pValsSCDECombined, 2, min)
+meanFoldChangeSCDE <- diag(rbind(resSCDE1$mle, resSCDE2$mle)[minSCDEInds, ])
+predSCDE <- ROCR::prediction(pValsSCDE, as.numeric(abs(log2(mult)) <= 2))
+perfSCDE <- ROCR::performance(predSCDE, "tpr", "fpr")
+ROCR::plot(perfSCDE)  
+aucObjSCDE <- ROCR::performance(predSCDE, "auc")
+aucObjSCDE@y.values[[1]]
 ```
+
+Which method
+performs the best? Why do some methods perform differently for this
+scenario? What are the properties of the genes that are identified as
+DE?
 
 ## Further comparisons
 
 To get more confidence in saying which method is better, the methods
 can be compared multiple times.
-
-__Exercise__: Generate synthetic data 100 times and determine the
-stability and consistency of the different methods. Note that it will
-take a considerable amount of time to run DESe2 and SCDE.
