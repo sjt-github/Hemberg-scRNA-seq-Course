@@ -261,6 +261,6 @@ dim(reads[fData(reads)$use, pData(reads)$use])
 saveRDS(reads, file = "blischak/reads.rds")
 ```
 
-If you want to further check yourself you can download our [`reads`](http://genat.uk/bookdown-demo/blischak/reads.rds) object. If you followed the steps above it should be exactly the same as yours.
+If you want to further check yourself you can download our [`reads`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/reads.rds) object. If you followed the steps above it should be exactly the same as yours.
 
 By comparing Figure 7.7 and Figure 6.6, it is clear that the reads based filtering removed 49 more cells than the UMI based analysis. If you go back and compare the results you should be able to conclude that the ERCC and MT filters are more strict for the reads-based analysis.

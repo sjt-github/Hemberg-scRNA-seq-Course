@@ -21,7 +21,7 @@ To illustrate cell QC, we consider a
 Blischak in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
 University of Chicago. The experiments were carried out on the
 Fluidigm C1 platform and to facilitate the quantification both unique
-molecular identifiers (UMIs) and ERCC _spike-ins_ were used. For our purposes you need to download the files [`annotation.txt`](http://genat.uk/bookdown-demo/blischak/annotation.txt), [`molecules.txt`](http://genat.uk/bookdown-demo/blischak/molecules.txt), and [`reads.txt`](http://genat.uk/bookdown-demo/blischak/reads.txt) into the `blischak` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
+molecular identifiers (UMIs) and ERCC _spike-ins_ were used. For our purposes you need to download the files [`annotation.txt`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/annotation.txt), [`molecules.txt`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/molecules.txt), and [`reads.txt`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/reads.txt) into the `blischak` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -388,7 +388,7 @@ Save the data:
 saveRDS(umi, file = "blischak/umi.rds")
 ```
 
-If you want to further check yourself you can download our [`umi`](http://genat.uk/bookdown-demo/blischak/umi.rds) object. If you followed the steps above it should be exactly the same as yours.
+If you want to further check yourself you can download our [`umi`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/umi.rds) object. If you followed the steps above it should be exactly the same as yours.
 
 ## Big Exercise
 
