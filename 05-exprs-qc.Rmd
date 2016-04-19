@@ -40,7 +40,7 @@ anno <- read.table("blischak/annotation.txt", sep = "\t", header = TRUE)
 ```
 
 Inspect a small portion of the expression matrix
-```{r}
+```{r, echo=FALSE}
 knitr::kable(
     head(molecules[ , 1:3]), booktabs = TRUE,
     caption = 'A table of the first 6 rows and 3 columns of the molecules table.'
@@ -246,7 +246,7 @@ umi$use_default <- (
 )
 ```
 
-```{r}
+```{r, echo=FALSE}
 knitr::kable(
   as.data.frame(table(umi$use_default)),
   booktabs = TRUE,
@@ -280,7 +280,7 @@ scater::plotPCA(umi,
                 return_SCESet = TRUE)
 ```
 
-```{r}
+```{r, echo=FALSE}
 knitr::kable(
   as.data.frame(table(umi$outlier)),
   booktabs = TRUE,
@@ -306,7 +306,7 @@ umi$use <- (
 )
 ```
 
-```{r}
+```{r, echo=FALSE}
 knitr::kable(
   as.data.frame(table(umi$use)),
   booktabs = TRUE,
@@ -364,7 +364,7 @@ filter_genes <- apply(counts(umi[ , pData(umi)$use]), 1,
 fData(umi)$use <- filter_genes
 ```
 
-```{r}
+```{r, echo=FALSE}
 knitr::kable(
     as.data.frame(table(filter_genes)),
     booktabs = TRUE,
