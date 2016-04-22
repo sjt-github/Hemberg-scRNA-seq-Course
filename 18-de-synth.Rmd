@@ -90,8 +90,8 @@ Using the standard p-value cut-off .05, we can find out how many genes
 that were called as significantly different.
 
 ```{r}
-ksChangedGenes <- which(pVals < .05)
-ksNotChangedGenes <- which(pVals >= .05)
+ksChangedGenes <- which(pVals < 0.05)
+ksNotChangedGenes <- which(pVals >= 0.05)
 cat(changedGenesInds)
 cat(ksChangedGenes)
 cat(intersect(changedGenesInds, ksChangedGenes))
@@ -161,11 +161,18 @@ One could still apply bulk DE methods to scRNA-seq data. One of the most popular
 
 ```{r, message=FALSE, warning=FALSE}
 cnts <- cbind(g, g2)
-cond <- factor(c(rep("A", ncol(g)),
-                 rep("B", ncol(g2))))
+cond <- factor(
+    c(
+        rep("A", ncol(g)),
+        rep("B", ncol(g2))
+    )
+)
 # object construction, add a pseudo-count of 1 to make DESeq work
-dds <- DESeqDataSetFromMatrix(cnts + 1, DataFrame(cond), ~ cond)
-dds <- DESeq(dds)
+dds <- DESeq2::DESeqDataSetFromMatrix(
+    cnts + 1, 
+    DataFrame(cond), 
+    ~ cond)
+dds <- DESeq2::DESeq(dds)
 resDESeq <- results(dds)
 ```
 
@@ -191,55 +198,83 @@ use it on the synthetic data:
 
 ```{r}
 cnts <- cbind(g, g2)
-cnts <- apply(cnts, 2, function(x) {storage.mode(x) <- 'integer'; x})
-cond <- factor(c(rep("A", ncol(g)),
-                 rep("B", ncol(g2))))
+cnts <- apply(
+    cnts,
+    2, 
+    function(x) {
+        storage.mode(x) <- 'integer'
+        return(x)
+    }
+)
+cond <- factor(
+    c(
+        rep("A", ncol(g)),
+        rep("B", ncol(g2))
+    )
+)
 names(cond) <- 1:length(cnts[1, ])
 colnames(cnts) <- 1:length(cnts[1, ]) 
-o.ifm <- scde::scde.error.models(counts = cnts,
-                                 groups = cond,
-                                 n.cores = 1,
-                                 threshold.segmentation = TRUE,
-                                 save.crossfit.plots = FALSE,
-                                 save.model.plots = FALSE,
-                                 verbose = 0,
-                                 min.size.entries = 20)
-priors <- scde::scde.expression.prior(models = o.ifm,
-                                      counts = cnts,
-                                      length.out = 400,
-                                      show.plot = F)
-resSCDE1 <- scde::scde.expression.difference(o.ifm,
-                                             cnts,
-                                             priors,
-                                             groups = cond,
-                                             n.randomizations = 100,
-                                             n.cores = 1,
-                                             verbose = 0)
+o.ifm <- scde::scde.error.models(
+    counts = cnts,
+    groups = cond,
+    n.cores = 1,
+    threshold.segmentation = TRUE,
+    save.crossfit.plots = FALSE,
+    save.model.plots = FALSE,
+    verbose = 0,
+    min.size.entries = 20
+)
+priors <- scde::scde.expression.prior(
+    models = o.ifm,
+    counts = cnts,
+    length.out = 400,
+    show.plot = FALSE)
+resSCDE1 <- scde::scde.expression.difference(
+    o.ifm,
+    cnts,
+    priors,
+    groups = cond,
+    n.randomizations = 100,
+    n.cores = 1,
+    verbose = 0)
 pValsSCDE1 <- pnorm(resSCDE1$cZ, lower.tail = FALSE) 
 # Need to run the other way as well 
 cnts2 <- cbind(g2, g)
-cnts2 <- apply(cnts2, 2, function(x) {storage.mode(x) <- 'integer'; x})
+cnts2 <- apply(
+    cnts2, 
+    2, 
+    function(x) {
+        storage.mode(x) <- 'integer'
+        return(x)
+    }
+)
 names(cond) <- 1:length(cnts2[1, ])
 colnames(cnts2) <- 1:length(cnts2[1, ]) 
-o.ifm <- scde::scde.error.models(counts = cnts2,
-                                 groups = cond,
-                                 n.cores = 1,
-                                 threshold.segmentation = TRUE,
-                                 save.crossfit.plots = FALSE,
-                                 save.model.plots = FALSE,
-                                 verbose = 0,
-                                 min.size.entries=20)
-priors <- scde::scde.expression.prior(models = o.ifm,
-                                      counts = cnts2,
-                                      length.out = 400,
-                                      show.plot = FALSE)
-resSCDE2 <- scde::scde.expression.difference(o.ifm,
-                                             cnts2,
-                                             priors,
-                                             groups=cond,
-                                             n.randomizations=100,
-                                             n.cores=1,
-                                             verbose=0)
+o.ifm <- scde::scde.error.models(
+    counts = cnts2,
+    groups = cond,
+    n.cores = 1,
+    threshold.segmentation = TRUE,
+    save.crossfit.plots = FALSE,
+    save.model.plots = FALSE,
+    verbose = 0,
+    min.size.entries = 20
+)
+priors <- scde::scde.expression.prior(
+    models = o.ifm,
+    counts = cnts2,
+    length.out = 400,
+    show.plot = FALSE
+)
+resSCDE2 <- scde::scde.expression.difference(
+    o.ifm,
+    cnts2,
+    priors,
+    groups = cond,
+    n.randomizations = 100,
+    n.cores = 1,
+    verbose = 0
+)
 pValsSCDE2 <- pnorm(resSCDE2$cZ, lower.tail = FALSE) 
 ```
 
@@ -291,9 +326,12 @@ limma::vennDiagram(
     names = c("Ground truth", "DESeq2", "SCDE", "KS-test"),
     circle.col = c("magenta", "blue", "green", "red"))
 
-allChangedInds <- intersect(which(pValsDESeq < .05),
-                            intersect(which(pValsSCDE < .05),
-                                      which(pVals < .05)))
+allChangedInds <- intersect(
+    which(pValsDESeq < .05),
+    intersect(which(pValsSCDE < .05),
+              which(pVals < .05)
+    )
+)
 tpAll <- length(intersect(changedGenesInds, allChangedInds))
 fnAll <- length(intersect(changedGenesInds, setdiff(1:1e3, allChangedInds)))
 fpAll <- length(intersect(notChangedGenesInds, allChangedInds))
@@ -340,9 +378,9 @@ __Our answer__:
 # KS-test
 pVals <- rep(1, nGenes)
 for (i in 1:nGenes) {
-    res <- ks.test(g[i,], g2[i,])
+    res <- ks.test(g[i, ], g2[i, ])
     # Bonferroni correction
-    pVals[i] <- res$p.value*nGenes
+    pVals[i] <- res$p.value * nGenes
 }
 pred <- ROCR::prediction(pVals, as.numeric(abs(log2(mult)) <= 2))
 perf <- ROCR::performance(pred, "tpr", "fpr")
@@ -352,9 +390,16 @@ aucObj@y.values[[1]]
 
 # DESeq2
 cnts <- cbind(g, g2)
-cond <- factor(c(rep("A", ncol(g)),
-                 rep("B", ncol(g2))))
-dds <- DESeq2::DESeqDataSetFromMatrix(cnts + 1, DataFrame(cond), ~ cond)
+cond <- factor(
+    c(
+        rep("A", ncol(g)),
+        rep("B", ncol(g2))
+    )
+)
+dds <- DESeq2::DESeqDataSetFromMatrix(
+    cnts + 1,
+    DataFrame(cond),
+    ~ cond)
 dds <- DESeq2::DESeq(dds)
 resDESeq <- results(dds)
 predDESeq <- ROCR::prediction(resDESeq$padj, as.numeric(abs(log2(mult)) <= 2))
@@ -365,55 +410,83 @@ aucObj@y.values[[1]]
 
 # SCDE
 cnts <- cbind(g, g2)
-cnts <- apply(cnts, 2, function(x) {storage.mode(x) <- 'integer'; x})
-cond <- factor(c(rep("A", ncol(g)),
-                 rep("B", ncol(g2))))
+cnts <- apply(
+    cnts, 
+    2, 
+    function(x) {
+        storage.mode(x) <- 'integer'
+        return(x)
+    }
+)
+cond <- factor(
+    c(
+        rep("A", ncol(g)),
+        rep("B", ncol(g2))
+    )
+)
 names(cond) <- 1:length(cnts[1, ])
 colnames(cnts) <- 1:length(cnts[1, ]) 
-o.ifm <- scde::scde.error.models(counts = cnts,
-                                 groups = cond,
-                                 n.cores = 1,
-                                 threshold.segmentation = TRUE,
-                                 save.crossfit.plots = FALSE,
-                                 save.model.plots = FALSE,
-                                 verbose = 0,
-                                 min.size.entries = 20)
-priors <- scde::scde.expression.prior(models = o.ifm,
-                                      counts = cnts,
-                                      length.out = 400,
-                                      show.plot = F)
-resSCDE1 <- scde::scde.expression.difference(o.ifm,
-                                             cnts,
-                                             priors,
-                                             groups = cond,
-                                             n.randomizations = 100,
-                                             n.cores = 1,
-                                             verbose = 0)
+o.ifm <- scde::scde.error.models(
+    counts = cnts,
+    groups = cond,
+    n.cores = 1,
+    threshold.segmentation = TRUE,
+    save.crossfit.plots = FALSE,
+    save.model.plots = FALSE,
+    verbose = 0,
+    min.size.entries = 20
+)
+priors <- scde::scde.expression.prior(
+    models = o.ifm,
+    counts = cnts,
+    length.out = 400,
+    show.plot = FALSE
+)
+resSCDE1 <- scde::scde.expression.difference(
+    o.ifm,
+    cnts,
+    priors,
+    groups = cond,
+    n.randomizations = 100,
+    n.cores = 1,
+    verbose = 0
+)
 pValsSCDE1 <- pnorm(resSCDE1$cZ, lower.tail = FALSE) 
 # Need to run the other way as well 
 cnts2 <- cbind(g2, g)
-cnts2 <- apply(cnts2, 2, function(x) {storage.mode(x) <- 'integer'; x})
+cnts2 <- apply(
+    cnts2, 
+    2, 
+    function(x) {
+        storage.mode(x) <- 'integer'
+        return(x)
+    }
+)
 names(cond) <- 1:length(cnts2[1, ])
 colnames(cnts2) <- 1:length(cnts2[1, ]) 
-o.ifm <- scde::scde.error.models(counts = cnts2,
-                                 groups = cond,
-                                 n.cores = 1,
-                                 threshold.segmentation = TRUE,
-                                 save.crossfit.plots = FALSE,
-                                 save.model.plots = FALSE,
-                                 verbose = 0,
-                                 min.size.entries=20)
-priors <- scde::scde.expression.prior(models = o.ifm,
-                                      counts = cnts2,
-                                      length.out = 400,
-                                      show.plot = FALSE)
-resSCDE2 <- scde::scde.expression.difference(o.ifm,
-                                             cnts2,
-                                             priors,
-                                             groups=cond,
-                                             n.randomizations=100,
-                                             n.cores=1,
-                                             verbose=0)
+o.ifm <- scde::scde.error.models(
+    counts = cnts2,
+    groups = cond,
+    n.cores = 1,
+    threshold.segmentation = TRUE,
+    save.crossfit.plots = FALSE,
+    save.model.plots = FALSE,
+    verbose = 0,
+    min.size.entries = 20)
+priors <- scde::scde.expression.prior(
+    models = o.ifm,
+    counts = cnts2,
+    length.out = 400,
+    show.plot = FALSE)
+resSCDE2 <- scde::scde.expression.difference(
+    o.ifm,
+    cnts2,
+    priors,
+    groups = cond,
+    n.randomizations = 100,
+    n.cores = 1,
+    verbose = 0
+)
 pValsSCDE2 <- pnorm(resSCDE2$cZ, lower.tail = FALSE) 
 
 pValsSCDECombined <- rbind(pValsSCDE1, pValsSCDE2)
