@@ -21,13 +21,13 @@ set.seed(1)
 ## Generation of a synthetic dataset
 
 We start by generating samples using the Poisson-Beta distribution,
-using 1000 genes from 100 cells. To simulate the second experimental
+using 100 genes from 40 cells. To simulate the second experimental
 condition we select one of the three parameters for each gene and
 modify it by multiplying by a normally distributed random factor.
 
 ```{r synthetic-sample}
 nGenes <- 1e2
-nCells <- 50
+nCells <- 40
 mult <- 2^(rnorm(nGenes, 0, 2))
 synData <- scRNA.seq.funcs::GeneratePoiBetaSamples(
     ks = 10^(rnorm(nGenes, 3, .5)),
@@ -131,7 +131,7 @@ ROC curve, we need to change the p-value cut-off.
 
 To facilitate the plotting, we use the package "ROCR"
 
-```{r synthetic-roc-curve-ks, fig.cap = "Different distributions of read counts for a single genes across 100 cells based on the Poisson-Beta model corresponding to different paramete sets"}
+```{r synthetic-roc-curve-ks, fig.cap = "Different distributions of read counts for a single genes across 40 cells based on the Poisson-Beta model corresponding to different paramete sets"}
 pred <- ROCR::prediction(pVals, as.numeric(abs(log2(mult)) <= 2))
 perf <- ROCR::performance(pred, "tpr", "fpr")
 ROCR::plot(perf)  
@@ -178,7 +178,7 @@ resDESeq <- results(dds)
 
 Check the performance of DESeq2:
 
-```{r synthetic-roc-curve-deseq, fig.cap = "Different distributions of read counts for a single genes across 100 cells based on the Poisson-Beta model corresponding to different paramete sets"}
+```{r synthetic-roc-curve-deseq, fig.cap = "Different distributions of read counts for a single genes across 40 cells based on the Poisson-Beta model corresponding to different paramete sets"}
 pValsDESeq <- resDESeq$padj
 predDESeq <- prediction(pValsDESeq, as.numeric(abs(log2(mult)) <= 2))
 perfDESeq <- performance(predDESeq, "tpr", "fpr")
