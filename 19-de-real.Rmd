@@ -49,6 +49,11 @@ As you can see, the cells cluster well by their developmental stage.
 We can now use the same methods as before to obtain a list of
 differentially expressed genes.
 
+Because SCDE is very slow here we will only use a subset of genes. You should not do that with your real dataset, though. Here we do it just for demostration purposes:
+```{r}
+biase <- biase[sample(1:nrow(biase), 500), ]
+```
+
 ## KS-test
 
 ```{r, message=FALSE, warning=FALSE}
