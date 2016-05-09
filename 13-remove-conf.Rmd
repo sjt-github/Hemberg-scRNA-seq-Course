@@ -6,11 +6,9 @@ knit: bookdown::preview_chapter
 
 ## Introduction
 
-In the previous chapter we saw that the library size normalisation is able to remove major confounders. Let us see whether further use of the controls (ERCC and MT) can provide us with more insights into the data.
+In the previous chapter we normalized for library size, effectively removing it as a confounder. Now we will consider removing other less well defined confounders from our data using the ERCC spike-in controls. Technical confounders (aka batch effects) can arise from difference in reagents, isolation methods, the lab/experimenter who performed the experiment, even which day/time the experiment was performed. 
 
-Several methods (eg. [BASiCS](https://github.com/catavallejos/BASiCS), [scLVM](https://github.com/PMBio/scLVM), [RUV](http://bioconductor.org/packages/release/bioc/html/RUVSeq.html)) have been developed for normalisation using ERCCs using different noise models and different fitting procedures.
-
-We will demonstrate some of the methods starting from the simplest one proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html), which identifies genes with significant variation above technical noise (ERCCs).
+Since the same amount of ERCC spike-in was added to each cell in our experiment we know that all the variablity we observe for these genes is due to technical noise; whereas endogenous genes are affected by both technical noise and biological variability. Technical noise can be removed by fitting a model to the spike-ins and "substracting" this from the endogenous genes. There are several methods available based on this premise (eg. [BASiCS](https://github.com/catavallejos/BASiCS), [scLVM](https://github.com/PMBio/scLVM), [RUV](http://bioconductor.org/packages/release/bioc/html/RUVSeq.html)); each using different noise models and different fitting procedures.
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -29,9 +27,12 @@ endog_genes <- !fData(umi.qc)$is_feature_control
 
 ## Brennecke method
 
+
+We will demonstrate some of the methods starting from the simplest one proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html), which identifies genes with significant variation above technical noise (ERCCs).
+
 To use the method, we first normalize for library size then calculate
 the mean and the square coefficient of variation (variation divided by
-the squared mean expression). A curve is fit for the relationship
+the squared mean expression). A quadratic curve is fit to the relationship
 between these two variables for the ERCC spike-in (subject to just
 technical variation) then a chi-square test is used to find genes
 significantly above the curve. This has been provided for you as the
