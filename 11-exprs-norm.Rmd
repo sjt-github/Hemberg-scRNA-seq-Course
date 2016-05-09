@@ -69,13 +69,9 @@ We will use visual inspection of PCA plots and calculation of cell-wise relative
 
 ```
 
-_Tallulah: I need to revamp this to (1) include RLE, (2) change what is/isn't an exercise, and (3) possibly add comparison of scater/edgeR with actual functions for DESeq_
-
-_Tallulah: Vague plan: show RLE & compare to DESeq 'truth' then have UQ, TMM, and CPM as exercises. Show everything for FPKMs_
-
  __scater__ acts as a wrapper for the `calcNormFactors` function from [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) which implements several library size normalization methods making it easy to apply any of these methods to our data. 
 
-__Note:__ edgeR makes extra adjustments to some of the normalization methods which will result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
+__Note:__ edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
 
 We will continue to work with the Blischak data that was used in the previous chapter.
 
@@ -100,7 +96,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
 boxplot(calc_cell_RLE(counts(umi.qc)),
         col = "grey50",
         ylab = "RLE",
-        main = "")
+        main = "", ylim=c(-1,1))
 ```
 
 ### CPM
@@ -116,7 +112,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
 boxplot(calc_cell_RLE(cpm(umi.qc)),
         col = "grey50",
         ylab = "RLE",
-        main = "")
+        main = "", ylim = c(-1,1))
 ```
 
 
@@ -137,18 +133,18 @@ scater::plotPCA(umi.qc[endog_genes, ],
 boxplot(calc_cell_RLE(norm_counts(umi.qc)),
         col = "grey50",
         ylab = "RLE",
-        main = "")
+        main = "", ylim=c(-1,1))
 ```
 
 __Exercise:__ 
 
 Use `method = "RLE"` and `method = "upperquartile"` to perform size-factor and UQ normalizations and compare to the results above.
 
-### RLE 
+### Size-factor (RLE)
 ```{r norm-pca-rle, fig.cap = "PCA plot of the blischak data after RLE normalisation"}
 umi.qc <- 
     scater::normaliseExprs(umi.qc,
-                           method = "RLE",
+                           method = "RLE", 
                            feature_set = endog_genes,
                            lib.size = rep(1, ncol(umi.qc)))
 scater::plotPCA(umi.qc[endog_genes, ],
@@ -157,6 +153,13 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
+```{r norm-ours-rle-rle, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(norm_counts(umi.qc)),
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim=c(-1,1))
+```
+
 
 ### Upperquantile
 ```{r norm-pca-uq, fig.cap = "PCA plot of the blischak data after UQ normalisation"}
@@ -172,7 +175,12 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
-
+```{r norm-ours-rle-uq, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(norm_counts(umi.qc)),
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim=c(-1,1))
+```
 
 ## Other methods
 
@@ -268,64 +276,6 @@ scater::plotPCA(umi.qc.ann,
 __Note:__ The PCA primarily looks for difference between cells. Since gene length is the same across cells for each gene FPKM is almost identical to the CPM plot (it is just rotated). However, if we plot the mean expression vs gene length it is apparent that normalizing for gene length should not be performed for this dataset.
 ```{r length-vs-mean, fig.cap = "Gene length vs Mean Expression for the raw data"}
 plot(eff_length, rowMeans(counts(umi.qc.ann)))
-```
-
-## Visualize genes
-
-Now after the normalisation we are ready to visualise the gene expression:
-
-### Raw
-```{r norm-genes-raw, fig.cap = "Expression of the first 6 genes of the blischak data"}
-scater::plotExpression(umi.qc.ann,
-                       rownames(umi.qc.ann)[1:6],
-                       x = "individual",
-                       exprs_values = "counts",
-                       colour = "batch")
-```
-
-### CPM
-```{r norm-genes-cpm, fig.cap = "Expression of the first 6 genes of the blischak data after the CPM normalisation"}
-scater::plotExpression(umi.qc.ann,
-                       rownames(umi.qc.ann)[1:6],
-                       x = "individual",
-                       exprs_values = "cpm",
-                       colour = "batch")
-```
-
-### log2(CPM)
-```{r norm-genes-log2-cpm, fig.cap = "Expression of the first 6 genes of the blischak data after the log2(CPM) normalisation"}
-scater::plotExpression(umi.qc.ann,
-                       rownames(umi.qc.ann)[1:6],
-                       x = "individual",
-                       exprs_values = "exprs",
-                       colour = "batch")
-```
-
-### Upperquantile
-```{r norm-genes-UQ, fig.cap = "Expression of the first 6 genes of the blischak data after the UQ normalisation"}
-scater::plotExpression(umi.qc.ann,
-                       rownames(umi.qc.ann)[1:6],
-                       x = "individual",
-                       exprs_values = "norm_counts",
-                       colour = "batch")
-```
-
-### FPKM
-```{r norm-genes-fpkm, fig.cap = "Expression of the first 6 genes of the blischak data after the FPKM normalisation"}
-scater::plotExpression(umi.qc.ann,
-                       rownames(umi.qc.ann)[1:6],
-                       x = "individual",
-                       exprs_values = "fpkm",
-                       colour = "batch")
-```
-
-### TPM
-```{r norm-genes-tpm, fig.cap = "Expression of the first 6 genes of the blischak data after the TPM normalisation"}
-scater::plotExpression(umi.qc.ann,
-                       rownames(umi.qc.ann)[1:6],
-                       x = "individual",
-                       exprs_values = "tpm",
-                       colour = "batch")
 ```
 
 ## Exercise
