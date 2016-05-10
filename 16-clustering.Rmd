@@ -38,14 +38,16 @@ scRNA-seq data.
 patient.data <- read.table("clustering/patient.txt", sep = "\t")
 ```
 
-For convinience we have performed all quality control and normalization steps (SF + RUV) in advance. The
+For convenience we have performed all quality control and normalization steps (SF + RUV) in advance. The
 dataset contains `r dim(patient.data)[2]` cells and `r dim(patient.data)[1]` genes.
 
 Here we present several methods available for clustering of scRNA-seq data.
 
 ## SC3
 
-We first cluster this dataset using __SC3__:
+SC3 is based on k-means clustering. The data is transformed using different dimensionality reduction strategies and distance metrics. Each transformed version of the data is clustered using k-means. We take the consensus of all these different clusterings by calculating the frequency that each pair of cells is found in the same cluster. This consensus matrix is then clustered using hierarchical clustering.
+
+To use __SC3__:
 
 ```{r, eval=FALSE}
 SC3::sc3(patient.data, ks = 2:5)
@@ -62,6 +64,7 @@ of __SC3__.
 =3$ provides the best clustering. What evidence do you find for this
 in the clustering? How can you use the [silhouette plots](https://en.wikipedia.org/wiki/Silhouette_%28clustering%29) to
 motivate choosing the value of $k$ that you think looks best?
+_Comment: You need to explain what the Silhouette plots represent!_
 
 * __Exercise 3__: The solution may change depending on the combination of
 check-boxes that was used. How similar are the different solutions,
@@ -75,6 +78,8 @@ case when all check boxes are checked.
 * __Exercise 5__: Change the marker genes threshold (the default is 0.85) in the right side panel of __SC3__. Does __SC3__ find more marker genes?
 
 ## pcaReduce
+
+[pcaReduce](https://github.com/JustinaZ/pcaReduce) combines k-means clustering with hierarchical clustering. At each stage PCA is used for dimensionality reduction followed by k-means. Starting from a large number of clusters pcaReduce iteratively merges similar clusters; after each merging event it removes the principle component explaning the least variance in the data. 
 
 To run [pcaReduce](https://github.com/JustinaZ/pcaReduce) on the same dataset, use the following commands
 
@@ -185,6 +190,8 @@ pheatmap::pheatmap(res, show_colnames = FALSE)
 
 ## SNN-Cliq
 
+[SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/) is a graph-based method. First the method identifies the _k_-nearest-neighbours of each cell according to the _distance_ measure. This is used to calculate the number of Shared Nearest Neighbours (SNN) between each pair of cells. A graph is built by placing an edge between two cells If they have at least one SNN. Clusters are defined as groups of cells with many edges between them using a "clique" method that requires two parameters: _r_ and _m_.
+
 To run the [SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/) method:
 
 ```{r}
@@ -221,7 +228,7 @@ __Exercise 10__: How can you characterize the solution identified by SNN-Cliq? R
 
 ## SINCERA
 
-As mentioend in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
+As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
 
 ```{r, echo=TRUE, fig.height=7, fig.width=7}
 # perform gene-by-gene per-sample z-score transformation
