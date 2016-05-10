@@ -235,7 +235,7 @@ priors <- scde::scde.expression.prior(
     counts = cnts,
     length.out = 400,
     show.plot = FALSE)
-resSCDE1 <- scde::scde.expression.difference(
+resSCDE <- scde::scde.expression.difference(
     o.ifm,
     cnts,
     priors,
@@ -243,7 +243,9 @@ resSCDE1 <- scde::scde.expression.difference(
     n.randomizations = 100,
     n.cores = 1,
     verbose = 0)
-pValsSCDE <- pnorm(abs(resSCDE1$cZ), lower.tail = FALSE)*2 # Convert Z-scores into 2-tailed p-values.
+# Convert Z-scores into 2-tailed p-values
+pValsSCDE <- pnorm(abs(resSCDE$cZ), lower.tail = FALSE) * 2
+pValsSCDE <- p.adjust(pValsSCDE, method = "bonferroni")
 ```
 
 __Exercise:__ Calculate an AUROC value and compare to the other methods.

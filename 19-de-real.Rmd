@@ -120,7 +120,7 @@ priors <- scde::scde.expression.prior(
     length.out = 400,
     show.plot = FALSE
 )
-resSCDE1 <- scde::scde.expression.difference(
+resSCDE <- scde::scde.expression.difference(
     o.ifm,
     cnts,
     priors,
@@ -129,48 +129,9 @@ resSCDE1 <- scde::scde.expression.difference(
     n.cores = 1,
     verbose = 0
 )
-pValsSCDE1 <- pnorm(resSCDE1$cZ, lower.tail = F)
-
-cnts2 <- apply(
-    biase[ , c(21:40, 1:20)],
-    2,
-    function(x) {
-        storage.mode(x) <- 'integer'
-        return(x)
-    }
-)
-names(cond) <- 1:length(cnts2[1, ])
-colnames(cnts2) <- 1:length(cnts2[1, ]) 
-o.ifm <- scde::scde.error.models(
-    counts = cnts2,
-    groups = cond,
-    n.cores = 1,
-    threshold.segmentation = TRUE,
-    save.crossfit.plots = FALSE,
-    save.model.plots = FALSE,
-    verbose = 0,
-    min.size.entries = 2
-)
-priors <- scde::scde.expression.prior(
-    models = o.ifm,
-    counts = cnts2,
-    length.out = 400,
-    show.plot = F
-)
-resSCDE2 <- scde::scde.expression.difference(
-    o.ifm,
-    cnts2,
-    priors,
-    groups = cond,
-    n.randomizations = 100,
-    n.cores = 1,
-    verbose = 0
-)
-pValsSCDE2 <- pnorm(resSCDE2$cZ, lower.tail = F) 
-
-pValsSCDECombined <- rbind(pValsSCDE1, pValsSCDE2)
-minSCDEInds <- apply(pValsSCDECombined, 2, which.min)
-pValsSCDE <- apply(pValsSCDECombined*2, 2, min) #Bonferroni correction
+# Convert Z-scores into 2-tailed p-values
+pValsSCDE <- pnorm(abs(resSCDE$cZ), lower.tail = FALSE) * 2 
+pValsSCDE <- p.adjust(pValsSCDE, method = "bonferroni")
 ```
 
 ## Comparison of the methods
