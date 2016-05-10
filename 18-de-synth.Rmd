@@ -76,6 +76,10 @@ ones. The most commonly used non-parametric test is the
 [Kolmogorov-Smirnov test](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test) (KS-test) and we can use it to compare the distributions for each gene
 in the two conditions.
 
+The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experssion and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros).
+
+__INSERT THE FIGURE FROM THE WIKIPEDIA PAGE?__
+
 ```{r, message=FALSE, warning=FALSE}
 nGenes <- nrow(g)
 pVals <- rep(1, nGenes)
@@ -157,7 +161,9 @@ genes?
 
 ## Finding DE genes using DESeq2
 
-One could still apply bulk DE methods to scRNA-seq data. One of the most popular methods for differential expression analysis for bulk RNA-Seq data is [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). Let's try it out on our synthetic dataset:
+One could still apply bulk DE methods to scRNA-seq data. One of the most popular methods for differential expression analysis for bulk RNA-Seq data is [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). DESeq2 estimates the variability of each gene using a quadratic relationship between mean expression and variability across all samples fit using Bayesian statistics. It then tests for a difference in mean expression across groups based on a negative binomial distribution.
+
+Let's try it out on our synthetic dataset:
 
 ```{r, message=FALSE, warning=FALSE}
 cnts <- cbind(g, g2)
@@ -193,8 +199,8 @@ changed?
 
 ## Finding DE genes using SCDE
 
-There are yet much fewer methods available for scRNA-seq data than for bulk data, but one popular method is [SCDE](http://hms-dbmi.github.io/scde/index.html). We can
-use it on the synthetic data:
+There are yet much fewer methods available for scRNA-seq data than for bulk data, but one better known method is [SCDE](http://hms-dbmi.github.io/scde/index.html). SCDE uses Bayesian statistics to fit a zero-inflated negative binomial distribution to the expression of each gene and tests for differences in mean expression level between groups.
+We can use it on the synthetic data:
 
 ```{r}
 cnts <- cbind(g, g2)
@@ -237,66 +243,14 @@ resSCDE1 <- scde::scde.expression.difference(
     n.randomizations = 100,
     n.cores = 1,
     verbose = 0)
-pValsSCDE1 <- pnorm(resSCDE1$cZ, lower.tail = FALSE) 
-# Need to run the other way as well 
-cnts2 <- cbind(g2, g)
-cnts2 <- apply(
-    cnts2, 
-    2, 
-    function(x) {
-        storage.mode(x) <- 'integer'
-        return(x)
-    }
-)
-names(cond) <- 1:length(cnts2[1, ])
-colnames(cnts2) <- 1:length(cnts2[1, ]) 
-o.ifm <- scde::scde.error.models(
-    counts = cnts2,
-    groups = cond,
-    n.cores = 1,
-    threshold.segmentation = TRUE,
-    save.crossfit.plots = FALSE,
-    save.model.plots = FALSE,
-    verbose = 0,
-    min.size.entries = 20
-)
-priors <- scde::scde.expression.prior(
-    models = o.ifm,
-    counts = cnts2,
-    length.out = 400,
-    show.plot = FALSE
-)
-resSCDE2 <- scde::scde.expression.difference(
-    o.ifm,
-    cnts2,
-    priors,
-    groups = cond,
-    n.randomizations = 100,
-    n.cores = 1,
-    verbose = 0
-)
-pValsSCDE2 <- pnorm(resSCDE2$cZ, lower.tail = FALSE) 
+pValsSCDE <- pnorm(abs(resSCDE1$cZ), lower.tail = FALSE)*2 # Convert Z-scores into 2-tailed p-values.
 ```
 
-As you can see, SCDE is different from the KS-test and
-DESeq2 since it only searches for changes in one direction. Thus, if
-we want to find both upregulated and downregulated genes, we must run
-the software twice and then combine the results as we have done
-above.
-
-__Exercise:__ Merge the results from the two runs and produce a single list
-of p-values and (absolute) fold-changes for all genes. Based on these
-results, calculate an AUROC value and compare to the other methods.
-
-__Hint:__ Keep in mind that we are now doing two tests for each gene.
+__Exercise:__ Calculate an AUROC value and compare to the other methods.
 
 __Our answer__:
 ```{r, echo=FALSE}
 # solution to the exercise above
-pValsSCDECombined <- rbind(pValsSCDE1, pValsSCDE2)
-minSCDEInds <- apply(pValsSCDECombined, 2, which.min)
-pValsSCDE <- apply(pValsSCDECombined, 2, min)
-meanFoldChangeSCDE <- diag(rbind(resSCDE1$mle, resSCDE2$mle)[minSCDEInds, ])
 predSCDE <- ROCR::prediction(pValsSCDE, as.numeric(abs(log2(mult)) <= 2))
 perfSCDE <- performance(predSCDE, "tpr", "fpr")
 ROCR::plot(perfSCDE)  
@@ -504,8 +458,3 @@ Which method
 performs the best? Why do some methods perform differently for this
 scenario? What are the properties of the genes that are identified as
 DE?
-
-## Further comparisons
-
-To get more confidence in saying which method is better, the methods
-can be compared multiple times.
