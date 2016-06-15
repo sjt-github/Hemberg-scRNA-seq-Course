@@ -229,7 +229,7 @@ You would expect to see a group corresponding to the smaller cells (normal) with
 
 ### Default Thresholds
 
-Results from the biological analysis of single-cell RNA-seq data are often strongly influenced by outliers. Thus, it is important to include multiple filters. A robust way of detecting outliers is through the median absolute difference which is defined as $d_i = |r_i - m|$, where $r_i$ is the number of reads in cell $i$ and $m$ is the median number of reads across the all cells in the sample. By default, scater removes all cells where $d_i>$median($d_i$). A similar filter is used for the number of detected genes. Furthermore, scater removes all cells where $>$80% of counts were assigned to control genes and any cells that have been marked as controls.
+Results from the biological analysis of single-cell RNA-seq data are often strongly influenced by outliers. Thus, it is important to include multiple filters. A robust way of detecting outliers is through the median absolute difference which is defined as $d_i = |r_i - m|$, where $r_i$ is the number of reads in cell $i$ and $m$ is the median number of reads across the all cells in the sample. By default, scater removes all cells where $d_i>5*$median($d_i$). A similar filter is used for the number of detected genes. Furthermore, scater removes all cells where >80% of counts were assigned to control genes and any cells that have been marked as controls.
 
 ```{r}
 umi$use_default <- (
@@ -343,7 +343,7 @@ If your answer is different please compare your code with [ours](https://github.
 
 ### Gene expression
 
-In addition to removing cells with poor quality, it is usually a good idea to exclude genes where we suspect that technical artefacts may have skewed the results. Moreover, inspection of the gene expression profiles may provide insights about how the experimental procedures could be imporved.
+In addition to removing cells with poor quality, it is usually a good idea to exclude genes where we suspect that technical artefacts may have skewed the results. Moreover, inspection of the gene expression profiles may provide insights about how the experimental procedures could be improved.
 
 It is often instructive to consider the number of reads consumed by the top 50 expressed genes.
 
@@ -356,7 +356,7 @@ The distribution relatively flat indicating (but not guaraneeing!) good coverage
 
 ### Gene filtering
 
-It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It also important to keep in mind that genes must be filtered after cell filtering since some genes may be only detected in poor quality cells (__note__ `pData(umi)$use` filter applied to the `umi` dataset).
+It is typically a good idea to remove genes whose expression level is considered __"undetectable"__. We define a gene as  detectable if at least two cells contain more than 1 transcript from the gene. If we were considering read counts rather than UMI counts a reasonable threshold is to require at least five reads in at least two cells. However, in both cases the threshold strongly depends on the sequencing depth. It is important to keep in mind that genes must be filtered after cell filtering since some genes may only be detected in poor quality cells (__note__ `pData(umi)$use` filter applied to the `umi` dataset).
 
 ```{r}
 filter_genes <- apply(counts(umi[ , pData(umi)$use]), 1, 
