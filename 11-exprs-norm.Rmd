@@ -69,7 +69,9 @@ We will use visual inspection of PCA plots and calculation of cell-wise relative
 
 ```
 
- __scater__ acts as a wrapper for the `calcNormFactors` function from [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) which implements several library size normalization methods making it easy to apply any of these methods to our data. 
+The __RLE__, __TMM__, and __UQ__ size-factor methods were developed for bulk RNA-seq data and, depending on the experimental context, may not be appropriate for single-cell RNA-seq data, as their underlying assumptions may be problematically violated. [Lun et al (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0947-7) recently published a size-factor normalisation method specifically designed for scRNA-seq data and accounting for single-cell biases, which we will call __LSF__ (Lun Sum Factors). Briefly, expression values are summed across pools of cells and the summed values are used to compute normalization size-factors per pool. The pool-based size factors can then be deconvolved into cell-specific size factors, which can be used for normalization in the same way as other size factors. 
+
+ __scater__ acts as a wrapper for the `calcNormFactors` function from [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) which implements several library size normalization methods making it easy to apply any of these methods to our data. The __LSF__ method is implementated in the Bioconductor package [scran](https://bioconductor.org/packages/release/bioc/html/scran.html), which allows seamless integrationinto the `scater` workflow. (The `scran` package itself depends on `scater`).
 
 __Note:__ edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR's and scater's "RLE" method which is based on the "size factor" used by [DESeq](http://bioconductor.org/packages/release/bioc/html/DESeq.html) may give different results to the `estimateSizeFactorsForMatrix` method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless `lib.size` is set at 1 for all cells.
 
@@ -135,6 +137,19 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc)),
         ylab = "RLE",
         main = "", ylim=c(-1,1))
 ```
+
+### LSF
+```{r norm-pca-lsf, fig.cap = "PCA plot of the blischak data after LSF normalisation"}
+qclust <- scran::quickCluster(umi.qc, min.size = 30)
+umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
+umi.qc <- scater::normalize(umi.qc)
+scater::plotPCA(umi.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "exprs")
+```
+
 
 __Exercise:__ 
 
