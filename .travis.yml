@@ -28,7 +28,7 @@ install:
   - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
   - Rscript -e "if (!require('SC3')) {source('https://bioconductor.org/biocLite.R');biocLite('SC3')}"
   - Rscript -e "if (!require('scater')) {source('https://bioconductor.org/biocLite.R');biocLite('scater')}"
-
+  - Rscript -e "if (!require('scran')) {source('https://bioconductor.org/biocLite.R');biocLite('scran')}"
 
 
 before_script:
