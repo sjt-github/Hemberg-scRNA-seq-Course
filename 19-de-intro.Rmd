@@ -2,14 +2,14 @@
 knit: bookdown::preview_chapter
 ---
 
-# Introduction to differential expression (DE) analysis
+# Differential Expression (DE) analysis
 
 ```{r, echo=FALSE}
 library(knitr)
 opts_chunk$set(fig.align = "center")
 ```
 
-## Background (bulk RNA-seq)
+## Bulk RNA-seq
 
 One of the most common types of analyses when analyzing bulk RNA-seq
 data is to identify differentially expressed genes. By comparing the
@@ -26,7 +26,7 @@ extensive
 available where the RNA-seq data has been validated using
 RT-qPCR. These data can be used to benchmark DE finding algorithms. 
 
-## DE analysis for scRNA-seq
+## Single cell RNA-seq
 
 In contrast to the bulk RNA-seq in scRNA-seq we usually do not have a defined
 set of experimental conditions, but instead, as was shown in the previous chapter
@@ -34,7 +34,7 @@ set of experimental conditions, but instead, as was shown in the previous chapte
 clustering approach. Once the groups have been identified one can find differentially
 expressed genes by either looking at the differencies in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for the comparison of the two groups of cells.
 
-## Synthetic data for scRNA-seq
+## scRNA-seq synthetic data
 
 One advantage of working with single-cell data is
 that there is a reliable, analytically tractable mathematical model for
@@ -47,7 +47,7 @@ then use the model to generate synthetic data which we can use to
 compare different DE finding algorithms. In the final section we
 investigate a real scRNA-seq dataset.
 
-## Modelled expression of a single gene
+## Single gene expression
 
 ```{r}
 library(scRNA.seq.funcs)
@@ -77,7 +77,7 @@ $\mu = k\cdot a/(a+b)$
 
 $\sigma^2 = k^2\cdot a\cdot b/((a+b+1)\cdot(a+b)^2)$
 
-## Possible shapes of the Poisson-Beta distribution
+## Poisson-Beta distribution
 
 There are three regimes of the Poisson-Beta distribution and they are
 determined by the values of the parameters $a$ and $b$.
@@ -109,7 +109,7 @@ hist(scRNA.seq.funcs::PoiBeta(100, 2, .3),
 __Exercise 1__: Vary the parameters _a_, _b_ and _k_ to explore how the
 location and shape of the distribution changes.
 
-## Effect of sampling size on parameter estimates
+## Sample size
 
 The difficulty in determining the parameters of the distribution also
 depends on the sample size. In the example below, it is not clear if
@@ -132,7 +132,7 @@ hist(scRNA.seq.funcs::PoiBeta(10, .6, 1.2, 50),
 __Exercise 2__: Modify the number of samples (i.e. cells) drawn to
 explore how difficult it is to correctly infer the correct shape.
 
-## Drop-out noise
+## Dropout noise
 
 The stochastic bursting model only captures the biological
 variability. In practice there will also be experimental
@@ -173,7 +173,7 @@ __Exercise 3__: Explore the different parameter regimes for the same
 drop-out rate. Do you think that we are more sensitive to drop-outs in
 any specific regime?
 
-## Over- and under-dispersion noise
+## Dispersion noise
 
 Another example of noise is under- or over-dispersion. This can be
 modelled using a single parameter multiplying the parameters $a$ and $b$

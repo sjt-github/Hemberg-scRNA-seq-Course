@@ -8,29 +8,35 @@ cache:
     - $TRAVIS_BUILD_DIR/_book/_bookdown_files
 
 install:
-  - Rscript -e "if (!require('devtools')) install.packages('devtools')"
-  - Rscript -e "if (!require('knitr')) install.packages('knitr')"
-  - Rscript -e "if (!require('mvoutlier')) install.packages('mvoutlier')"
-  - Rscript -e "if (!require('Rtsne')) install.packages('Rtsne')"
-  - Rscript -e "if (!require('statmod')) install.packages('statmod')"
-  - Rscript -e "if (!require('pheatmap')) install.packages('pheatmap')"
-  - Rscript -e "if (!require('ggplot2')) install.packages('ggplot2')"
-  - Rscript -e "if (!require('ROCR')) install.packages('ROCR')"
   - Rscript -e "if (!require('bookdown')) devtools::install_github('rstudio/bookdown')"
+  - Rscript -e "if (!require('knitr')) install.packages('knitr')"
+  - Rscript -e "if (!require('devtools')) install.packages('devtools')"
   - Rscript -e "if (!require('BiocInstaller')) {source('https://bioconductor.org/biocLite.R');biocLite('BiocInstaller')}"
-  - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
-  - Rscript -e "if (!require('DESeq2')) {source('https://bioconductor.org/biocLite.R');biocLite('DESeq2')}"
-  - Rscript -e "if (!require('limma')) {source('https://bioconductor.org/biocLite.R');biocLite('limma')}"
-  - Rscript -e "if (!require('M3Drop')) devtools::install_github('tallulandrews/M3D')"
-  - Rscript -e "if (!require('scde')) devtools::install_github('hms-dbmi/scde', build_vignettes = FALSE)"
-  - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
   - Rscript -e "if (!require('scRNA.seq.funcs')) devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
-  - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
-  - Rscript -e "if (!require('SC3')) {source('https://bioconductor.org/biocLite.R');biocLite('SC3')}"
+
+  - Rscript -e "if (!require('ggplot2')) install.packages('ggplot2')"
+  - Rscript -e "if (!require('pheatmap')) install.packages('pheatmap')"
+  - Rscript -e "if (!require('limma')) {source('https://bioconductor.org/biocLite.R');biocLite('limma')}"
+
   - Rscript -e "if (!require('scater')) {source('https://bioconductor.org/biocLite.R');biocLite('scater')}"
+  - Rscript -e "if (!require('mvoutlier')) install.packages('mvoutlier')"
+  - Rscript -e "if (!require('statmod')) install.packages('statmod')"
+  - Rscript -e "if (!require('Rtsne')) install.packages('Rtsne')"
   - Rscript -e "if (!require('scran')) {source('https://bioconductor.org/biocLite.R');biocLite('scran')}"
+  - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
+
+  - Rscript -e "if (!require('SC3')) {source('https://bioconductor.org/biocLite.R');biocLite('SC3')}"
+  - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
+  - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
+
+  - Rscript -e "if (!require('M3Drop')) devtools::install_github('tallulandrews/M3D')"
+
   - Rscript -e "if (!require('TSCAN')) {source('https://bioconductor.org/biocLite.R');biocLite('TSCAN')}"
   - Rscript -e "if (!require('monocle')) {source('https://bioconductor.org/biocLite.R');biocLite('monocle')}"
+
+  - Rscript -e "if (!require('ROCR')) install.packages('ROCR')"
+  - Rscript -e "if (!require('DESeq2')) {source('https://bioconductor.org/biocLite.R');biocLite('DESeq2')}"
+  - Rscript -e "if (!require('scde')) devtools::install_github('hms-dbmi/scde', build_vignettes = FALSE)"
 
 before_script:
   - chmod +x ./_build.sh

@@ -3,7 +3,7 @@
 output: html_document
 ---
 
-# DE expression in a synthetic dataset
+# DE in a synthetic dataset
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -18,7 +18,7 @@ library(limma)
 set.seed(1)
 ```
 
-## Generation of a synthetic dataset
+## Dataset
 
 We start by generating samples using the Poisson-Beta distribution,
 using 100 genes from 50 cells. To simulate the second experimental
@@ -41,7 +41,7 @@ g <- synData$sample1
 g2 <- synData$sample2
 ```
 
-## Differential expression in scRNA-seq
+## DE in scRNA-seq
 
 For bulk data, each gene is represented by a single value and to
 identify DEGs we need to identify those genes where the difference in
@@ -101,7 +101,7 @@ cat(ksChangedGenes)
 cat(intersect(changedGenesInds, ksChangedGenes))
 ```
 
-## Performance of the KS test
+## Performance of KS test
 
 The genes identified by the KS-test differs substantially from the
 ground truth. Instead of considering the absolute number of identified
@@ -159,7 +159,7 @@ distribution of parameter values, distribution of fold-changes. What
 factors make it easy or hard to identify differentially expressed
 genes?
 
-## Finding DE genes using DESeq2
+## DESeq2
 
 One could still apply bulk DE methods to scRNA-seq data. One of the most popular methods for differential expression analysis for bulk RNA-Seq data is [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). DESeq2 estimates the variability of each gene using a quadratic relationship between mean expression and variability across all samples fit using Bayesian statistics. It then tests for a difference in mean expression across groups based on a negative binomial distribution.
 
@@ -197,7 +197,7 @@ __Exercise:__ Based on the AUC-value, does DESeq or the KS-test seem
 more accurate? Can you find a parameter regime where the ranking is
 changed?
 
-## Finding DE genes using SCDE
+## SCDE
 
 There are yet much fewer methods available for scRNA-seq data than for bulk data, but one better known method is [SCDE](http://hms-dbmi.github.io/scde/index.html). SCDE uses Bayesian statistics to fit a zero-inflated negative binomial distribution to the expression of each gene and tests for differences in mean expression level between groups.
 We can use it on the synthetic data:
