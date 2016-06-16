@@ -29,7 +29,8 @@ install:
   - Rscript -e "if (!require('SC3')) {source('https://bioconductor.org/biocLite.R');biocLite('SC3')}"
   - Rscript -e "if (!require('scater')) {source('https://bioconductor.org/biocLite.R');biocLite('scater')}"
   - Rscript -e "if (!require('scran')) {source('https://bioconductor.org/biocLite.R');biocLite('scran')}"
-
+  - Rscript -e "if (!require('TSCAN')) {source('https://bioconductor.org/biocLite.R');biocLite('TSCAN')}"
+  - Rscript -e "if (!require('monocle')) {source('https://bioconductor.org/biocLite.R');biocLite('monocle')}"
 
 before_script:
   - chmod +x ./_build.sh
