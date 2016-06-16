@@ -63,6 +63,9 @@ The __upperquartile (UQ)__ was proposed by [Bullard et al (2010)](http://bmcbioi
 
 Another method is called __TMM__ is the weighted trimmed mean of M-values (to the reference) proposed by [Robinson and Oshlack (2010)](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-3-r25). The M-values in question are the gene-wise log2 fold changes between individual cells. One cell is used as the reference then the M-values for each other cell is calculated compared  to this reference. These values are then trimmed by removing the top and bottom ~30%, and the average of the remaining values is calculated by weighting them to account for the effect of the log scale on variance. Each non-reference cell is multiplied by the calculated factor. Two potential issues with this method are insufficient non-zero genes left after trimming, and the assumption that most genes are not differentially expressed.
 
+Finally the `scran` package implements a variant on CPM specialized for single-cell data ([Lun et al 2016](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0947-7)). Briefly this method deals with the problem of vary large numbers of zero values per cell by pooling cells together calculating a normalization factor (similar to CPM) for the sum of each pool. Since each cell is found in many different pools, cell-specific factors can be deconvoluted from the collection of pool-specific factors using linear algebra. 
+
+
 We will use visual inspection of PCA plots and calculation of cell-wise relative log expression (`calc_cell_RLE()`) to compare the efficiency of different normalization methods. Cells with many[few] reads have higher[lower] than median expression for most genes resulting in a positive[negative] RLE across the cell, whereas normalized cells have an RLE close to zero.
 
 ```{r calc_cell_RLE-source, eval=FALSE}
@@ -138,7 +141,7 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc)),
         main = "", ylim=c(-1,1))
 ```
 
-### LSF
+### scran
 ```{r norm-pca-lsf, fig.cap = "PCA plot of the blischak data after LSF normalisation"}
 qclust <- scran::quickCluster(umi.qc, min.size = 30)
 umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
@@ -149,7 +152,12 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "exprs")
 ```
-
+```{r norm-ours-rle-raw, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(exprs(umi.qc)),
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim=c(-1,1))
+```
 
 __Exercise:__ 
 
@@ -288,7 +296,7 @@ scater::plotPCA(umi.qc.ann,
                 exprs_values = "tpm")
 ```
 
-__Note:__ The PCA primarily looks for difference between cells. Since gene length is the same across cells for each gene FPKM is almost identical to the CPM plot (it is just rotated). However, if we plot the mean expression vs gene length it is apparent that normalizing for gene length should not be performed for this dataset.
+__Note:__ The PCA primarily looks for differences between cells. Since gene length is the same across cells for each gene FPKM is almost identical to the CPM plot (it is just rotated). However, if we plot the mean expression vs gene length it is apparent that normalizing for gene length should not be performed for this dataset.
 ```{r length-vs-mean, fig.cap = "Gene length vs Mean Expression for the raw data"}
 plot(eff_length, rowMeans(counts(umi.qc.ann)))
 ```
