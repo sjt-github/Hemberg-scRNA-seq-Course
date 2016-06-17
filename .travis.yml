@@ -19,8 +19,8 @@ install:
   - Rscript -e "if (!require('limma')) {source('https://bioconductor.org/biocLite.R');biocLite('limma')}"
 
   - Rscript -e "if (!require('scater')) {source('https://bioconductor.org/biocLite.R');biocLite('scater')}"
-  - Rscript -e "if (!require('mvoutlier')) install.packages('mvoutlier')"
   - Rscript -e "if (!require('statmod')) install.packages('statmod')"
+  - Rscript -e "if (!require('mvoutlier')) install.packages('mvoutlier')"
   - Rscript -e "if (!require('Rtsne')) install.packages('Rtsne')"
   - Rscript -e "if (!require('scran')) {source('https://bioconductor.org/biocLite.R');biocLite('scran')}"
   - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
@@ -28,6 +28,7 @@ install:
   - Rscript -e "if (!require('SC3')) {source('https://bioconductor.org/biocLite.R');biocLite('SC3')}"
   - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
   - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
+  - Rscript -e "if (!require('jackstraw')) install.packages('jackstraw')"
   - Rscript -e "if (!require('Seurat')) devtools::install_github('Puriney/seurat')"
   
   - Rscript -e "if (!require('M3Drop')) devtools::install_github('tallulandrews/M3D')"
