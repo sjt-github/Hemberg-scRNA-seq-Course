@@ -8,6 +8,7 @@ knit: bookdown::preview_chapter
 
 ```{r, echo=FALSE}
 library(scRNA.seq.funcs)
+library(knitr)
 opts_chunk$set(out.width='90%', fig.align = 'center')
 insert_fun <- function(name) {
   read_chunk(lines = capture.output(dump(name, '')), labels = paste(name, 'source', sep = '-'))

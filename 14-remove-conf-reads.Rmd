@@ -10,6 +10,7 @@ library(RUVSeq)
 library(scater, quietly = TRUE)
 library(scran)
 options(stringsAsFactors = FALSE)
+library(knitr)
 opts_chunk$set(fig.align = 'center', echo=FALSE)
 reads <- readRDS("blischak/reads.rds")
 reads.qc <- reads[fData(reads)$use, pData(reads)$use]
