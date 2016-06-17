@@ -39,10 +39,12 @@ significantly above the curve. This has been provided for you as the
 Brenneck_getVariableGenes(counts, spikes) function.
 
 ```{r rm-conf-brennecke, fig.cap = "Results of using the Brennecke method on the Blischak dataset", fig.asp=1}
-umi.qc <- cpm(umi.qc)
-erccs <- grep("ERCC-", rownames(assayData(umi.qc)$norm_counts))
+qclust <- scran::quickCluster(umi.qc, min.size = 30)
+umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
+umi.qc <- scater::normalize(umi.qc)
+erccs <- grep("ERCC-", rownames(exprs(umi.qc)))
 highly.var.genes <- scRNA.seq.funcs::Brennecke_getVariableGenes(
-            assayData(umi.qc)$norm_counts,
+            exprs(umi.qc),
             erccs
 )
 ```
@@ -68,7 +70,7 @@ method which uses [singular value decomposition](https://en.wikipedia.org/wiki/S
 
 ```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
 assayData(umi.qc)$ruv_counts <- RUVSeq::RUVg(
-    round(assayData(umi.qc)$norm_counts),
+    round(exprs(umi.qc)),
     erccs,
     k = 1)$normalizedCounts
 ```
@@ -87,7 +89,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
-                exprs_values = "norm_counts")
+                exprs_values = "exprs")
 ```
 
 ```{r rm-conf-pca-rle-ruv, fig.cap = "PCA plot of the blischak data after RLE and RUV normalisations"}
@@ -104,7 +106,7 @@ We can also examine the relative log expression (RLE) across cells to
 confirm technical noise has been removed from the dataset.
 
 ```{r rm-conf-rle-comp, fig.cap = "Comparison of the relative log expression of the blischak data before and after the RUV normalisation"}
-boxplot(list(scRNA.seq.funcs::calc_cell_RLE(assayData(umi.qc)$norm_counts),
+boxplot(list(scRNA.seq.funcs::calc_cell_RLE(exprs(umi.qc)),
              scRNA.seq.funcs::calc_cell_RLE(assayData(umi.qc)$ruv_counts)))
 ```
 

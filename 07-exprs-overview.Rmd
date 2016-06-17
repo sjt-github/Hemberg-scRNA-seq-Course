@@ -31,7 +31,7 @@ The easiest thing to overview the data is to transform it using the principal co
 
 PCA is defined in such a way that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components.
 
-```{r clust-pca, out.width = '100%', fig.cap="Schematic representation of PCA dimensionality reduction (taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html))"}
+```{r clust-pca, echo=FALSE, fig.cap="Schematic representation of PCA dimensionality reduction (taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html))", out.width='100%'}
 knitr::include_graphics("figures/pca.png")
 ```
 
@@ -57,7 +57,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "counts")
 ```
 
-Comparing Figure 8.2 and Figure 8.3, it is clear that after quality control the NA19098.r2 cells no longer form a group of outliers.
+Comparing Figure \@ref(expr-overview-pca-before-qc) and Figure \@ref(expr-overview-pca-after-qc), it is clear that after quality control the NA19098.r2 cells no longer form a group of outliers.
 
 By default only the top 500 most variable genes are used by scater to calculate the PCA. This can be adjusted by changing the `ntop` argument. 
 
