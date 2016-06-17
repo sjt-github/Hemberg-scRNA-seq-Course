@@ -51,7 +51,7 @@ colnames(procdeng) <- 1:268
 dengclust <- TSCAN::exprmclust(procdeng, clusternum=10)
 TSCAN::plotmclust(dengclust)
 dengorderTSCAN <- TSCAN::TSCANorder(dengclust, orderonly=F)
-pseudotime_order_tscan <- cellLabels[as.numeric(dengorderTSCAN)]
+pseudotime_order_tscan <- as.character(dengorderTSCAN$sample_name)
 pseudotime_order_tscan
 ```
 
@@ -67,7 +67,7 @@ __Exercise__ Compare results for different numbers of clusters (`clusternum`).
 Monocle skips the clustering stage of TSCAN and directly builds a minimum spanning tree to connect all cells. Monocle then identifies the longest path in this tree to determine pseudotime. If the data contains diverging trajectories (i.e. one cell type differentiation into two different cell-types), monocle can identify alternative long paths in the tree using the argument `num_paths`. Each of the resulting forked paths is defined as a separate cell state, thus `num_paths=2` will identify three different cell states.
 
 Unfortunately, Monocle does not work when all the genes are used, so
-we must carry out feature selection. First, we use M3D
+we must carry out feature selection. First, we use M3Drop:
 ```{r m3d-select-genes}
 m3dGenes <- as.character(
     M3Drop::M3Drop_Differential_Expression(deng, suppress.plot=T)$Gene
@@ -90,10 +90,10 @@ dCellData <- monocle::setOrderingFilter(dCellData, 1:length(m3dGenes))
 dCellDataSet <- monocle::reduceDimension(dCellData, pseudo_expr=1)
 dCellDataSet <- monocle::orderCells(dCellDataSet, reverse=T, num_paths=2)
 monocle::plot_spanning_tree(dCellDataSet)
-pseudotime_monocle = data.frame(Cell = cellLabels, 
+pseudotime_monocle <- data.frame(Cell = cellLabels, 
                                 time = phenoData(dCellDataSet)$Pseudotime, 
                                 State=phenoData(dCellDataSet)$State)
-pseudotime_order_monocle = as.character(Pseudotime[order(Pseudotime$time),1])
+pseudotime_order_monocle <- rownames(pseudotime_monocle[order(pseudotime_monocle$time), ])
 pseudotime_order_monocle
 ```
 
@@ -101,8 +101,8 @@ pseudotime_order_monocle
 
 How do the trajectories inferred by TSCAN and Monocle compare?
 ```{r tscan-monocle-compare}
-matched_ordering = match(as.character(pseudotime_order_monocle),pseudotime_order_tscan)
-plot(matched_ordering, xlab="Monocle Order", ylab="TSCAN Order")
+matched_ordering <- match(pseudotime_order_tscan, pseudotime_order_monocle)
+plot(matched_ordering, xlab = "Monocle Order", ylab = "TSCAN Order")
 ```
 
 __Exercise__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes
