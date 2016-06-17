@@ -1,8 +1,8 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
-# Clustering analysis {#clust-methods}
+# Clustering example {#clust-methods}
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -15,6 +15,7 @@ library(pcaMethods)
 library(pcaReduce)
 library(Rtsne)
 library(SC3)
+library(Seurat)
 library(pheatmap)
 library(ggplot2)
 set.seed(1234567)
@@ -41,13 +42,9 @@ patient.data <- read.table("clustering/patient.txt", sep = "\t")
 For convenience we have performed all quality control and normalization steps (SF + RUV) in advance. The
 dataset contains `r dim(patient.data)[2]` cells and `r dim(patient.data)[1]` genes.
 
-Here we present several methods available for clustering of scRNA-seq data.
+Now we are ready to cluster the data using the methods described in the previous chapter.
 
 ## SC3
-
-SC3 is based on k-means clustering. The data is transformed using different dimensionality reduction strategies and distance metrics. Each transformed version of the data is clustered using k-means. We take the consensus of all these different clusterings by calculating the frequency that each pair of cells is found in the same cluster. This consensus matrix is then clustered using hierarchical clustering.
-
-To use __SC3__:
 
 ```{r, eval=FALSE}
 SC3::sc3(patient.data, ks = 2:5)
@@ -78,11 +75,6 @@ case when all check boxes are checked.
 * __Exercise 5__: Change the marker genes threshold (the default is 0.85) in the right side panel of __SC3__. Does __SC3__ find more marker genes?
 
 ## pcaReduce
-
-[pcaReduce](https://github.com/JustinaZ/pcaReduce) combines k-means clustering with hierarchical clustering. At each stage PCA is used for dimensionality reduction followed by k-means. Starting from a large number of clusters pcaReduce iteratively merges similar clusters; after each merging event it removes the principle component explaning the least variance in the data. 
-
-To run [pcaReduce](https://github.com/JustinaZ/pcaReduce) on the same dataset, use the following commands
-
 ```{r clust-pca-reduce3, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$"}
 # use the same gene filter as in SC3
 input <- scRNA.seq.funcs::gene_filter(patient.data, 0.06)
@@ -190,9 +182,7 @@ pheatmap::pheatmap(res, show_colnames = FALSE)
 
 ## SNN-Cliq
 
-[SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/) is a graph-based method. First the method identifies the _k_-nearest-neighbours of each cell according to the _distance_ measure. This is used to calculate the number of Shared Nearest Neighbours (SNN) between each pair of cells. A graph is built by placing an edge between two cells If they have at least one SNN. Clusters are defined as groups of cells with many edges between them using a "clique" method that requires two parameters: _r_ and _m_.
-
-To run the [SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/) method:
+Here we run SNN-cliq with te default parameters provided in the author's example:
 
 ```{r}
 distan <- "euclidean"
@@ -267,5 +257,94 @@ pheatmap::pheatmap(t(dat),
                    show_rownames = FALSE)
 ```
 
-
 __Exercise 12__: Is using the singleton cluster criteria for finding __k__ a good idea?
+
+## SEURAT
+
+Here we follow an [example](http://www.satijalab.org/clustertutorial1.html) created by the authors of SEURAT. We had to introduce some modifications due to the errors produced by the original code:
+
+```{r, message=FALSE, warning=FALSE}
+# Create a SEURAT object
+d <- new("seurat", raw.data = as.data.frame(log(patient.data + 1)))
+
+# Setup a SEURAT object
+d <- setup(
+    d,
+    project = "NBT",
+    min.cells = 3,
+    names.field = 2,
+    names.delim = "_",
+    min.genes = 10,
+    is.expr = 1
+) 
+
+# Genes placed into 20 bins based on X-axis (average expression).
+# Y-axis is within-bin z-score of log(Variance/mean). 
+d <- mean.var.plot(
+    d,
+    y.cutoff = 2,
+    x.low.cutoff = 2,
+    fxn.x = expMean,
+    fxn.y = logVarDivMean
+)
+
+# Run a PCA using the variable genes as input
+d <- pca(d, do.print = FALSE, pcs.store = 25)
+
+# Do 200 random samplings to find significant genes, 
+# each time randomly permute 1% of genes.
+# This returns a 'p-value' for each gene in each PC, 
+# based on how likely the gene/PC score would have been observed by chance
+d <- jackStraw(
+    d,
+    num.replicate = 200,
+    do.print = FALSE,
+    num.pc = 25
+)
+
+# Compare the distribution of P-values for each PC with a uniform distribution.
+# 'Significant' PCs will have a strong enrichment of genes with low p-values
+pAll <- d@jackStraw.empP
+pAll$Contig <- rownames(pAll)
+pAll.l <- melt(pAll, id.vars = "Contig")
+colnames(pAll.l) <- c("Contig", "PC", "Value")
+
+score.df <- NULL
+score.thresh=1e-5
+for (i in unique(pAll.l$PC)){
+	q <- qqplot(pAll[, i], runif(1000), plot.it = FALSE)
+	pc.score <- prop.test(
+	    c(
+	        length(which(pAll[, i] <= score.thresh)), 
+	        floor(nrow(pAll) * score.thresh)
+	    ), 
+	    c(nrow(pAll), nrow(pAll))
+	)$p.val
+	if (length(which(pAll[, i] <= score.thresh)) == 0) pc.score <- 1
+
+	if(is.null(score.df))
+	  score.df <- data.frame(PC = i, Score = pc.score)
+	else
+	  score.df <- rbind(score.df, data.frame(PC = i, Score = pc.score))
+}
+
+# There are no significant PCs:
+head(score.df)
+ndim <- 2
+
+# Project data on a 2D using tSNE
+d <- run_tsne(d, dims.use = 1:ndim, max_iter = 2000)
+
+# Find clusters in the tSNE map
+d <- DBclust_dimension(
+    d, 
+    1, 
+    2, 
+    reduction.use = "tsne", 
+    G.use = 8, 
+    set.ident = TRUE
+)
+tsne.plot(d, pt.size = 1)
+```
+
+__Exercise 13__: 

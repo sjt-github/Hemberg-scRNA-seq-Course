@@ -1,5 +1,5 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
 # Expression QC (UMI)
@@ -21,7 +21,7 @@ To illustrate cell QC, we consider a
 Blischak in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
 University of Chicago. The experiments were carried out on the
 Fluidigm C1 platform and to facilitate the quantification both unique
-molecular identifiers (UMIs) and ERCC _spike-ins_ were used. For our purposes you need to download the files [`annotation.txt`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/annotation.txt), [`molecules.txt`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/molecules.txt), and [`reads.txt`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/reads.txt) into the `blischak` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
+molecular identifiers (UMIs) and ERCC _spike-ins_ were used. The data files are located in the `blischak` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
 
 ```{r, echo=FALSE}
 library(knitr)

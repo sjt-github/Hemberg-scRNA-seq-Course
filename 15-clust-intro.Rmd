@@ -1,5 +1,5 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
 # Clustering analysis
@@ -87,7 +87,13 @@ Most methods for scRNA-seq analysis includes a _k_-means step at some point.
 
 Over the last two decades there has been a lot of interest in
 analyzing networks in various domains. One goal is to identify groups
-or modules of nodes in a network. Some of these methods can be applied
+or modules of nodes in a network.
+
+```{r clust-graph, out.width = '100%', fig.cap="Schematic representation of the graph network"}
+knitr::include_graphics("figures/graph_network.jpg")
+```
+
+Some of these methods can be applied
 to scRNA-seq data and one example is the  method, which is based
 on the concept of identifying groups of tightly connected nodes.
 
@@ -101,25 +107,33 @@ on the concept of identifying groups of tightly connected nodes.
 
 ### [SINCERA](https://research.cchmc.org/pbge/sincera.html)
 
-* Based on hierarchical clustering
+* SINCERA ([@Guo2015-ok]) is based on hierarchical clustering
 * Data is converted to _z_-scores before clustering
 * Identify _k_ by finding the first singleton cluster in the hierarchy
 
 ### [pcaReduce](https://github.com/JustinaZ/pcaReduce)
 
-* Based on PCA
+pcaReduce ([@Zurauskiene2016-kg]) combines PCA, _k_-means and “iterative” hierarchical clustering. Starting from a large number of clusters pcaReduce iteratively merges similar clusters; after each merging event it removes the principle component explaning the least variance in the data.
 
 ### [SC3](http://bioconductor.org/packages/SC3/)
 
-* Based on PCA and spectral dimensionality reductions
+```{r clust-sc3, out.width = '100%', fig.cap="SC3 pipeline"}
+knitr::include_graphics("figures/sc3.png")
+```
+
+* SC3 ([@Kiselev2016-bq]) is based on PCA and spectral dimensionality reductions
 * Utilises _k_-means
 * Additionally performs the consensus clustering
 
-### tSNE + _k_-means
+### tSNE + k-means
 
 * Based on tSNE maps
 * Utilises _k_-means
 
+### [SEURAT](https://github.com/Puriney/seurat)
+
+SEURAT ([@Macosko2015-ix]) first ustilises PCA on a set of cells, then a number of statistically significant PCs is defined. Those PCs are further projected to a 2D space using tSNE. The remaining cells are then projected on the same tSNE map. Density clustering algorithm ([DBSCAN](https://en.wikipedia.org/wiki/DBSCAN)) is then used to identify cell clusters in the 2D space.
+
 ### [SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)
 
-* Based on finding the so-called "cliques" in a graph
+SNN-Cliq ([@Xu2015-vf]) is a graph-based method. First the method identifies the k-nearest-neighbours of each cell according to the _distance_ measure. This is used to calculate the number of Shared Nearest Neighbours (SNN) between each pair of cells. A graph is built by placing an edge between two cells If they have at least one SNN. Clusters are defined as groups of cells with many edges between them using a "clique" method. SNN-Cliq requires several parameters to be defined manually.
