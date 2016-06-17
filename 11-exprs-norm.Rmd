@@ -98,7 +98,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
 ```
 
 ```{r norm-ours-rle-raw, fig.cap = "Cell-wise RLE of the blischak data"}
-boxplot(calc_cell_RLE(counts(umi.qc)),
+boxplot(calc_cell_RLE(counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
@@ -114,7 +114,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "cpm")
 ```
 ```{r norm-ours-rle-cpm, fig.cap = "Cell-wise RLE of the blischak data"}
-boxplot(calc_cell_RLE(cpm(umi.qc)),
+boxplot(calc_cell_RLE(cpm(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim = c(-1,1))
@@ -135,7 +135,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 ```{r norm-ours-rle-tmm, fig.cap = "Cell-wise RLE of the blischak data"}
-boxplot(calc_cell_RLE(norm_counts(umi.qc)),
+boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
@@ -152,8 +152,8 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "exprs")
 ```
-```{r norm-ours-rle-scran, fig.cap = "Cell-wise LSF of the blischak data"}
-boxplot(calc_cell_RLE(exprs(umi.qc)),
+```{r norm-ours-rle-scran, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
@@ -177,7 +177,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 ```{r norm-ours-rle-rle, fig.cap = "Cell-wise RLE of the blischak data"}
-boxplot(calc_cell_RLE(norm_counts(umi.qc)),
+boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
@@ -199,7 +199,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 ```{r norm-ours-rle-uq, fig.cap = "Cell-wise RLE of the blischak data"}
-boxplot(calc_cell_RLE(norm_counts(umi.qc)),
+boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))

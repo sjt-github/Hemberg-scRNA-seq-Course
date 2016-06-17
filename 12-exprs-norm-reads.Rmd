@@ -21,6 +21,12 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "counts")
 ```
+```{r norm-ours-rle-raw-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(counts(reads.qc[endog_genes, ])),
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim=c(-1,1))
+```
 
 ```{r norm-pca-cpm-reads, fig.cap = "PCA plot of the blischak data after CPM normalisation"}
 scater::plotPCA(reads.qc[endog_genes, ],
@@ -29,13 +35,11 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "cpm")
 ```
-
-```{r norm-pca-log2-cpm-reads, fig.cap = "PCA plot of the blischak data after log2(CPM) normalisation"}
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "exprs")
+```{r norm-ours-rle-cpm-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(cpm(reads.qc[endog_genes, ])),
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim = c(-1,1))
 ```
 
 ```{r norm-pca-tmm-reads, fig.cap = "PCA plot of the blischak data after TMM normalisation"}
@@ -50,8 +54,14 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "norm_counts")
 ```
+```{r norm-ours-rle-tmm-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim=c(-1,1))
+```
 
-```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the blischak data after LSF normalisation"}
+```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the blischak data after RLE normalisation"}
 qclust <- scran::quickCluster(reads.qc, min.size = 30)
 reads.qc <- scran::computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- scater::normalize(reads.qc)
@@ -62,8 +72,8 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 exprs_values = "exprs")
 ```
 
-```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise LSF of the blischak data"}
-boxplot(calc_cell_RLE(exprs(reads.qc)),
+```{r norm-ours-rle-scran-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(exprs(reads.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
@@ -82,6 +92,13 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 
+```{r norm-ours-rle-rle-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim=c(-1,1))
+```
+
 ```{r norm-pca-uq-reads, fig.cap = "PCA plot of the blischak data after UQ normalisation"}
 reads.qc <- 
     scater::normaliseExprs(reads.qc,
@@ -94,6 +111,12 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 size_by = "total_features",
                 shape_by = "individual",
                 exprs_values = "norm_counts")
+```
+```{r norm-ours-rle-uq-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim=c(-1,1))
 ```
 
 ```{r}
@@ -133,4 +156,20 @@ fpkm(reads.qc.ann) <-
         reads.qc.ann,
         eff_length
     )
+```
+
+```{r norm-pca-fpkm-reads, fig.cap = "PCA plot of the blischak data after FPKM normalisation"}
+scater::plotPCA(reads.qc.ann,
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "fpkm")
+```
+
+```{r norm-pca-tpm-reads, fig.cap = "PCA plot of the blischak data after TPM normalisation"}
+scater::plotPCA(reads.qc.ann,
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "tpm")
 ```
