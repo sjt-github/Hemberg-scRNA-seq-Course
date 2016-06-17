@@ -26,8 +26,9 @@ install:
   - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
 
   - Rscript -e "if (!require('SC3')) {source('https://bioconductor.org/biocLite.R');biocLite('SC3')}"
-  - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
   - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
+  - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
+  - Rscript -e "if (!require('lfa')) {source('https://bioconductor.org/biocLite.R');biocLite('lfa')}"
   - Rscript -e "if (!require('jackstraw')) install.packages('jackstraw')"
   - Rscript -e "if (!require('Seurat')) devtools::install_github('Puriney/seurat')"
   
