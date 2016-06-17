@@ -215,10 +215,6 @@ from read counts since often only a portion of the entire
 gene/transcript is sequenced, not the entire length. If in doubt check 
 for a relationship between gene/transcript length and expression level.
 
-```{r length-vs-mean, fig.cap = "Gene length vs Mean Expression for the raw data"}
-plot(eff_length, rowMeans(counts(umi.qc.ann)))
-```
-
 However, here we show how these normalisations can be calculated using scater. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. scater uses the [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html) package, which allows one to annotate genes by other attributes:
 ```{r}
 umi.qc <-
@@ -297,6 +293,9 @@ scater::plotPCA(umi.qc.ann,
 
 __Note:__ The PCA looks for differences between cells. Gene length is the same across cells for each gene thus FPKM is almost identical to the CPM plot (it is just rotated) since it performs CPM first then normalizes gene length. Whereas, TPM is different because it weights genes by their length before performing CPM. 
 
+```{r length-vs-mean, fig.cap = "Gene length vs Mean Expression for the raw data"}
+plot(eff_length, rowMeans(counts(umi.qc.ann)))
+```
 
 ## Exercise
 
