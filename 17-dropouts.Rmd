@@ -165,7 +165,7 @@ In the figure above blue points are the ERCC spike-ins. The red curve
 is the fitted technical noise model and the dashed line is the 95%
 CI. Pink dots are the genes with significant biological variability
 after multiple-testing correction. Since our dataset is relatively
-homogeneous only `r length(highly.var.genes)` genes are identified as significantly
+homogeneous only  genes are identified as significantly
 variable.
 
 We can also use the Brennecke method introduced earlier to identify 
