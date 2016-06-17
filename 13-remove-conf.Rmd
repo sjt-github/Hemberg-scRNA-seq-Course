@@ -8,7 +8,7 @@ knit: bookdown::preview_chapter
 
 In the previous chapter we normalized for library size, effectively removing it as a confounder. Now we will consider removing other less well defined confounders from our data using the ERCC spike-in controls. Technical confounders (aka batch effects) can arise from difference in reagents, isolation methods, the lab/experimenter who performed the experiment, even which day/time the experiment was performed. 
 
-Since the same amount of ERCC spike-in was added to each cell in our experiment we know that all the variablity we observe for these genes is due to technical noise; whereas endogenous genes are affected by both technical noise and biological variability. Technical noise can be removed by fitting a model to the spike-ins and "substracting" this from the endogenous genes. There are several methods available based on this premise (eg. [BASiCS](https://github.com/catavallejos/BASiCS), [scLVM](https://github.com/PMBio/scLVM), [RUV](http://bioconductor.org/packages/release/bioc/html/RUVSeq.html)); each using different noise models and different fitting procedures.
+Since the same amount of ERCC spike-in was added to each cell in our experiment we know that all the variablity we observe for these genes is due to technical noise; whereas endogenous genes are affected by both technical noise and biological variability. Technical noise can be removed by fitting a model to the spike-ins and "substracting" this from the endogenous genes. There are several methods available based on this premise (eg. [BASiCS](https://github.com/catavallejos/BASiCS), [scLVM](https://github.com/PMBio/scLVM), [RUV](http://bioconductor.org/packages/release/bioc/html/RUVSeq.html)); each using different noise models and different fitting procedures. Alternatively, one can identify genes which exhibit significant variation beyond technical noise (eg. Distance to median, [Highly variable genes](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html))
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -25,7 +25,7 @@ umi.qc <- umi[fData(umi)$use, pData(umi)$use]
 endog_genes <- !fData(umi.qc)$is_feature_control
 ```
 
-## Brennecke method
+## Highly variable genes via Brennecke method
 
 
 We will demonstrate some of the methods starting from the simplest one proposed by [Brennecke et al.](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html), which identifies genes with significant variation above technical noise (ERCCs).
@@ -39,11 +39,7 @@ significantly above the curve. This has been provided for you as the
 Brenneck_getVariableGenes(counts, spikes) function.
 
 ```{r rm-conf-brennecke, fig.cap = "Results of using the Brennecke method on the Blischak dataset", fig.asp=1}
-umi.qc <- 
-    scater::normaliseExprs(umi.qc,
-                           method = "RLE",
-                           feature_set = endog_genes,
-                           lib.size = rep(1, ncol(umi.qc)))
+umi.qc <- cpm(umi.qc)
 erccs <- grep("ERCC-", rownames(assayData(umi.qc)$norm_counts))
 highly.var.genes <- scRNA.seq.funcs::Brennecke_getVariableGenes(
             assayData(umi.qc)$norm_counts,
