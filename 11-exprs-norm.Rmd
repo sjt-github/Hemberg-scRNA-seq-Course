@@ -8,7 +8,6 @@ knit: bookdown::preview_chapter
 
 ```{r, echo=FALSE}
 library(scRNA.seq.funcs)
-library(knitr)
 opts_chunk$set(out.width='90%', fig.align = 'center')
 insert_fun <- function(name) {
   read_chunk(lines = capture.output(dump(name, '')), labels = paste(name, 'source', sep = '-'))
@@ -81,6 +80,7 @@ __Note:__ edgeR makes extra adjustments to some of the normalization methods whi
 We will continue to work with the Blischak data that was used in the previous chapter.
 
 ```{r, message=FALSE, warning=FALSE}
+library(scRNA.seq.funcs)
 library(scater, quietly = TRUE)
 options(stringsAsFactors = FALSE)
 umi <- readRDS("blischak/umi.rds")

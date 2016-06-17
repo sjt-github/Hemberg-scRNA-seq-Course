@@ -5,8 +5,8 @@ knit: bookdown::preview_chapter
 # Normalization for library size (Reads)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(scRNA.seq.funcs)
 library(scater, quietly = TRUE)
-library(knitr)
 options(stringsAsFactors = FALSE)
 opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
 reads <- readRDS("blischak/reads.rds")
