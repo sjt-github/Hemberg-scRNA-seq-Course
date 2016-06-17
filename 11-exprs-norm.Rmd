@@ -153,7 +153,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "exprs")
 ```
 ```{r norm-ours-rle-raw, fig.cap = "Cell-wise RLE of the blischak data"}
-boxplot(calc_cell_RLE(exprs(umi.qc)),
+boxplot(calc_cell_RLE(norm_counts(umi.qc)),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))

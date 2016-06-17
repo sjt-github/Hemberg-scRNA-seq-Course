@@ -137,6 +137,7 @@ with the output for DESeq. Load it using:
 DESeq_table <- readRDS("usoskin/DESeq_table.rds")
 length(unique(DESeq_table$Gene))
 ```
+
 We can also use the Brennecke method introduced earlier to identify 
 highly variable genes. However, there are only 9 spike-ins detected in this dataset
 so we will use the entire dataset as spike-ins. 
