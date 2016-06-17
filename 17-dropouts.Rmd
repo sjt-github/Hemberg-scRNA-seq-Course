@@ -86,13 +86,26 @@ title(main = "Usoskin")
 
 ## Right outliers
 
-[Note to TA: Add diagram/example of averaging to get outliers]
-
 There are many outliers to the right of the fitted MM curve. Genes
 which are expressed at different levels in subpopulations of our cells
 will be shifted to the right of the curve. This happens because the MM
 curve is a convex function, whereas averaging dropout rate and
 expression is a linear function.
+
+```{r, fig.width = 8.5, fig.height = 6}
+K = 49.473
+S_sim = 10^seq(from=-3, to=4, by=0.05)
+MM = 1-S_sim/(K+S_sim)
+plot(S_sim, MM, type="l", lwd=3, xlab="Expression", ylab="Dropout Rate", xlim=c(1,1000))
+S1 = 10; P1 = 1-S1/(K+S1) # Expression & dropouts for cells in condition 1
+S2 = 750; P2 = 1-S2/(K+S2) # Expression & dropouts for cells in condition 2
+points(c(S1,S2),c(P1,P2), pch=16, col="grey85", cex=3)
+mix = 0.5; # proportion of population in condition 1
+points(S1*mix+S2*(1-mix), P1*mix+P2*(1-mix), pch=16, col="grey35", cex=3)
+```
+__Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures. 
+
+__Exercise__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
 
 We use M3Drop to identify significant outliers to the right of the MM
 curve. We also apply 1% FDR multiple testing correction:
