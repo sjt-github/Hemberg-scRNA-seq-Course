@@ -120,6 +120,24 @@ boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
         main = "", ylim=c(-1,1))
 ```
 
+```{r norm-pca-downsample-reads, fig.cap = "PCA plot of the blischak data after downsampling"}
+norm_counts(reads.qc) <- 
+    scRNA.seq.funcs::Down_Sample_Matrix(counts(reads.qc))
+scater::plotPCA(reads.qc[endog_genes, ],
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "norm_counts")
+```
+```{r norm-ours-rle-downsample-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+tmp <- norm_counts(reads.qc[endog_genes, ])
+# ignore genes which are not detected in any cells following downsampling
+boxplot(calc_cell_RLE(tmp[rowMeans(tmp) > 0, ]), 
+        col = "grey50",
+        ylab = "RLE",
+        main = "", ylim = c(-1, 1))
+```
+
 ```{r}
 reads.qc <-
     scater::getBMFeatureAnnos(reads.qc,
