@@ -29,7 +29,7 @@ the gene expression profiles. Since some of the cells will
 proceed faster along the differentiation than others, each snapshot may contain
 cells at varying points along the developmental progression. We use statistical methods
  to order the cells along one or more trajectories which represent the underlying
- developmental trajectories, this ordering is referred to a "pseudotime".
+ developmental trajectories, this ordering is referred to as "pseudotime".
 
 In this chapter we will consider two different tools, Monocle and
 TSCAN for ordering cells according to their pseudotime development. To
@@ -39,45 +39,51 @@ development that was collected by Deng et al. The dataset consists of
 
 ## TSCAN
 
-TSCAN combines clustering with pseudotime analysis. First it clustering the cells using `mclust`, 
-which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters together. The branch of this tree which connects the largest number of clusters is the main branch which is used to determine pseudotime.
+TSCAN combines clustering with pseudotime analysis. First it clusters the cells using `mclust`, 
+which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters together. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.
 
 First we will try to use all genes to order the cells.
 ```{r tscan-all-genes}
 deng <- readRDS("deng/deng.rds")
 cellLabels <- colnames(deng)
-procdeng <- TSCAN::preprocess(deng, clusternum=10)
+procdeng <- TSCAN::preprocess(deng)
 colnames(procdeng) <- 1:268
-dengclust <- TSCAN::exprmclust(procdeng, clusternum=10)
+dengclust <- TSCAN::exprmclust(procdeng, clusternum = 10)
 TSCAN::plotmclust(dengclust)
-dengorderTSCAN <- TSCAN::TSCANorder(dengclust, orderonly=F)
+dengorderTSCAN <- TSCAN::TSCANorder(dengclust, orderonly = F)
 pseudotime_order_tscan <- as.character(dengorderTSCAN$sample_name)
-pseudotime_order_tscan
 ```
 
-We can also examine which cells have been assigned to each state:
+We can also examine which timepoints have been assigned to each state:
 
-```{r}
+```{r tscan-vs-truth}
 cellLabels[dengclust$clusterid == 1]
+plot(
+    cellLabels[as.numeric(pseudotime_order_tscan)], 
+    xlab="Pseudotime Order", 
+    ylab="Timepoint"
+)
 ```
-__Exercise__ Compare results for different numbers of clusters (`clusternum`).
+
+__Exercise 1__ Compare results for different numbers of clusters (`clusternum`).
 
 ## monocle
 
-Monocle skips the clustering stage of TSCAN and directly builds a minimum spanning tree to connect all cells. Monocle then identifies the longest path in this tree to determine pseudotime. If the data contains diverging trajectories (i.e. one cell type differentiation into two different cell-types), monocle can identify alternative long paths in the tree using the argument `num_paths`. Each of the resulting forked paths is defined as a separate cell state, thus `num_paths=2` will identify three different cell states.
+Monocle skips the clustering stage of TSCAN and directly builds a minimum spanning tree to connect all cells. Monocle then identifies the longest path in this tree to determine pseudotime. If the data contains diverging trajectories (i.e. one cell type differentiates into two different cell-types), monocle can identify alternative long paths in the tree using the argument `num_paths`. Each of the resulting forked paths is defined as a separate cell state, thus `num_paths = 2` will identify three different cell states.
 
 Unfortunately, Monocle does not work when all the genes are used, so
 we must carry out feature selection. First, we use M3Drop:
 ```{r m3d-select-genes}
 m3dGenes <- as.character(
-    M3Drop::M3Drop_Differential_Expression(deng, suppress.plot=T)$Gene
+    M3Drop::M3Drop_Differential_Expression(deng, suppress.plot = T)$Gene
 )
 d <- deng[which(m3dGenes %in% rownames(deng)),]
 d <- d[!duplicated(rownames(d)),]
 ```
 
-```{r monocle-all-genes}
-pd <- as.data.frame(colnames(d))
+Now run monocle:
+```{r monocle-all-genes, message=FALSE, warning=FALSE}
+pd <- as.data.frame(as.numeric(as.character(cellLabels)))
 names(pd) <- "timepoint"
 pd <- new("AnnotatedDataFrame", data=pd)
 fd <- as.data.frame(rownames(d))
@@ -85,25 +91,74 @@ names(fd) <- "gene"
 fd <- new("AnnotatedDataFrame", data=fd)
 colnames(d) <- 1:dim(d)[2]
 rownames(d) <- 1:dim(d)[1]
-dCellData <- monocle::newCellDataSet(d, phenoData=pd, featureData=fd)
+rownames(pd) <- colnames(d)
+rownames(fd) <- rownames(d)
+dCellData <- monocle::newCellDataSet(d, phenoData = pd, featureData = fd)
 dCellData <- monocle::setOrderingFilter(dCellData, 1:length(m3dGenes))
-dCellDataSet <- monocle::reduceDimension(dCellData, pseudo_expr=1)
-dCellDataSet <- monocle::orderCells(dCellDataSet, reverse=T, num_paths=2)
+dCellDataSet <- monocle::reduceDimension(dCellData, pseudo_expr = 1)
+dCellDataSet <- monocle::orderCells(dCellDataSet, reverse = F, num_paths = 1)
 monocle::plot_spanning_tree(dCellDataSet)
-pseudotime_monocle <- data.frame(Cell = cellLabels, 
-                                time = phenoData(dCellDataSet)$Pseudotime, 
-                                State=phenoData(dCellDataSet)$State)
-pseudotime_order_monocle <- rownames(pseudotime_monocle[order(pseudotime_monocle$time), ])
-pseudotime_order_monocle
+# Store the ordering
+pseudotime_monocle <- 
+    data.frame(
+        Timepoint = phenoData(dCellDataSet)$timepoint, 
+        pseudotime = phenoData(dCellDataSet)$Pseudotime, 
+        State=phenoData(dCellDataSet)$State
+    )
+rownames(pseudotime_monocle) <- 1:268
+pseudotime_order_monocle <- 
+    rownames(pseudotime_monocle[order(pseudotime_monocle$pseudotime), ])
+```
+
+We can again compare the inferred pseudotime to the known sampling timepoints.
+```{r monocle-vs-truth}
+plot(
+    pseudotime_monocle$pseudotime, 
+    pseudotime_monocle$Timepoint, 
+    xlab="Pseudotime", 
+    ylab="Timepoint"
+)
 ```
 
 ## Comparison of the methods
 
 How do the trajectories inferred by TSCAN and Monocle compare?
 ```{r tscan-monocle-compare}
-matched_ordering <- match(pseudotime_order_tscan, pseudotime_order_monocle)
-plot(matched_ordering, xlab = "Monocle Order", ylab = "TSCAN Order")
+matched_ordering <- 
+    match(
+        pseudotime_order_tscan, 
+        pseudotime_order_monocle
+    )
+timepoint_ordered <- 
+    pseudotime_monocle[order(pseudotime_monocle$pseudotime), 1]
+colours <- rainbow(n = 10) # red = early, violet = late
+plot(
+    matched_ordering, 
+    xlab = "Monocle Order", 
+    ylab = "TSCAN Order", 
+    col = colours[timepoint_ordered], 
+    pch = 16
+)
 ```
 
-__Exercise__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes
+## Expression of genes through time
+Each package also enables the visualization of expression through pseudotime.
 
+__TSCAN__
+```{r Obox6-tscan}
+colnames(deng) <- 1:268
+TSCAN::singlegeneplot(
+    deng[rownames(deng) == "Obox6", ], 
+    dengorderTSCAN
+)
+```
+
+__Monocle__
+```{r Obox6-monocle}
+monocle::plot_genes_in_pseudotime(
+    dCellDataSet[fData(dCellDataSet)$gene == "Obox6",], 
+    color_by = "timepoint"
+)
+```
+
+__Exercise 2__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes
