@@ -58,7 +58,7 @@ uso_list <- M3Drop::M3Drop_Clean_Data(
 )
 ```
 
-__Exercise__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
+__Exercise 1__: How many cells & genes have been removed by this filtering? Do you agree with the 2000 detected genes threshold?
 
 ## The Michaelis-Menten Equation
 
@@ -105,7 +105,7 @@ points(S1*mix+S2*(1-mix), P1*mix+P2*(1-mix), pch=16, col="grey35", cex=3)
 ```
 __Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures. 
 
-__Exercise__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
+__Exercise 2__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
 
 We use M3Drop to identify significant outliers to the right of the MM
 curve. We also apply 1% FDR multiple testing correction:
@@ -159,18 +159,16 @@ the squared mean expression). A quadratic curve is fit to the relationship
 between these two variables for the ERCC spike-in (subject to just
 technical variation) then a chi-square test is used to find genes
 significantly above the curve. This has been provided for you as the
-Brenneck_getVariableGenes(counts, spikes) function.
+Brennecke_getVariableGenes(counts, spikes) function. However, there are only 9 spike-ins detected in this dataset
+so we will use the entire dataset as spike-ins. 
 
-In the figure above blue points are the ERCC spike-ins. The red curve
+In the figure below the red curve
 is the fitted technical noise model and the dashed line is the 95%
 CI. Pink dots are the genes with significant biological variability
 after multiple-testing correction. Since our dataset is relatively
 homogeneous only  genes are identified as significantly
 variable.
 
-We can also use the Brennecke method introduced earlier to identify 
-highly variable genes. However, there are only 9 spike-ins detected in this dataset
-so we will use the entire dataset as spike-ins. 
 ```{r, fig.width = 7, fig.height = 6}
 Brennecke_HVG <- M3Drop::Brennecke_getVariableGenes(
     uso_list$data,
@@ -180,9 +178,9 @@ Brennecke_HVG <- M3Drop::Brennecke_getVariableGenes(
 length(Brennecke_HVG)
 ```
 
-__Exercise__: Plot a heatmap of the expression of the HVGs and DESeq DE genes. Do they look differentially expressed?
+__Exercise 3__: Plot a heatmap of the expression of the HVGs and DESeq DE genes. Do they look differentially expressed?
 
-__Exercise__: How many of the known markers are identified by Brennecke & DESeq?
+__Exercise 4__: How many of the known markers are identified by Brennecke & DESeq?
 
 Finally, we can compare the overlaps between these three dataset.
 

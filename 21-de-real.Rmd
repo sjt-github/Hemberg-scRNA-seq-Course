@@ -70,8 +70,6 @@ for (i in 1:nrow(biase)) {
 
 ## DESeq2
 
-Because the number of genes now is `r dim(biase)[1]`, which is about 100 times more than the number of genes we used for the synthetic dataset, this calculation will take some time. You do __not__ need to run it during the course, instead just check the results below.
-
 ```{r, message=FALSE, warning=FALSE}
 cond <- factor(
     c(
@@ -90,8 +88,6 @@ pValsDESeq <- resDESeq$padj
 ```
 
 ## SCDE
-
-Because the number of genes now is `r dim(biase)[1]`, which is about 100 times more than the number of genes we used for the synthetic dataset, this calculation will take quite a lot of time. You do __not__ need to run it during the course, instead just check the results below.
 
 ```{r}
 cnts <- apply(
@@ -149,7 +145,7 @@ vennDiagram(
 )
 ```
 
-__Exercise:__ How does this Venn diagram correspond to what you would expect based on the synthetic data? 
+__Exercise 1:__ How does this Venn diagram correspond to what you would expect based on the synthetic data? 
 
 ## Visualisation
 
@@ -157,7 +153,7 @@ To further characterize the list of genes, we can calculate the
 average fold-changes and compare the ones that were called as
 differentially expressed to the ones that were not. 
 
-```{r de-real-biase-hist}
+```{r de-real-biase-hist, fig.height=7}
 cell2 <- biase[, 1:20]
 cell4 <- biase[, 21:40]
 ksGenesChangedInds <- which(pVals<.05)
@@ -186,7 +182,7 @@ hist(log2(meanFoldChange[deSeqGenesChangedInds]),
      xlim = c(-8, 8))
 ```
 
-__Exercise:__ Create the histogram of fold-changes for SCDE. Compare
+__Exercise 2:__ Create the histogram of fold-changes for SCDE. Compare
 the estimated fold-changes between the different methods? What do the
 genes where they differ have in common?
 
@@ -196,7 +192,7 @@ A popular method for illustrating the difference between two
 conditions is the volcano plot which compares the magnitude of the
 change and the significance.
 
-```{r de-real-biase-volcano}
+```{r de-real-biase-volcano, fig.height=7}
 par(mfrow=c(2,1))
 plot(log2(meanFoldChange[ksGenesNotChangedInds]),
      -log10(pVals[ksGenesNotChangedInds]/nGenes),
@@ -224,7 +220,7 @@ points(log2(meanFoldChange[deSeqGenesChangedInds]),
 
 Another popular method for illustrating the difference between two
 conditions is the MA-plot, in which the data has been transformed onto the M (log ratios) and A (mean average) scale:
-```{r de-real-biase-ma-plot}
+```{r de-real-biase-ma-plot, fig.height=7}
 par(mfrow=c(2,1))
 plot(log2(rowMeans(cell2[ksGenesNotChangedInds,])),
      log2(meanFoldChange[ksGenesNotChangedInds]),
@@ -245,7 +241,7 @@ points(log2(rowMeans(cell2[deSeqGenesChangedInds,])),
        col = "blue")
 ```
 
-__Exercise:__ The volcano and MA-plots for the SCDE are missing - can
+__Exercise 3:__ The volcano and MA-plots for the SCDE are missing - can
 you generate them? Compare to the synthetic data, what do they tell
 you about the properties of the genes that have changed?
 
@@ -259,10 +255,9 @@ allChangedInds <- intersect(which(pValsDESeq<.05),
                             intersect(which(pValsSCDE<.05),
                                       which(pVals<.05)))
 pheatmap::pheatmap(log2(1 + cbind(cell2, cell4)[allChangedInds,]),
-                   # scale = "column",
                    cutree_cols = 2,
                    show_rownames = FALSE)
 ```
 
-__Exercise:__ Create heatmaps for the genes that were detected by at least 2/3 methods.
+__Exercise 4:__ Create heatmaps for the genes that were detected by at least 2/3 methods.
 

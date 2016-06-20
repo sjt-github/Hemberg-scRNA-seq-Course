@@ -17,6 +17,7 @@ insert_fun('calc_cpm')
 insert_fun('calc_sf')
 insert_fun('calc_uq')
 insert_fun('calc_cell_RLE')
+insert_fun('Down_Sample_Matrix')
 ```
 
 In the previous chapter we identified important confounding factors and explanatory variables. scater allows one to account for these variables in subsequent statistical models or to condition them out using `normaliseExprs()`, if so desired. This can be done by providing a design matrix to `normaliseExprs()`. We are not covering this topic here, but you can try to do it yourself as an exercise.
@@ -196,42 +197,32 @@ scater::plotPCA(umi.qc[endog_genes, ],
 boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",
-        main = "", ylim=c(-1,1))
+        main = "", ylim = c(-1, 1))
 ```
 ## Downsampling 
 
 A final way to correct for library size is to downsample the expression matrix so that each cell has approximately the same total number of molecules. The benefit of this method is that zero values will be introduced by the down sampling thus eliminating any biases due to differing numbers of detected genes. However, the major drawback is that the process is not deterministic so each time the downsampling is run the resulting expression matrix is slightly different. Thus, often analyses must be run on multiple downsamplings to ensure results are robust.
 
-```{r}
-Down_Sample_Matrix <- function(expr_mat) {
-        min_lib_size = min(colSums(expr_mat))
-        down_sample <- function(x) {
-                prob = min_lib_size/sum(x)
-                return(unlist(lapply(x, function(y) {rbinom(1,y,prob)})))
-        }
-        down_sampled_mat = apply(expr_mat,2,down_sample)
-        return(down_sampled_mat)
-}
-```
-```{r norm-pca-downsample, fig.cap = "PCA plot of the blischak data after downsampling"}
-downsampled <- Down_Sample_Matrix(counts(umi.qc));
-tmp = umi.qc;
-assayData(tmp)$counts <- downsampled
+```{r Down_Sample_Matrix-source, eval=FALSE}
 
-scater::plotPCA(tmp[endog_genes, ],
+```
+
+```{r norm-pca-downsample, fig.cap = "PCA plot of the blischak data after downsampling"}
+norm_counts(umi.qc) <- 
+    scRNA.seq.funcs::Down_Sample_Matrix(counts(umi.qc))
+scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
-                exprs_values = "counts")
+                exprs_values = "norm_counts")
 ```
 ```{r norm-ours-rle-downsample, fig.cap = "Cell-wise RLE of the blischak data"}
-boxplot(calc_cell_RLE(downsampled[rowMeans(downsampled)>0,]), #Ignore genes which are not detected 
-                                                              #in any cells following downsampling
+# ignore genes which are not detected in any cells following downsampling
+boxplot(calc_cell_RLE(downsampled[rowMeans(downsampled) > 0, ]), 
         col = "grey50",
         ylab = "RLE",
-        main = "", ylim=c(-1,1))
+        main = "", ylim = c(-1, 1))
 ```
-
 
 ## Normalizing for gene/transcript length
 
