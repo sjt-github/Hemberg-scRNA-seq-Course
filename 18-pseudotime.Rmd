@@ -34,7 +34,7 @@ cells at varying points along the developmental progression. We use statistical 
 In this chapter we will consider two different tools, Monocle and
 TSCAN for ordering cells according to their pseudotime development. To
 illustrate the methods we will be using a dataset on mouse embryonic
-development that was collected by Deng et al. The dataset consists of
+development [@Deng2014-mx]. The dataset consists of
 268 cells from 10 different time-points of early mouse development.
 
 ## TSCAN

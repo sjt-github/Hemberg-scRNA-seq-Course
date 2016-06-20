@@ -349,4 +349,4 @@ tsne.plot(d, pt.size = 1)
 
 __Exercise 13__: As you can see DBSCAN could find only one cluster. It is known that DBSCAN cannot cluster data sets well with large differences in densities, since the _G.use_ parameter cannot then be chosen appropriately for all clusters. Try to change _G.use_ to be able to find more than one cluster in the data.
 
-__Note__ We found that in general SEURAT does not work well for small datasets (_N_ < 200 cells). For a comprehensive comparisons of the methods please look at the SC3 paper ([@Kiselev2016-bq]).
+__Note__ We found that in general SEURAT does not work well for small datasets (_N_ < 200 cells). For a comprehensive comparisons of the methods please look at the SC3 paper [@Kiselev2016-bq].
