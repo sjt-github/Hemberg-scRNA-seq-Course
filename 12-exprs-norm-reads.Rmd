@@ -47,8 +47,7 @@ boxplot(calc_cell_RLE(cpm(reads.qc[endog_genes, ])),
 reads.qc <- 
     scater::normaliseExprs(reads.qc,
                            method = "TMM",
-                           feature_set = endog_genes,
-                           lib.size = rep(1, ncol(reads.qc)))
+                           feature_set = endog_genes)
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
@@ -62,7 +61,7 @@ boxplot(calc_cell_RLE(norm_counts(reads.qc[endog_genes, ])),
         main = "", ylim=c(-1,1))
 ```
 
-```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the blischak data after RLE normalisation"}
+```{r norm-pca-lsf-umi, fig.cap = "PCA plot of the blischak data after LSF normalisation"}
 qclust <- scran::quickCluster(reads.qc, min.size = 30)
 reads.qc <- scran::computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- scater::normalize(reads.qc)
@@ -84,8 +83,7 @@ boxplot(calc_cell_RLE(exprs(reads.qc[endog_genes, ])),
 reads.qc <- 
     scater::normaliseExprs(reads.qc,
                            method = "RLE",
-                           feature_set = endog_genes,
-                           lib.size = rep(1, ncol(reads.qc)))
+                           feature_set = endog_genes)
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
@@ -105,8 +103,7 @@ reads.qc <-
     scater::normaliseExprs(reads.qc,
                            method = "upperquartile", 
                            feature_set = endog_genes,
-                           p = 0.99,
-                           lib.size = rep(1, ncol(reads.qc)))
+                           p = 0.99)
 scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
