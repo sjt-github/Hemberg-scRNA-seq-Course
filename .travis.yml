@@ -12,7 +12,7 @@ install:
   - Rscript -e "if (!require('knitr')) install.packages('knitr')"
   - Rscript -e "if (!require('devtools')) install.packages('devtools')"
   - Rscript -e "if (!require('BiocInstaller')) {source('https://bioconductor.org/biocLite.R');biocLite('BiocInstaller')}"
-  - Rscript -e "devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
+  - Rscript -e "if (!require('scRNA.seq.funcs')) devtools::install_github('hemberg-lab/scRNA.seq.funcs')"
 
   - Rscript -e "if (!require('ggplot2')) install.packages('ggplot2')"
   - Rscript -e "if (!require('pheatmap')) install.packages('pheatmap')"

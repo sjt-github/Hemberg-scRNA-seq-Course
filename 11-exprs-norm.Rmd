@@ -217,8 +217,9 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 ```{r norm-ours-rle-downsample, fig.cap = "Cell-wise RLE of the blischak data"}
+tmp <- norm_counts(umi.qc[endog_genes, ])
 # ignore genes which are not detected in any cells following downsampling
-boxplot(calc_cell_RLE(downsampled[rowMeans(downsampled) > 0, ]), 
+boxplot(calc_cell_RLE(tmp[rowMeans(tmp) > 0, ]), 
         col = "grey50",
         ylab = "RLE",
         main = "", ylim = c(-1, 1))
