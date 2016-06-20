@@ -28,7 +28,7 @@ scater::plotQC(reads.qc[endog_genes, ],
                exprs_values = "counts")
 ```
 
-```{r confound-find-expl-vars-reads, fig.cap = "Explanatory variables", fig.asp=1, eval=FALSE}
+```{r confound-find-expl-vars-reads, fig.cap = "Explanatory variables"}
 scater::plotQC(reads.qc[endog_genes, ],
                type = "expl",
                exprs_values = "counts",

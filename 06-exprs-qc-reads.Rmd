@@ -230,10 +230,6 @@ limma::vennDiagram(venn.diag,
                    circle.col = c("magenta", "blue", "green"))
 ```
 
-```{r dropout-overview-reads, fig.cap = "Dropout rate vs mean expression"}
-scater::plotQC(reads, type = "exprs-freq-vs-mean")
-```
-
 ```{r top50-gene-expr-reads, fig.cap = "Number of total counts consumed by the top 50 expressed genes", fig.asp = 1}
 scater::plotQC(reads, type = "highest-expression")
 ```
