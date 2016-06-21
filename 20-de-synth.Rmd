@@ -273,7 +273,7 @@ par(mfrow = c(1, 1))
 limma::vennDiagram(
     vennCounts(
         cbind(
-            1 - changedGenes,
+            changedGenes,
             pValsDESeq < .05,
             pValsSCDE < .05,
             pVals < .05
