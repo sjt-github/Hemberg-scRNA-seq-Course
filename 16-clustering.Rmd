@@ -60,7 +60,6 @@ of __SC3__.
 =3$ provides the best clustering. What evidence do you find for this
 in the clustering? How can you use the [silhouette plots](https://en.wikipedia.org/wiki/Silhouette_%28clustering%29) to
 motivate choosing the value of $k$ that you think looks best?
-_Comment: You need to explain what the Silhouette plots represent!_
 
 * __Exercise 3__: The solution may change depending on the combination of
 check-boxes that was used. How similar are the different solutions,
