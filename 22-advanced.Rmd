@@ -13,8 +13,8 @@ expression matrices as .rds files which you can download
 
 * [Treutlein et al](https://www.dropbox.com/s/2964wgz27vn0jv1/treutlein.rds?dl=0)
 * [Deng et al](https://www.dropbox.com/s/l6ycsod5qb4ryuz/deng.rds?dl=0)
-* [Pollen et al](https://www.dropbox.com/s/fxpjno6sl3ui644/pollen1.rds?dl=0), [alt Pollen](https://www.dropbox.com/s/fxpjno6sl3ui644/pollen1.rds?dl=0)
-* [Usoskin et al](https://www.dropbox.com/s/fxpjno6sl3ui644/pollen1.rds?dl=0), [alt Usoskin](https://www.dropbox.com/s/fxpjno6sl3ui644/pollen1.rds?dl=0), [another Usoskin](https://www.dropbox.com/s/fxpjno6sl3ui644/pollen1.rds?dl=0)
+* [Pollen et al](https://www.dropbox.com/s/fxpjno6sl3ui644/pollen1.rds?dl=0), [alt Pollen](https://www.dropbox.com/s/exax7muxtbh65du/pollen2.rds?dl=0)
+* [Usoskin et al](https://www.dropbox.com/s/klw4d2ervbl4c6h/usoskin1.rds?dl=0), [alt Usoskin](https://www.dropbox.com/s/1t7w9gewm9113al/usoskin2.rds?dl=0), [another Usoskin](https://www.dropbox.com/s/j32sflvkbl4idml/usoskin3.rds?dl=0)
 * [Klein et al](https://www.dropbox.com/s/pzj5mt8w8q2nl8p/klein.rds?dl=0)
 
 Here are some suggestions for questions that you can explore:
