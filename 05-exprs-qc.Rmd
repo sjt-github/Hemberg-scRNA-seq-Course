@@ -30,6 +30,7 @@ opts_chunk$set(out.width='90%', fig.align = 'center')
 
 ```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
+library(knitr)
 options(stringsAsFactors = FALSE)
 ```
 
@@ -40,7 +41,7 @@ anno <- read.table("blischak/annotation.txt", sep = "\t", header = TRUE)
 ```
 
 Inspect a small portion of the expression matrix
-```{r, echo=FALSE}
+```{r}
 knitr::kable(
     head(molecules[ , 1:3]), booktabs = TRUE,
     caption = 'A table of the first 6 rows and 3 columns of the molecules table.'
@@ -114,7 +115,7 @@ total number of molecules for each cell should follow?
 
 __Our answer__
 
-```{r, echo=FALSE}
+```{r}
 filter_by_total_counts <- (umi$total_counts > 25000)
 knitr::kable(
     as.data.frame(table(filter_by_total_counts)),
@@ -123,8 +124,6 @@ knitr::kable(
     caption = 'The number of cells removed by total counts filter (FALSE)'
 )
 ```
-
-If your answer is different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/05-exprs-qc.Rmd) (you need to search for this exercise in the opened file).
 
 ### Detected genes (1)
 
@@ -152,7 +151,7 @@ How many cells does our filter remove?
 
 __Our answer__
 
-```{r, echo=FALSE}
+```{r}
 filter_by_expr_features <- (umi$total_features > 7000)
 knitr::kable(
     as.data.frame(table(filter_by_expr_features)),
@@ -161,8 +160,6 @@ knitr::kable(
     caption = 'The number of cells removed by total features filter (FALSE)'
 )
 ```
-
-If your answer is different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/05-exprs-qc.Rmd) (you need to search for this exercise in the opened file).
 
 ### ERCCs and MTs
 
@@ -198,7 +195,7 @@ Create filters for removing batch NA19098.r2 and cells with high expression of m
 
 __Our answer__
 
-```{r, echo=FALSE}
+```{r}
 filter_by_ERCC <- umi$batch != "NA19098.r2"
 knitr::kable(
   as.data.frame(table(filter_by_ERCC)),
@@ -215,8 +212,6 @@ knitr::kable(
 )
 ```
 
-If your answer is different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/05-exprs-qc.Rmd) (you need to search for this exercise in the opened file).
-
 __Exercise 4__
 
 What would you expect to see in the ERCC vs counts plot if you were examining a dataset containing cells of different sizes (eg. normal & senescent cells)?
@@ -226,6 +221,32 @@ __Answer__
 You would expect to see a group corresponding to the smaller cells (normal) with a higher fraction of ERCC reads than a separate group corresponding to the larger cells (senescent).
 
 ## Cell filtering
+
+### Manual
+
+Now we can define a cell filter based on our previous analysis:
+
+```{r}
+umi$use <- (
+    # sufficient features (genes)
+    filter_by_expr_features &
+    # sufficient molecules counted
+    filter_by_total_counts &
+    # sufficient endogenous RNA
+    filter_by_ERCC &
+    # remove cells with unusual number of reads in MT genes
+    filter_by_MT
+)
+```
+
+```{r}
+knitr::kable(
+  as.data.frame(table(umi$use)),
+  booktabs = TRUE,
+  row.names = FALSE,
+  caption = 'The number of cells removed by manual filter (FALSE)'
+)
+```
 
 ### Default Thresholds
 
@@ -246,7 +267,7 @@ umi$use_default <- (
 )
 ```
 
-```{r, echo=FALSE}
+```{r}
 knitr::kable(
   as.data.frame(table(umi$use_default)),
   booktabs = TRUE,
@@ -274,44 +295,18 @@ scater first creates a matrix where the rows represent cells and the columns rep
 umi <-
 scater::plotPCA(umi,
                 size_by = "total_features", 
-                shape_by = "filter_on_total_features",
+                shape_by = "use",
                 pca_data_input = "pdata",
                 detect_outliers = TRUE,
                 return_SCESet = TRUE)
 ```
 
-```{r, echo=FALSE}
+```{r}
 knitr::kable(
   as.data.frame(table(umi$outlier)),
   booktabs = TRUE,
   row.names = FALSE,
   caption = 'The number of cells removed by automatic filter (FALSE)'
-)
-```
-
-### Manual
-
-Another option in scater is to use your own filters. We define filters based on our previous analysis:
-
-```{r}
-umi$use <- (
-    # sufficient features (genes)
-    filter_by_expr_features &
-    # sufficient molecules counted
-    filter_by_total_counts &
-    # sufficient endogenous RNA
-    filter_by_ERCC &
-    # remove cells with unusual number of reads in MT genes
-    filter_by_MT
-)
-```
-
-```{r, echo=FALSE}
-knitr::kable(
-  as.data.frame(table(umi$use)),
-  booktabs = TRUE,
-  row.names = FALSE,
-  caption = 'The number of cells removed by manual filter (FALSE)'
 )
 ```
 
@@ -325,7 +320,7 @@ __Hint__: Use `limma::vennCounts` and `limma::vennDiagram` functions from the [l
 
 __Answer__
 
-```{r cell-filt-comp, fig.cap = "Comparison of the default, automatic and manual cell filters", echo=FALSE}
+```{r cell-filt-comp, fig.cap = "Comparison of the default, automatic and manual cell filters"}
 def <- colnames(umi)[!umi$use_default]
 auto <- colnames(umi)[umi$outlier]
 man <- colnames(umi)[!umi$use]
@@ -336,8 +331,6 @@ limma::vennDiagram(venn.diag,
                    names = c("Default", "Automatic", "Manual"),
                    circle.col = c("magenta", "blue", "green"))
 ```
-
-If your answer is different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/05-exprs-qc.Rmd) (you need to search for this exercise in the opened file).
 
 ## Gene analysis
 
@@ -364,7 +357,7 @@ filter_genes <- apply(counts(umi[ , pData(umi)$use]), 1,
 fData(umi)$use <- filter_genes
 ```
 
-```{r, echo=FALSE}
+```{r}
 knitr::kable(
     as.data.frame(table(filter_genes)),
     booktabs = TRUE,

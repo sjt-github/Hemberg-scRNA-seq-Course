@@ -1,17 +1,20 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
 # Expression overview (Reads)
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)
-library(knitr)
 options(stringsAsFactors = FALSE)
-opts_chunk$set(out.width='90%', fig.align = 'center', echo=FALSE)
 reads <- readRDS("blischak/reads.rds")
 reads.qc <- reads[fData(reads)$use, pData(reads)$use]
 endog_genes <- !fData(reads.qc)$is_feature_control
+```
+
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(out.width='90%', fig.align = 'center')
 ```
 
 ```{r expr-overview-pca-before-qc-reads, fig.cap = "PCA plot of the blischak data"}
