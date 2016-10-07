@@ -29,6 +29,7 @@ install:
   - Rscript -e "if (!require('SC3')) devtools::install_github('hemberg-lab/SC3')"
   - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
   - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
+  - Rscript -e "if (!require('lfa')) {source('https://bioconductor.org/biocLite.R');biocLite('lfa')}"
   - Rscript -e "if (!require('Seurat')) devtools::install_github('satijalab/seurat', ref = 'da6cd08')"
   
   - Rscript -e "if (!require('M3Drop')) devtools::install_github('tallulandrews/M3D')"
