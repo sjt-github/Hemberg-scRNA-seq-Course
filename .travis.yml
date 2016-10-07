@@ -3,7 +3,7 @@ r:
   - release
 sudo: false
 cache:
-  packages: yes
+  packages: no
   directories:
     - $TRAVIS_BUILD_DIR/_book/_bookdown_files
 
@@ -28,10 +28,7 @@ install:
   - Rscript -e "if (!require('SC3')) {source('https://bioconductor.org/biocLite.R');biocLite('SC3')}"
   - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
   - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
-  - Rscript -e "if (!require('tidyr')) install.packages('tidyr')"
-  - Rscript -e "if (!require('lfa')) {source('https://bioconductor.org/biocLite.R');biocLite('lfa')}"
-  - Rscript -e "if (!require('jackstraw')) install.packages('jackstraw')"
-  - Rscript -e "if (!require('Seurat')) devtools::install_github('Puriney/seurat')"
+  - Rscript -e "if (!require('Seurat')) devtools::install_github('satijalab/seurat', ref = 'da6cd08')"
   
   - Rscript -e "if (!require('M3Drop')) devtools::install_github('tallulandrews/M3D')"
 
