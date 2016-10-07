@@ -42,7 +42,7 @@ reads <- scater::newSCESet(
 ```
 
 ```{r}
-keep_feature <- rowSums(is_exprs(reads)) > 0
+keep_feature <- rowSums(counts(reads) > 0) > 0
 reads <- reads[keep_feature, ]
 ```
 
