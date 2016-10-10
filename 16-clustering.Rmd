@@ -46,7 +46,10 @@ Now we are ready to cluster the data using the methods described in the previous
 ## SC3
 
 ```{r, eval=FALSE}
-SC3::sc3(patient.data, ks = 2:5)
+patient.sceset <- create_sceset(patient.data)
+patient.sceset <- calculateQCMetrics(patient.sceset)
+patient.sceset <- sc3(patient.sceset, ks = 2:5)
+sc3_interactive(patient.sceset)
 ```
 
 This command will open SC3 in a web browser. Once it is opened please perform the following exercises:
@@ -81,7 +84,7 @@ input.log <- log2(input + 1)
 # run pcaReduce 10 times creating hierarchies from 1 to 30 clusters
 pca.red <- pcaReduce::PCAreduce(t(input.log), nbt = 10, q = 30, method = 'S')
 res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 3))
-pheatmap::pheatmap(res)
+pheatmap(res, legend = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
 
 __Exercise 6__: Run pcaReduce for $k=2$, $k=4$ and $k=5$. Is it easy to choose the optimal $k$?

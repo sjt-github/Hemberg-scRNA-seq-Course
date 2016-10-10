@@ -43,7 +43,7 @@ method which uses [singular value decomposition](https://en.wikipedia.org/wiki/S
 qclust <- scran::quickCluster(umi.qc, min.size = 30)
 umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
 umi.qc <- scater::normalize(umi.qc)
-assayData(umi.qc)$ruv_counts <- RUVSeq::RUVg(
+set_exprs(umi.qc, "ruv_counts") <- RUVSeq::RUVg(
     round(exprs(umi.qc)),
     erccs,
     k = 1)$normalizedCounts

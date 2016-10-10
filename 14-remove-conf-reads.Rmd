@@ -22,7 +22,7 @@ erccs <- fData(reads.qc)$is_feature_control
 qclust <- scran::quickCluster(reads.qc, min.size = 30)
 reads.qc <- scran::computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
 reads.qc <- scater::normalize(reads.qc)
-assayData(reads.qc)$ruv_counts <- RUVSeq::RUVg(
+set_exprs(reads.qc, "ruv_counts") <- RUVSeq::RUVg(
     round(exprs(reads.qc)),
     erccs,
     k = 1)$normalizedCounts
