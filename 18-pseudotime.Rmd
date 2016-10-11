@@ -78,7 +78,7 @@ Unfortunately, Monocle does not work when all the genes are used, so
 we must carry out feature selection. First, we use M3Drop:
 ```{r m3d-select-genes}
 m3dGenes <- as.character(
-    M3Drop::M3Drop_Differential_Expression(deng, suppress.plot = T)$Gene
+    M3Drop::M3DropDifferentialExpression(deng, suppress.plot = T)$Gene
 )
 d <- deng[which(m3dGenes %in% rownames(deng)),]
 d <- d[!duplicated(rownames(d)),]

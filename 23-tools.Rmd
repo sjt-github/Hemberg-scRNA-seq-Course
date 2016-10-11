@@ -14,32 +14,6 @@ output: html_document
 
 ## scRNA-seq analysis tools
 
-Normalization:
+Extensive list of software packages (and the people developing these methods) for single-cell data analysis:
 
-* [RUVSeq](http://bioconductor.org/packages/RUVSeq/)
-* [BASiCS](https://github.com/catavallejos/BASiCS)
-* [scLVM](https://github.com/PMBio/scLVM)
-
-DE and pathway analysis:
-
-* [D3E](https://github.com/hemberg-lab/D3E)
-* [SCDE](http://hms-dbmi.github.io/scde/)
-
-Hard clustering:
-
-* [SC3](http://bioconductor.org/packages/SC3/)
-* [pcaReduce](https://github.com/JustinaZ/pcaReduce)
-* [tSNE+kmeans](https://lvdmaaten.github.io/tsne/)
-* [SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)
-* [SINCERA](https://research.cchmc.org/pbge/sincera.html)
-
-Finding important genes:
-
-* [Bernecke method](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html)
-* [M3D](https://github.com/tallulandrews/M3D)
-
-Pseudo-time analysis:
-
-* [Monocle](http://cole-trapnell-lab.github.io/monocle-release/)
-* [Wanderlust](http://www.c2b2.columbia.edu/danapeerlab/html/wanderlust.html)
-* [embeddr](https://github.com/kieranrcampbell/embeddr)
+* [awesome-single-cell](https://github.com/seandavi/awesome-single-cell)
