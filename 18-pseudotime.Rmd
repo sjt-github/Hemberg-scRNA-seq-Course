@@ -153,7 +153,7 @@ Each package also enables the visualization of expression through pseudotime.
 
 __TSCAN__
 ```{r Obox6-tscan}
-colnames(deng) <- 1:268
+colnames(deng) <- 1:ncol(deng)
 TSCAN::singlegeneplot(
     deng[rownames(deng) == "Obox6", ], 
     dengorderTSCAN
