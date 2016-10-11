@@ -47,7 +47,7 @@ First we will try to use all genes to order the cells.
 deng <- readRDS("deng/deng.rds")
 cellLabels <- colnames(deng)
 procdeng <- TSCAN::preprocess(deng)
-colnames(procdeng) <- 1:268
+colnames(procdeng) <- 1:ncol(deng)
 dengclust <- TSCAN::exprmclust(procdeng, clusternum = 10)
 TSCAN::plotmclust(dengclust)
 dengorderTSCAN <- TSCAN::TSCANorder(dengclust, orderonly = F)
@@ -57,13 +57,19 @@ pseudotime_order_tscan <- as.character(dengorderTSCAN$sample_name)
 We can also examine which timepoints have been assigned to each state:
 
 ```{r tscan-vs-truth}
-cellLabels[dengclust$clusterid == 1]
+cellLabels[dengclust$clusterid == 10]
 colours <- rainbow(n = 10) # red = early, violet = late
+tmp <- 
+    factor(
+        cellLabels[as.numeric(pseudotime_order_tscan)],
+        levels = c("early2cell", "mid2cell", "late2cell", "4cell", "8cell", 
+                   "16cell", "midblast", "earlyblast", "lateblast")
+    )
 plot(
-    cellLabels[as.numeric(pseudotime_order_tscan)], 
+    as.numeric(tmp), 
     xlab="Pseudotime Order", 
     ylab="Timepoint",
-    col = colours[as.numeric(cellLabels[as.numeric(pseudotime_order_tscan)])],
+    col = colours[tmp],
     pch = 16
 )
 ```
@@ -78,7 +84,7 @@ Unfortunately, Monocle does not work when all the genes are used, so
 we must carry out feature selection. First, we use M3Drop:
 ```{r m3d-select-genes}
 m3dGenes <- as.character(
-    M3Drop::M3DropDifferentialExpression(deng, suppress.plot = T)$Gene
+    M3Drop::M3DropDifferentialExpression(deng)$Gene
 )
 d <- deng[which(m3dGenes %in% rownames(deng)),]
 d <- d[!duplicated(rownames(d)),]
