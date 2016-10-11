@@ -86,22 +86,19 @@ we must carry out feature selection. First, we use M3Drop:
 m3dGenes <- as.character(
     M3Drop::M3DropDifferentialExpression(deng)$Gene
 )
-d <- deng[which(m3dGenes %in% rownames(deng)),]
-d <- d[!duplicated(rownames(d)),]
+d <- deng[which(rownames(deng) %in% m3dGenes), ]
+d <- d[!duplicated(rownames(d)), ]
 ```
 
 Now run monocle:
 ```{r monocle-all-genes, message=FALSE, warning=FALSE}
-pd <- as.data.frame(as.numeric(as.character(cellLabels)))
-names(pd) <- "timepoint"
+pd <- data.frame(timepoint = cellLabels)
 pd <- new("AnnotatedDataFrame", data=pd)
 fd <- as.data.frame(rownames(d))
 names(fd) <- "gene"
 fd <- new("AnnotatedDataFrame", data=fd)
-colnames(d) <- 1:dim(d)[2]
-rownames(d) <- 1:dim(d)[1]
-rownames(pd) <- colnames(d)
-rownames(fd) <- rownames(d)
+colnames(d) <- 1:ncol(d)
+rownames(d) <- 1:nrow(d)
 dCellData <- monocle::newCellDataSet(d, phenoData = pd, featureData = fd)
 dCellData <- monocle::setOrderingFilter(dCellData, 1:length(m3dGenes))
 dCellDataSet <- monocle::reduceDimension(dCellData, pseudo_expr = 1)
@@ -114,7 +111,7 @@ pseudotime_monocle <-
         pseudotime = phenoData(dCellDataSet)$Pseudotime, 
         State=phenoData(dCellDataSet)$State
     )
-rownames(pseudotime_monocle) <- 1:268
+rownames(pseudotime_monocle) <- 1:ncol(d)
 pseudotime_order_monocle <- 
     rownames(pseudotime_monocle[order(pseudotime_monocle$pseudotime), ])
 ```
