@@ -4,43 +4,24 @@ output: html_document
 
 # Advanced exercises
 
-For the final part of the course we provide you with a few open-ended
-question. The goal of these questions is to stimulate new ideas about
-what types of analyses that you can carry out with scRNA-seq data.
+For the final part of the course we would like you to work on more open ended problems. The goal is to carry out the type of analyses that you would be doing for an actual research project. 
 
-We have collected published scRNA-seq datasets and stored the
-expression matrices as .rds files which you can download
+Participants who have their own dataset that they are interested in should feel free to work with them. 
 
-* [Treutlein et al](https://www.dropbox.com/s/2964wgz27vn0jv1/treutlein.rds?dl=0)
-* [Deng et al](https://www.dropbox.com/s/l6ycsod5qb4ryuz/deng.rds?dl=0)
-* [Pollen et al](https://www.dropbox.com/s/fxpjno6sl3ui644/pollen1.rds?dl=0), [alt Pollen](https://www.dropbox.com/s/exax7muxtbh65du/pollen2.rds?dl=0)
-* [Usoskin et al](https://www.dropbox.com/s/klw4d2ervbl4c6h/usoskin1.rds?dl=0), [alt Usoskin](https://www.dropbox.com/s/1t7w9gewm9113al/usoskin2.rds?dl=0), [another Usoskin](https://www.dropbox.com/s/j32sflvkbl4idml/usoskin3.rds?dl=0)
-* [Klein et al](https://www.dropbox.com/s/pzj5mt8w8q2nl8p/klein.rds?dl=0)
+For other participants we recommend downloading a dataset from the [conquer](http://imlspenticton.uzh.ch:3838/conquer/) resource. As you can see, several different QC metrics have already been pre-calculated and you can obtain the data as a scater-object.
 
 Here are some suggestions for questions that you can explore:
 
-* SC3 uses a different method compared to SCDE and DESeq2 to compare
-  several groups at once to identify marker genes. Can you use SCDE or
-  DESeq2 to compare the clusters from the above datasets to find
-  marker genes? How does this set of genes differ from the one
-  obtained by SC3?
+* There are several mESC datasets from different labs (e.g. Deng, Xue and Kumar). Can you merge them and remove the batch effects?
 
-* Both the [Pollen et
-  al](http://www.nature.com/nbt/journal/v32/n10/abs/nbt.2967.html) and
-  the [Usoskin et
-  al](http://www.nature.com/neuro/journal/v18/n1/abs/nn.3881.html)
-  come in more than one version. The only difference between the files
-  are the cell labels. The different datasets have been clustered at
-  different granularities. Use SC3 and other clustering tools to
-  explore the different granularities. Do you think that there is
-  stronger support for one choice of granularity over another? How can
-  you best motivate one choice over another? Does the interpretation
-  of the data change depending on the choice of $k$? Can you identify
-  some other choice of $k$ that the authors did not suggest?
+* One of the main challenging in hard clustering is to identify the appropriate value for k. Can you use one or more of the clustering tools to explore the different hierarchies available? What are good mathematical and/or biological criteria for determining k?
 
-* In addition to identifying differences in expression between
-  different cell types, we are also interested in finding differences
-  in regulatory interactions. One way of characterizing regulatory
-  interactions is through correlation coefficients. Can you identify
-  differences in regulation between different clusters of cells in any
-  of the above datasets?
+* How can you identify cell-type specific gene regulatory networks? A useful starting point is to calculate the pairwise correlation coefficients for all genes. But how do you proceed from there? What is the best strategy for selecting a cut-off and how can you validate the extracted network?
+
+* The choice of normalization strategy matters, but how do you determine which is the best method? We used the Blischak data which is specifically constructed for investigating the role of batch effects and we have a good idea of what to expect. In most situations things are likely to be more complicated, so the question is how to evaluate and compare the different methods? We considered DE genes, can you think of other aspects that are relevant? 
+
+* scRNA-seq datasets are high-dimensional and since most dimensions (ie genes) are not informative. Consequently, dimensionality reduction is important when analyzing and visualizing the data. Two of the most popular methods are PCA and tSNE and they have been used extensively in the course. Do you know of any other dimensionality reduction methods and can you apply them to scRNA-seq data?
+
+* One of the main challenges after clustering cells is to interpret the biological relevance of the subpopulations. One approach is to identify [gene ontology](http://geneontology.org/) terms that are enriched for the set of marker genes. Identify marker genes (e.g. using SC3 or M3Drop) and explore the ontology terms using [gProfiler](http://biit.cs.ut.ee/gprofiler/), [WebGestalt](http://www.webgestalt.org/) or [DAVID](https://david.ncifcrf.gov/).
+
+* Similarly, when ordering cells according to pseudotime we would like to understand what underlying cellular processes are changing over time. Identify a set of changing genes from the aligned cells and use ontology terms to characterize them.
