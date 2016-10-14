@@ -90,6 +90,7 @@ If your answers are different please compare your code with [ours](https://githu
 
 An alternative to PCA for visualizing scRNASeq data is a tSNE plot. [tSNE](https://lvdmaaten.github.io/tsne/) (t-Distributed Stochastic Neighbor Embedding) combines dimensionality reduction (e.g. PCA) with random walks on the nearest-neighbour network to map high dimensional data (i.e. our 14,214 dimensional expression matrix) to a 2-dimensional space while preserving local distances between cells. In contrast with PCA, tSNE is a stochastic algorithm which means running the method multiple times on the same dataset will result in different plots. In the code below we fix the "seed" of the random-number generator so that we always get the same plot. 
 
+
 ### Before QC
 
 ```{r expr-overview-tsne-before-qc, fig.cap = "tSNE map of the blischak data"}
@@ -119,6 +120,8 @@ scater::plotTSNE(umi.qc[endog_genes, ],
 Interpreting PCA and tSNE plots is often challenging. However, in this case it is clear that they provide a similar picture of the data. Comparing Figure \@ref(fig:expr-overview-tsne-before-qc) and \@ref(fig:expr-overview-tsne-after-qc), it is again clear that the samples from NA19098.r2 are no longer outliers after the QC filtering.
 
 Furthermore tSNE requires you to provide a value of "perplexity" which reflects the number of neighbours used to build the nearest-neighbour network; a high value creates a dense network which clumps cells together while a low value makes the network more sparse allowing groups of cells to separate from each other. __scater__ uses a default perplexity of the total number of cells divided by five (rounded down).
+
+You can read more about the pitfalls of using tSNE [here](http://distill.pub/2016/misread-tsne/).
 
 __Exercise 2__
 How do the tSNE plots change when a perplexity of 10 or 200 is used?
