@@ -18,6 +18,7 @@ library(SC3)
 library(pheatmap)
 library(ggplot2)
 set.seed(1234567)
+#test
 ```
 
 To illustrate clustering of scRNA-seq data, we consider a dataset of
