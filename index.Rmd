@@ -18,13 +18,13 @@ In this course we will be surveying the existing problems as well as the availab
 
 ## Registration  
 
-<a href="http://training.csx.cam.ac.uk/bioinformatics/event/1755391" target="blank">http://training.csx.cam.ac.uk/bioinformatics/event/1755391</a>
+<a href="http://training.csx.cam.ac.uk/bioinformatics/event/1824788" target="blank">http://training.csx.cam.ac.uk/bioinformatics/event/1824788</a>
 
 ## GitHub
 <a href="https://github.com/hemberg-lab/scRNA.seq.course" target="blank">https://github.com/hemberg-lab/scRNA.seq.course</a>
 
 ## License
-<a href="http://creativecommons.org/licenses/by-nd/4.0" target="blank">Creative Commons Attribution-NoDerivatives 4.0 International License</a>
+<b>GPL-3</b>
 
 ## Prerequisites
 
@@ -32,7 +32,7 @@ The course is intended for those who have basic familiarity with Unix and the R 
 
 We will also assume that you are familiar with mapping and analysing bulk RNA-seq data as well as with the commonly available computational tools.
 
-We recommend attending the [Introduction to RNA-seq and ChIP-seq data analysis](http://training.csx.cam.ac.uk/bioinformatics/event/1544785) or the [Analysis of high-throughput sequencing data with Bioconductor](http://training.csx.cam.ac.uk/bioinformatics/event/1614561) before attending this course.
+We recommend attending the [Introduction to RNA-seq and ChIP-seq data analysis](http://training.csx.cam.ac.uk/bioinformatics/event/1899707) or the [Analysis of high-throughput sequencing data with Bioconductor](http://training.csx.cam.ac.uk/bioinformatics/event/1614561) before attending this course.
 
 ## Contact
 
