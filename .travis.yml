@@ -36,6 +36,7 @@ install:
 
   - Rscript -e "if (!require('TSCAN')) {source('https://bioconductor.org/biocLite.R');biocLite('TSCAN')}"
   - Rscript -e "if (!require('monocle')) {source('https://bioconductor.org/biocLite.R');biocLite('monocle')}"
+  - Rscript -e "if (!require('destiny')) {source('https://bioconductor.org/biocLite.R');biocLite('destiny')}"
 
   - Rscript -e "if (!require('ROCR')) install.packages('ROCR')"
   - Rscript -e "if (!require('DESeq2')) {source('https://bioconductor.org/biocLite.R');biocLite('DESeq2')}"
