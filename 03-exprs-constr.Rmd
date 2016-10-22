@@ -98,10 +98,4 @@ developed for bulk RNA-seq data, e.g. [HT-seq](http://www-huber.embl.de/users/an
 <featureCounts_path>/featureCounts -Q 30 -p -a genome.gtf -o outputfile input.bam
 ```
 
-### UMI quantification
-
-The number of unique barcodes used as UMIs is typically much smaller than the total number of mRNAs in a cell. Thus to properly count UMIs they must be separated into groups based on their mapping position. Most scRNASeq methods perform several rounds of PCR prior to fragmenting transcripts. As a result UMIs originating from the same mRNA won't map to exactly the same position in the genome. Thus UMIs should be grouped by transcript or gene. One way to achieve this is to map reads to the transcriptome rather than the genome.
-
-Once UMIs have been grouped the number of original mRNA molecules can be estimated by counting the number of unique UMIs in each group. However, single base-pair substitutions introduced by errors during PCR or sequencing can create "new" unique UMIs inflating the counts. This effect depends on the length of the barcode used, longer = more potential errors. For instance using a 10bp barcode will result in ~7% of reads containing at least one error. 
-
-To our knowledge the only software which attempts to correct for these errors is [UMI-tools](https://github.com/CGATOxford/UMI-tools). They provide several different methods to quantify UMIs based on different assumptions about what type of errors occur in the barcodes (they discuss them in detail [here](https://cgatoxford.wordpress.com/tag/umi-tools/)).
+[Unique molecular identifiers (UMIs)](http://www.nature.com/nmeth/journal/v9/n1/full/nmeth.1778.html) make it possible to count the absolute number of molecules and they have proven popular for [scRNA-seq](http://www.nature.com/nmeth/journal/v11/n2/full/nmeth.2772.html). We will discuss how UMIs can be processed in the next chapter.
