@@ -76,9 +76,8 @@ set_exprs(umi.qc, "ruvs2") <- ruvs$normalizedCounts
 ## Effectiveness 1
 
 We evaluate the effectiveness of the normalization by inspecting the
-PCA plot where shape corresponds the technical replicate and colour
-corresponds to different biological samples (individuals from whom the
-iPSC lines where derived). Separation of biological samples and
+PCA plot where colour corresponds the technical replicates and shape
+corresponds to different biological samples (individuals). Separation of biological samples and
 interspersed batches indicates that technical variation has been
 removed. 
 

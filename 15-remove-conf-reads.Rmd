@@ -1,50 +1,162 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
-# Remove confounders using controls (Reads)
+# Remove confounders using controls
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = 'center')
+```
+
+```{r, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(RUVSeq)
 library(scater, quietly = TRUE)
 library(scran)
+library(edgeR)
 options(stringsAsFactors = FALSE)
-library(knitr)
-opts_chunk$set(fig.align = 'center', echo=FALSE)
 reads <- readRDS("blischak/reads.rds")
 reads.qc <- reads[fData(reads)$use, pData(reads)$use]
 endog_genes <- !fData(reads.qc)$is_feature_control
 erccs <- fData(reads.qc)$is_feature_control
 ```
 
-```{r rm-conf-brennecke-reads, fig.cap = "Results of using the Brennecke method on the Blischak dataset", fig.asp=1}
-qclust <- scran::quickCluster(reads.qc, min.size = 30)
-reads.qc <- scran::computeSumFactors(reads.qc, sizes = 15, clusters = qclust)
-reads.qc <- scater::normalize(reads.qc)
-set_exprs(reads.qc, "ruv_counts") <- RUVSeq::RUVg(
-    round(exprs(reads.qc)),
-    erccs,
-    k = 1)$normalizedCounts
+## Remove Unwanted Variation
+
+### RUVg
+
+```{r, message=FALSE, warning=FALSE}
+ruvg <- RUVg(counts(reads.qc), erccs, k = 1)
+set_exprs(reads.qc, "ruvg1") <- ruvg$normalizedCounts
+ruvg <- RUVg(counts(reads.qc), erccs, k = 2)
+set_exprs(reads.qc, "ruvg2") <- ruvg$normalizedCounts
 ```
 
-```{r rm-conf-pca-rle-reads, fig.cap = "PCA plot of the blischak data after RLE normalisation"}
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "exprs")
+### RUVs
+
+```{r}
+scIdx <- matrix(-1, ncol = max(table(reads.qc$individual)), nrow = 3)
+tmp <- which(reads.qc$individual == "NA19098")
+scIdx[1, 1:length(tmp)] <- tmp
+tmp <- which(reads.qc$individual == "NA19101")
+scIdx[2, 1:length(tmp)] <- tmp
+tmp <- which(reads.qc$individual == "NA19239")
+scIdx[3, 1:length(tmp)] <- tmp
+cIdx <- rownames(reads.qc)
+ruvs <- RUVs(counts(reads.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
+set_exprs(reads.qc, "ruvs1") <- ruvs$normalizedCounts
+ruvs <- RUVs(counts(reads.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
+set_exprs(reads.qc, "ruvs2") <- ruvs$normalizedCounts
 ```
 
-```{r rm-conf-pca-rle-ruv-reads, fig.cap = "PCA plot of the blischak data after RLE and RUV normalisations"}
-scater::plotPCA(reads.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "ruv_counts")
+## Effectiveness 1
+
+```{r}
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "ruvg1") +
+    ggtitle("PCA - RUVg normalisation: k = 1")
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "ruvg2") +
+    ggtitle("PCA - RUVg normalisation: k = 2")
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "ruvs1") +
+    ggtitle("PCA - RUVs normalisation: k = 1")
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "ruvs2") +
+    ggtitle("PCA - RUVs normalisation: k = 2")
 ```
 
-```{r rm-conf-rle-comp-reads, fig.cap = "Comparison of the relative log expression of the blischak data before and after the RUV normalisation"}
-boxplot(list(scRNA.seq.funcs::calc_cell_RLE(exprs(reads.qc), erccs),
-             scRNA.seq.funcs::calc_cell_RLE(assayData(reads.qc)$ruv_counts, erccs)))
+## Effectiveness 2
+
+```{r}
+boxplot(
+    list(
+        "Raw counts" = calc_cell_RLE(counts(reads.qc), erccs),
+        "RUVg (k = 1)" = calc_cell_RLE(assayData(reads.qc)$ruvg1, erccs),
+        "RUVg (k = 2)" = calc_cell_RLE(assayData(reads.qc)$ruvg2, erccs),
+        "RUVs (k = 1)" = calc_cell_RLE(assayData(reads.qc)$ruvs1, erccs),
+        "RUVs (k = 2)" = calc_cell_RLE(assayData(reads.qc)$ruvs2, erccs)
+    )
+)
+```
+
+## Effectiveness 3
+
+```{r}
+keep <- reads.qc$individual == "NA19101"
+design <- model.matrix(~reads.qc[, keep]$batch)
+```
+
+### DE (raw counts)
+```{r}
+dge1 <- DGEList(
+    counts = counts(reads.qc[, keep]), 
+    norm.factors = rep(1, sum(keep)),
+    group = reads.qc[, keep]$batch
+)
+dge1 <- estimateDisp(dge1, design = design, trend.method = "none")
+plotBCV(dge1)
+fit1 <- glmFit(dge1, design)
+res1 <- glmLRT(fit1, coef = 2)
+topTags(res1)
+summary(decideTestsDGE(res1))
+plotSmear(
+    res1, 
+    de.tags = rownames(topTags(res1, n = sum(abs(decideTestsDGE(res1))))$table)
+)
+```
+
+### DE (RUVg, k = 2)
+```{r}
+dge2 <- DGEList(
+    counts = get_exprs(reads.qc[, keep], "ruvg2"), 
+    norm.factors = rep(1, sum(keep)),
+    group = reads.qc[, keep]$batch
+)
+dge2 <- estimateDisp(dge2, design = design, trend.method = "none")
+plotBCV(dge2)
+fit2 <- glmFit(dge2, design)
+res2 <- glmLRT(fit2, coef = 2)
+topTags(res2)
+summary(decideTestsDGE(res2))
+plotSmear(
+    res2, 
+    de.tags = rownames(topTags(res2, n = sum(abs(decideTestsDGE(res2))))$table)
+)
+```
+
+### DE (RUVs, k = 2)
+```{r}
+dge3 <- DGEList(
+    counts = get_exprs(reads.qc[, keep], "ruvs2"), 
+    norm.factors = rep(1, sum(keep)),
+    group = reads.qc[, keep]$batch
+)
+dge3 <- estimateDisp(dge3, design = design, trend.method = "none")
+plotBCV(dge3)
+fit3 <- glmFit(dge3, design)
+res3 <- glmLRT(fit3, coef = 2)
+topTags(res3)
+summary(decideTestsDGE(res3))
+plotSmear(
+    res3, 
+    de.tags = rownames(topTags(res3, n = sum(abs(decideTestsDGE(res3))))$table)
+)
 ```
