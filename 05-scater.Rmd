@@ -6,9 +6,9 @@ knit: bookdown::preview_chapter
 
 ## Introduction
 
-[scater](https://github.com/davismcc/scater) is a R package single-cell RNA-seq analysis. The package contains several useful methods for quality control, visualisation and pre-processing of data prior to further downstream analysis.
+[scater](http://bioconductor.org/packages/scater/) is a R package single-cell RNA-seq analysis. The package contains several useful methods for quality control, visualisation and pre-processing of data prior to further downstream analysis.
 
-[scater](https://github.com/davismcc/scater) features the following functionality:
+[scater](http://bioconductor.org/packages/scater/) features the following functionality:
 
 * Automated computation of QC metrics
 * Transcript quantification from read data with pseudo-alignment
@@ -17,7 +17,7 @@ knit: bookdown::preview_chapter
 * Seamless integration into the Bioconductor universe
 * Simple normalisation methods
 
-We highly recommend to use [scater](https://github.com/davismcc/scater) for all single-cell RNA-seq analyses and [scater](https://github.com/davismcc/scater) is the basis of the first part of the course (disclaimer: one of the teachers on this course, Davis McCarthy, is the primary developer of scater).
+We highly recommend to use [scater](http://bioconductor.org/packages/scater/) for all single-cell RNA-seq analyses and [scater](http://bioconductor.org/packages/scater/) is the basis of the first part of the course (disclaimer: one of the teachers on this course, Davis McCarthy, is the primary developer of scater).
 
 ## scater workflow
 
@@ -25,17 +25,17 @@ We highly recommend to use [scater](https://github.com/davismcc/scater) for all 
 
 ## Terminology
 
-(this chapter is taken from the [scater vignette](https://www.bioconductor.org/packages/devel/bioc/vignettes/scater/inst/doc/vignette.html))
+(this chapter is taken from the [scater vignette](http://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/vignette.html))
 
 * The capabilities of scater are built on top of Bioconductor’s Biobase.
 * In Bioconductor terminology we assay numerous __“features”__ for a number of __“samples”__.
-* Features, in the context of [scater](https://github.com/davismcc/scater), correspond most commonly to genes or transcripts, but could be any general genomic or transcriptomic regions (e.g. exon) of interest for which we take measurements.
+* Features, in the context of [scater](http://bioconductor.org/packages/scater/), correspond most commonly to genes or transcripts, but could be any general genomic or transcriptomic regions (e.g. exon) of interest for which we take measurements.
 * In the following chapters it may be more intuitive to mentally replace __“feature”__ with __“gene”__ or __“transcript”__ (depending on the context of the study) wherever __“feature”__ appears.
 * In the scater context, __“samples”__ refer to individual cells that we have assayed.
 
 ## SCESet class
 
-(this chapter is taken from the [scater vignette](https://www.bioconductor.org/packages/devel/bioc/vignettes/scater/inst/doc/vignette.html))
+(this chapter is taken from the [scater vignette](http://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/vignette.html))
 
 In scater we organise single-cell expression data in objects of the __SCESet__ class. The class inherits the Bioconductor ExpressionSet class, which provides a common interface familiar to those who have analyzed microarray experiments with Bioconductor. The class requires three input files:
 
@@ -45,4 +45,4 @@ In scater we organise single-cell expression data in objects of the __SCESet__ c
 
 For more details about other features inherited from Bioconductor’s __ExpressionSet__ class, type `?ExpressionSet` at the R prompt.
 
-When the data are encapsulated in the __SCESet__ class, [scater](https://github.com/davismcc/scater) will automatically calculate several different properties. This will be demonstrated in the subsequent chapters.
+When the data are encapsulated in the __SCESet__ class, [scater](http://bioconductor.org/packages/scater/) will automatically calculate several different properties. This will be demonstrated in the subsequent chapters.

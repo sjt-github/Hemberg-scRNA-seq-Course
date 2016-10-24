@@ -15,10 +15,10 @@ library(pcaMethods)
 library(pcaReduce)
 library(Rtsne)
 library(SC3)
+library(scater)
 library(pheatmap)
 library(ggplot2)
 set.seed(1234567)
-#test
 ```
 
 To illustrate clustering of scRNA-seq data, we consider a dataset of
@@ -39,51 +39,88 @@ scRNA-seq data.
 patient.data <- read.table("clustering/patient.txt", sep = "\t")
 ```
 
-For convenience we have performed all quality control and normalization steps (SF + RUV) in advance. The
+For convenience we have performed all quality control and normalization steps (SF + RUVg) in advance. The
 dataset contains `r dim(patient.data)[2]` cells and `r dim(patient.data)[1]` genes.
 
 Now we are ready to cluster the data using the methods described in the previous chapter.
 
 ## SC3
 
-```{r, eval=FALSE}
+`SC3` is a purely clustering tool and it does not provide functions for the sequencing quality control (QC) or normalisation. On the contrary it is expected that these preprocessing steps are performed by a user in advance. To encourage the preprocessing, SC3 is built on top of the [scater](http://bioconductor.org/packages/scater/) package (see previous chapters). To our knowledge the scater is the most comprehensive toolkit for the QC and normalisation analysis of the single-cell RNA-Seq data.
+
+If you already have an object of `scater` class `SCESet` then you should proceed to the next code chunk. If you have a matrix containing cell/gene expression values then you can create a `scater` object using your matrix:
+```{r}
 patient.sceset <- create_sceset(patient.data)
 patient.sceset <- calculateQCMetrics(patient.sceset)
+```
+
+The next step is to prepare the `scater` object for clustering:
+```{r}
+patient.sceset <- sc3_prepare(patient.sceset)
+```
+
+Before runing the actual clustering `SC3` also allows one to estimate the number of clusters in the input dataset:
+```{r}
+patient.sceset <- sc3_estimate_k(patient.sceset)
+patient.sceset@sc3$k_prediction
+```
+
+Now we are ready ro run the `SC3` clustering:
+```{r}
 patient.sceset <- sc3(patient.sceset, ks = 2:5)
+```
+
+When the clustering is done you will be able to visualise the clustering results in many different ways. See the [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details.
+
+`SC3` also has a useful function for summarising/visualising the results in the interactive `Shiny` session:
+```{r, eval=FALSE}
 sc3_interactive(patient.sceset)
 ```
 
-This command will open SC3 in a web browser. Once it is opened please perform the following exercises:
+This command will open `SC3` in a web browser. Once it is opened please perform the following exercises:
 
 * __Exercise 1__: Explore different clustering solutions for $k$ from 2
 to 5. Also try to change the consensus averaging by checking and
 unchecking distance and transformation check boxes in the left panel
 of __SC3__.
 
-* __Exercise 2__: Based on the genotyping, we strongly believe that $k
+* __Exercise 2__: Based on the genotyping and `SC3` prediction, we strongly believe that $k
 =3$ provides the best clustering. What evidence do you find for this
 in the clustering? How can you use the [silhouette plots](https://en.wikipedia.org/wiki/Silhouette_%28clustering%29) to
 motivate choosing the value of $k$ that you think looks best?
 
-* __Exercise 3__: The solution may change depending on the combination of
-check-boxes that was used. How similar are the different solutions,
-and which are the most stable clusterings? You can find out how
-different cells migrate between clusters using the "Cell Labels" tab
+* __Exercise 3__: Which clusters are the most stable? You can find out how
+different cells migrate between clusters using the "Cell Labels"/"Stability" tabs
 panel.
 
-* __Exercise 4__: Calculate differentially expressed genes and marker genes for the obtained clusterings. Please use $k=3$ and the most stable solution, corresponding to the
-case when all check boxes are checked.
+* __Exercise 4__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=3$.
 
-* __Exercise 5__: Change the marker genes threshold (the default is 0.85) in the right side panel of __SC3__. Does __SC3__ find more marker genes?
+* __Exercise 5__: Change the marker genes threshold (the default is 0.85). Does __SC3__ find more marker genes?
 
 ## pcaReduce
-```{r clust-pca-reduce3, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$"}
+
+`pcaReduce` does not provide QC or normalisation function neither. It operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will used the default `SC3` gene filter
+
+```{r}
 # use the same gene filter as in SC3
-input <- scRNA.seq.funcs::gene_filter(patient.data, 0.06)
+input <- patient.data[SC3:::gene_filter(patient.data), ]
 # log transform before the analysis
 input.log <- log2(input + 1)
+```
+
+There are several parameters used by `pcaReduce`:
+* `nbt` defines a number of `pcaReduce` runs (it is stochastic and may have different solutions after different runs)
+* `q` defines number of dimensions to start clustering with. The output will contain partitions for all $k$ from 2 to q+1.
+* `method` defines a method used for clustering. `S` - to perform sampling based merging, `M` - to perform merging based on largest probability.
+
+We will run `pcaReduce` 10 times:
+```{r}
 # run pcaReduce 10 times creating hierarchies from 1 to 30 clusters
-pca.red <- pcaReduce::PCAreduce(t(input.log), nbt = 10, q = 30, method = 'S')
+pca.red <- PCAreduce(t(input.log), nbt = 10, q = 30, method = 'S')
+```
+
+Let's compare the clusterings (with $k$ = 3) provided after running `pcaReduce` 10 times:
+```{r clust-pca-reduce3, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$"}
 res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 3))
 pheatmap(res, legend = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
@@ -108,7 +145,7 @@ res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 5))
 pheatmap::pheatmap(res)
 ```
 
-__Exercise 7__: Compare the results between SC3 and pcaReduce. What is
+__Exercise 7__: Compare the results between `SC3` and `pcaReduce`. What is
 the main difference between the solutions provided by the two
 different methods?
 
@@ -132,10 +169,11 @@ Now we are going to apply _k_-means clustering algorithm to the cloud of points 
 
 We will start with $k=2$:
 ```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 2 colored clusters, identified by the _k_-means clustering algorithm"}
-clusts <- stats::kmeans(tsne_out$Y,
-                        centers = 2,
-                        iter.max = 1e+09,
-                        nstart = 1000)$clust
+clusts <- kmeans(
+    tsne_out$Y,
+    centers = 2,
+    iter.max = 1e+09,
+    nstart = 1000)$clust
 df_to_plot$clusts <- factor(clusts, levels = unique(clusts))
 comps <- colnames(df_to_plot)[1:3]
 ggplot2::ggplot(df_to_plot,
@@ -148,10 +186,10 @@ ggplot2::ggplot(df_to_plot,
 
 __Exercise 7__: Make the same plots for $k=3$, $k=4$ and $k=5$.
 
-__Exercise 8__: Compare the results between SC3 and tSNE+kmeans. Can the
+__Exercise 8__: Compare the results between `SC3` and `tSNE+kmeans`. Can the
 results be improved by changing the perplexity parameter?
 
-As you may have noticed, both pcaReduce and tSNE+kmeans are stochastic
+As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
 and give different results every time they are run. To get a better
 overview of the solutions, we need to run the methods multiple times. Here
 we run __tSNE+kmeans__ clustering 10 times with $k = 3$ (with perplexity =
@@ -252,18 +290,22 @@ results compare to the other methods? What happens if you choose $k = 3$?
 
 __Our answer:__
 ```{r clust-sincera, fig.cap = "Clustering solutions of SINCERA method using $k=3$", echo=FALSE}
-pheatmap::pheatmap(t(dat),
-                   cluster_cols = hc,
-                   cutree_cols = 3,
-                   kmeans_k = 100,
-                   show_rownames = FALSE)
+pheatmap(
+    t(dat),
+    cluster_cols = hc,
+    cutree_cols = 3,
+    kmeans_k = 100,
+    show_rownames = FALSE
+)
 ```
 
 __Exercise 12__: Is using the singleton cluster criteria for finding __k__ a good idea?
 
 ## SEURAT
 
-Here we follow an [example](http://www.satijalab.org/clustertutorial1.html) created by the authors of SEURAT. We had to introduce some modifications due to the errors produced by the original code:
+Here we follow an [example](http://satijalab.org/seurat/seurat_clustering_tutorial_part1.html) created by the authors of SEURAT. We had to introduce some modifications due to the errors produced by the original code:
+
+__Note__ In the newest version of SEURAT (v. 1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. In this tutorial we are still using an old version (v. 1.3) of `SEURAT` (this will be updated by the next time this course is run - approximately Spring 2017):
 
 ```{r, message=FALSE, warning=FALSE}
 library(Seurat)
