@@ -122,7 +122,7 @@ pca.red <- PCAreduce(t(input.log), nbt = 10, q = 30, method = 'S')
 Let's compare the clusterings (with $k$ = 3) provided after running `pcaReduce` 10 times:
 ```{r clust-pca-reduce3, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$"}
 res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 3))
-pheatmap(res, legend = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
+pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
 
 __Exercise 6__: Run pcaReduce for $k=2$, $k=4$ and $k=5$. Is it easy to choose the optimal $k$?
@@ -132,17 +132,17 @@ __Hint__: When running pcaReduce for different $k$s you do not need to rerun pca
 __Our solutions__:
 ```{r clust-pca-reduce2, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=2$.", echo=FALSE}
 res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 2))
-pheatmap::pheatmap(res)
+pheatmap::pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
 
 ```{r clust-pca-reduce4, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=4$.", echo=FALSE}
 res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 4))
-pheatmap::pheatmap(res)
+pheatmap::pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
 
 ```{r clust-pca-reduce5, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=5$.", echo=FALSE}
 res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 5))
-pheatmap::pheatmap(res)
+pheatmap::pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
 
 __Exercise 7__: Compare the results between `SC3` and `pcaReduce`. What is
@@ -205,19 +205,19 @@ heatmap. Then run tSNE+kmeans algorithm with $k = 2$ or $k = 4$ and
 see how the clustering looks like in these cases.
 
 ```{r clust-tsne-kmeans3, fig.cap = "Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=3$", echo=FALSE}
-pheatmap::pheatmap(res, show_colnames = FALSE)
+pheatmap::pheatmap(res, show_colnames = FALSE, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
 
 ```{r clust-tsne-kmeans2-mult, fig.cap = "Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=2$", echo=FALSE}
 tsne.res <- scRNA.seq.funcs::tsne_mult(input.log, 2, 10)
 res <- unique(do.call(rbind, tsne.res))
-pheatmap::pheatmap(res, show_colnames = FALSE)
+pheatmap::pheatmap(res, show_colnames = FALSE, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
 
 ```{r clust-tsne-kmeans4, fig.cap = "Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=4$", echo=FALSE}
 tsne.res <- scRNA.seq.funcs::tsne_mult(input.log, 4, 10)
 res <- unique(do.call(rbind, tsne.res))
-pheatmap::pheatmap(res, show_colnames = FALSE)
+pheatmap::pheatmap(res, show_colnames = FALSE, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
 
 ## SNN-Cliq
