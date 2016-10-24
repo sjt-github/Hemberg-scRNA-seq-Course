@@ -20,7 +20,7 @@ opts_chunk$set(fig.align = "center", echo=FALSE)
     * Greatly reduce noise in data
     * May reduce gene detection rates (unclear if it is UMIs or other protocol differences)
     * Use longer UMIs (~10bp)
-    * Correct for sequencing errors in umis using UMI-tools
+    * Correct for sequencing errors in UMIs using [UMI-tools'](https://github.com/CGATOxford/UMI-tools)
 
 * Spike-ins
     * Useful for quality control
@@ -38,42 +38,42 @@ knitr::include_graphics("figures/Pipeline-batches.png")
 ```
 ## Processing Reads
 * Read QC & Trimming
-    * FASTQC, cutadapt
+    * [FASTQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html)
     
 * Mapping
-    * Small datasets or UMI datasets: align to genome/transcriptome using STAR
-    * Large datasets: pseudo-alignment with Salmon
+    * Small datasets or UMI datasets: align to genome/transcriptome using [STAR](https://github.com/alexdobin/STAR)
+    * Large datasets: pseudo-alignment with [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html)
   
 * Quantification
-    * Small dataset, no UMIs : Cufflinks or featureCounts
-    * Large datasets, no UMIs: Salmon
-    * UMI dataset : UMI-Tools + featureCounts
+    * Small dataset, no UMIs : [Cufflinks](http://cole-trapnell-lab.github.io/cufflinks/tools/) or [featureCounts](http://subread.sourceforge.net/)
+    * Large datasets, no UMIs: [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html)
+    * UMI dataset : [UMI-tools'](https://github.com/CGATOxford/UMI-tools) + [featureCounts](http://subread.sourceforge.net/)
 
 ## Preparing Expression Matrix
 
 * Cell QC
-    * scater
+    * [scater](http://bioconductor.org/packages/scater)
     * consider: mtRNA, rRNA, spike-ins (if available), number of detected genes per cell, total reads/molecules per cell
 
 * Library Size Normalization
-    * scran
+    * [scran](http://bioconductor.org/packages/scran)
 
 * Batch correction (if appropriate)
-    * RUVs
+    * [RUVs](http://bioconductor.org/packages/RUVSeq)
 
 ## Biological Interpretation
 
 * Feature Selection
-    * M3Drop
+    * [M3Drop](http://bioconductor.org/packages/M3Drop)
 
 * Clustering and Marker Gene Identification
-    * SC3
+    * [SC3](http://bioconductor.org/packages/SC3)
 
 * Pseudotime
     * distinct timepoints: Tscan
-    * Continuous data: DPT (diffusion pseudotime)
+    * Continuous data: [density](http://bioconductor.org/packages/density)
 
 * Differential Expression
-    * Small number of cells and few groups : SCDE
+    * Small number of cells and few groups : [scde](http://hms-dbmi.github.io/scde/)
     * Replicates with batch effects : mixture/linear models
     * Large datasets: Kruskal-Wallis test (all groups at once), or Kolmogorov-Smirnov (KS)-test (compare 2-groups at a time).
