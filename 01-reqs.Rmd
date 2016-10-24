@@ -17,7 +17,7 @@ One also needs to install the following R packages (ordered by purposes):
 install.packages("devtools")
 ```
 
-[BiocInstaller](http://bioconductor.org/packages/release/bioc/html/BiocInstaller.html) for installing packages from BioConductor:
+[BiocInstaller](http://bioconductor.org/packages/BiocInstaller) for installing packages from BioConductor:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 source('https://bioconductor.org/biocLite.R')
 biocLite('BiocInstaller')
@@ -40,7 +40,7 @@ install.packages("ggplot2")
 install.packages("pheatmap")
 ```
 
-[limma](https://bioconductor.org/packages/release/bioc/html/limma.html) for plotting Venn diagrams:
+[limma](https://bioconductor.org/packages/limma) for plotting Venn diagrams:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
@@ -49,7 +49,7 @@ biocLite("limma")
 
 ## QC and normalisation
 
-[scater](http://bioconductor.org/packages/release/bioc/html/scater.html) is a single-cell analysis toolkit for expression:
+[scater](http://bioconductor.org/packages/scater) is a single-cell analysis toolkit for expression:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 source('https://bioconductor.org/biocLite.R')
 biocLite('scater')
@@ -65,18 +65,18 @@ install.packages("mvoutlier")
 install.packages("statmod")
 ```
 
-[Rtsne](https://cran.r-project.org/web/packages/pheatmap/index.html) for Rtsne data embedding:
+[Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) for Rtsne data embedding:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 install.packages("Rtsne")
 ```
 
-[scran](http://bioconductor.org/packages/release/bioc/html/scran.html) for a new single cell normalisation method (LSF):
+[scran](http://bioconductor.org/packages/scran) for a new single cell normalisation method (LSF):
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 source('https://bioconductor.org/biocLite.R')
 biocLite('scran')
 ```
 
-[RUVSeq](https://bioconductor.org/packages/release/bioc/html/RUVSeq.html) for normalization using ERCC controls:
+[RUVSeq](https://bioconductor.org/packages/RUVSeq) for normalization using ERCC controls:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
@@ -85,51 +85,46 @@ biocLite("RUVSeq")
 
 ## Clustering
 
-[pcaReduce](https://github.com/JustinaZ/pcaReduce) for unsupervised clustering of scRNA-seq data ([bioRxiv](http://biorxiv.org/content/early/2015/09/08/026385)):
+[pcaReduce](https://github.com/JustinaZ/pcaReduce) for unsupervised clustering of scRNA-seq data:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 devtools::install_github("JustinaZ/pcaReduce")
 ```
 
-[pcaMethods](http://bioconductor.org/packages/release/bioc/html/pcaMethods.html) is a [pcaReduce](https://github.com/JustinaZ/pcaReduce) dependency:
+[pcaMethods](http://bioconductor.org/pcaMethods) is a [pcaReduce](https://github.com/JustinaZ/pcaReduce) dependency:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
 biocLite("pcaMethods")
 ```
 
-[SC3](http://bioconductor.org/packages/devel/bioc/html/SC3.html) for unsupervised clustering of scRNA-seq data:
+[SC3](http://bioconductor.org/packages/SC3) for unsupervised clustering of scRNA-seq data:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 source("https://bioconductor.org/biocLite.R")
 biocLite("SC3")
 ```
 
-* Before running __SC3__ for the first time __only__, please start R and enter:
+[SEURAT](https://github.com/satijalab/seurat) for density clustering of scRNA-seq data (at the moment we are using an old version of this package - v. 1.3):
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
-RSelenium::checkForServer()
-```
-
-[SEURAT](https://github.com/Puriney/seurat) for density clustering of scRNA-seq data:
-```{r, eval=FALSE, message=FALSE, warning=FALSE}
-devtools::install_github('Puriney/seurat')
+devtools::install_github('satijalab/seurat', ref = 'da6cd08')
 ```
 
 ## Dropouts
 
-[M3Drop](https://github.com/tallulandrews/M3D) for identification of important and DE genes:
+[M3Drop](http://bioconductor.org/packages/M3Drop) for identification of important and DE genes:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 devtools::install_github("tallulandrews/M3D")
 ```
 
 ## Pseudotime
 
-[TSCAN](https://bioconductor.org/packages/release/bioc/html/TSCAN.html) for pseudotime analysis:
+[TSCAN](https://bioconductor.org/packages/TSCAN) for pseudotime analysis:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
 biocLite("TSCAN")
 ```
 
-[destiny](https://bioconductor.org/packages/release/bioc/html/destiny.html) for pseudotime analysis:
+[destiny](https://bioconductor.org/packages/destiny) for pseudotime analysis:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
@@ -144,7 +139,14 @@ biocLite("destiny")
 install.packages("ROCR")
 ```
 
-[DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) for identification of differentially expressed genes:
+[edgeR](https://bioconductor.org/packages/edgeR) for identification of differentially expressed genes:
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+## try http:// if https:// URLs are not supported
+source("https://bioconductor.org/biocLite.R")
+biocLite("edgeR")
+```
+
+[DESeq2](https://bioconductor.org/packages/DESeq2) for identification of differentially expressed genes:
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
