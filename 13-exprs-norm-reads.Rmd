@@ -36,7 +36,7 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 shape_by = "individual",
                 exprs_values = "exprs")
 ```
-```{r norm-ours-rle-cpm-reads, fig.cap = "Cell-wise RLE of the blischak data"}
+```{r norm-ours-rle-cpm-reads, fig.cap = "Cell-wise RLE of the blischak data", warning=FALSE}
 boxplot(calc_cell_RLE(exprs(reads.qc[endog_genes, ])),
         col = "grey50",
         ylab = "RLE",

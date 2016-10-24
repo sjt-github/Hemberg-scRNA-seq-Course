@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Expression overview (Reads)
+# Data visualization (Reads)
 
 ```{r, message=FALSE, warning=FALSE}
 library(scater, quietly = TRUE)

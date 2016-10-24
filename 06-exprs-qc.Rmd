@@ -115,7 +115,7 @@ total number of molecules for each cell should follow?
 
 __Our answer__
 
-```{r}
+```{r, echo=FALSE}
 filter_by_total_counts <- (umi$total_counts > 25000)
 knitr::kable(
     as.data.frame(table(filter_by_total_counts)),
@@ -151,7 +151,7 @@ How many cells does our filter remove?
 
 __Our answer__
 
-```{r}
+```{r, echo=FALSE}
 filter_by_expr_features <- (umi$total_features > 7000)
 knitr::kable(
     as.data.frame(table(filter_by_expr_features)),
@@ -195,7 +195,7 @@ Create filters for removing batch NA19098.r2 and cells with high expression of m
 
 __Our answer__
 
-```{r}
+```{r, echo=FALSE}
 filter_by_ERCC <- umi$batch != "NA19098.r2"
 knitr::kable(
   as.data.frame(table(filter_by_ERCC)),
@@ -320,7 +320,7 @@ __Hint__: Use `limma::vennCounts` and `limma::vennDiagram` functions from the [l
 
 __Answer__
 
-```{r cell-filt-comp, fig.cap = "Comparison of the default, automatic and manual cell filters"}
+```{r cell-filt-comp, fig.cap = "Comparison of the default, automatic and manual cell filters", echo=FALSE}
 def <- colnames(umi)[!umi$use_default]
 auto <- colnames(umi)[umi$outlier]
 man <- colnames(umi)[!umi$use]

@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Remove confounders using controls
+# Confounders Removal
 
 ## Introduction
 

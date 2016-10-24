@@ -66,7 +66,7 @@ How do the PCA plots change if when all 14,214 genes are used? Or when only top 
 
 __Our answer__
 
-```{r expr-overview-pca-after-qc-exercise1-1, fig.cap = "PCA plot of the blischak data (14214 genes)"}
+```{r expr-overview-pca-after-qc-exercise1-1, fig.cap = "PCA plot of the blischak data (14214 genes)", echo=FALSE}
 scater::plotPCA(umi.qc[endog_genes, ],
                 ntop = 14214,
                 colour_by = "batch",
@@ -75,7 +75,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "counts")
 ```
 
-```{r expr-overview-pca-after-qc-exercise1-2, fig.cap = "PCA plot of the blischak data (50 genes)"}
+```{r expr-overview-pca-after-qc-exercise1-2, fig.cap = "PCA plot of the blischak data (50 genes)", echo=FALSE}
 scater::plotPCA(umi.qc[endog_genes, ],
                 ntop = 50,
                 colour_by = "batch",
@@ -128,7 +128,7 @@ How do the tSNE plots change when a perplexity of 10 or 200 is used?
 
 __Our answer__
 
-```{r expr-overview-tsne-after-qc-exercise2-1, fig.cap = "tSNE map of the blischak data (perplexity = 10)"}
+```{r expr-overview-tsne-after-qc-exercise2-1, fig.cap = "tSNE map of the blischak data (perplexity = 10)", echo=FALSE}
 scater::plotTSNE(umi.qc[endog_genes, ],
                  ntop = 500,
                  perplexity = 10,
@@ -139,7 +139,7 @@ scater::plotTSNE(umi.qc[endog_genes, ],
                  rand_seed = 123456)
 ```
 
-```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the blischak data (perplexity = 200)"}
+```{r expr-overview-tsne-after-qc-exercise2-2, fig.cap = "tSNE map of the blischak data (perplexity = 200)", echo=FALSE}
 scater::plotTSNE(umi.qc[endog_genes, ],
                  ntop = 500,
                  perplexity = 200,

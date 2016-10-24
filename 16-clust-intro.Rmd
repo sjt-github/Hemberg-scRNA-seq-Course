@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Clustering analysis
+# Clustering Introduction
 
 ```{r, echo=FALSE}
 library(knitr)

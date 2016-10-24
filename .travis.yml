@@ -26,7 +26,7 @@ install:
   - Rscript -e "if (!require('scran')) {source('https://bioconductor.org/biocLite.R');biocLite('scran')}"
   - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
 
-  - Rscript -e "devtools::install_github('hemberg-lab/SC3')"
+  - Rscript -e "if (!require('SC3'))devtools::install_github('hemberg-lab/SC3')"
   - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
   - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
   - Rscript -e "if (!require('lfa')) {source('https://bioconductor.org/biocLite.R');biocLite('lfa')}"

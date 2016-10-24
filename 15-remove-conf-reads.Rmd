@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Remove confounders using controls (Reads)
+# Confounders Removal (Reads)
 
 ```{r, echo=FALSE}
 library(knitr)
