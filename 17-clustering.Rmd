@@ -66,7 +66,7 @@ patient.sceset@sc3$k_prediction
 ```
 
 Now we are ready ro run the `SC3` clustering:
-```{r}
+```{r, eval=FALSE}
 patient.sceset <- sc3(patient.sceset, ks = 2:5)
 ```
 

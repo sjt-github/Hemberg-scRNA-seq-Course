@@ -4,6 +4,7 @@ bookdown::gitbook:
     in_header: google_analytics.html
   config:
     toc:
+      collapse: section
       before: |
         <li><a href="index.html">Table of Contents</a></li>
       after: |
