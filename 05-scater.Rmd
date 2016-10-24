@@ -17,7 +17,7 @@ knit: bookdown::preview_chapter
 * Seamless integration into the Bioconductor universe
 * Simple normalisation methods
 
-We highly recommend to use [scater](https://github.com/davismcc/scater) for all single-cell RNA-seq analyses and [scater](https://github.com/davismcc/scater) is the basis of the first part of the course.
+We highly recommend to use [scater](https://github.com/davismcc/scater) for all single-cell RNA-seq analyses and [scater](https://github.com/davismcc/scater) is the basis of the first part of the course (disclaimer: one of the teachers on this course, Davis McCarthy, is the primary developer of scater).
 
 ## scater workflow
 
