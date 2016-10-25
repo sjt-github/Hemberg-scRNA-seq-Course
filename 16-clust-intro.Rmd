@@ -134,7 +134,7 @@ knitr::include_graphics("figures/sc3.png")
 
 SEURAT [@Macosko2015-ix] first utilises PCA on a set of cells, then a number of statistically significant PCs is defined. Those PCs are further projected to a 2D space using tSNE. The remaining cells are then projected on the same tSNE map. Density clustering algorithm ([DBSCAN](https://en.wikipedia.org/wiki/DBSCAN)) is then used to identify cell clusters in the 2D space.
 
-__Note__ In the newest version of SEURAT (v. 1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk].
+__Note__ In the newest versions of SEURAT (v. 1.3-1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk].
 
 ### [SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)
 

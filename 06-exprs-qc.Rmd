@@ -17,7 +17,7 @@ Since there is currently no standard method for performing scRNASeq the expected
 
 To illustrate cell QC, we consider a
 [dataset](http://jdblischak.github.io/singleCellSeq/analysis/) of
- induced pluripotent stem cells generated from three different individuals by John
+ induced pluripotent stem cells generated from three different individuals [@Tung2016-an] by John
 Blischak in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
 University of Chicago. The experiments were carried out on the
 Fluidigm C1 platform and to facilitate the quantification both unique

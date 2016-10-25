@@ -305,7 +305,7 @@ __Exercise 12__: Is using the singleton cluster criteria for finding __k__ a goo
 
 Here we follow an [example](http://satijalab.org/seurat/seurat_clustering_tutorial_part1.html) created by the authors of SEURAT. We had to introduce some modifications due to the errors produced by the original code:
 
-__Note__ In the newest version of SEURAT (v. 1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. In this tutorial we are still using an old version (v. 1.3) of `SEURAT` (this will be updated by the next time this course is run - approximately Spring 2017):
+__Note__ In the newest versions of SEURAT (v. 1.3-1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. In this tutorial we are still using an old version (v. 1.2) of `SEURAT` (this will be updated by the next time this course is run - approximately Spring 2017):
 
 ```{r, message=FALSE, warning=FALSE}
 library(Seurat)
