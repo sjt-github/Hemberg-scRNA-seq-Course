@@ -155,9 +155,9 @@ Another way of evaluating the effectiveness of correction is to look at the diff
 For demonstration purposes we will only use a subset of cells. You should not do that with your real dataset, though.
 ```{r}
 keep <- c(
-    sample(which(reads.qc$batch == "NA19101.r1"), 20), 
-    sample(which(reads.qc$batch == "NA19101.r2"), 20),
-    sample(which(reads.qc$batch == "NA19101.r3"), 20)
+    sample(which(umi.qc$batch == "NA19101.r1"), 20), 
+    sample(which(umi.qc$batch == "NA19101.r2"), 20),
+    sample(which(umi.qc$batch == "NA19101.r3"), 20)
 )
 design <- model.matrix(~umi.qc[, keep]$batch)
 ```
