@@ -152,8 +152,13 @@ boxplot(
 
 Another way of evaluating the effectiveness of correction is to look at the differentially expressed (DE) genes among the batches of the same individual Theoretically, these batches should not differ from each other. Let's take the most promising individual (__NA19101__, whose batches are the closest to each other) and check whether it is true.
 
+For demonstration purposes we will only use a subset of cells. You should not do that with your real dataset, though.
 ```{r}
-keep <- umi.qc$individual == "NA19101"
+keep <- c(
+    sample(which(reads.qc$batch == "NA19101.r1"), 20), 
+    sample(which(reads.qc$batch == "NA19101.r2"), 20),
+    sample(which(reads.qc$batch == "NA19101.r3"), 20)
+)
 design <- model.matrix(~umi.qc[, keep]$batch)
 ```
 
@@ -165,7 +170,7 @@ The particular coefficient that we test for DE in each case below tests to for g
 ```{r}
 dge1 <- DGEList(
     counts = counts(umi.qc[, keep]), 
-    norm.factors = rep(1, sum(keep)),
+    norm.factors = rep(1, length(keep)),
     group = umi.qc[, keep]$batch
 )
 dge1 <- estimateDisp(dge1, design = design, trend.method = "none")

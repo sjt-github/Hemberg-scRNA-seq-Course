@@ -111,7 +111,11 @@ boxplot(
 ## Effectiveness 3
 
 ```{r}
-keep <- reads.qc$individual == "NA19101"
+keep <- c(
+    sample(which(reads.qc$batch == "NA19101.r1"), 20), 
+    sample(which(reads.qc$batch == "NA19101.r2"), 20),
+    sample(which(reads.qc$batch == "NA19101.r3"), 20)
+)
 design <- model.matrix(~reads.qc[, keep]$batch)
 ```
 
@@ -119,7 +123,7 @@ design <- model.matrix(~reads.qc[, keep]$batch)
 ```{r}
 dge1 <- DGEList(
     counts = counts(reads.qc[, keep]), 
-    norm.factors = rep(1, sum(keep)),
+    norm.factors = rep(1, length(keep)),
     group = reads.qc[, keep]$batch
 )
 dge1 <- estimateDisp(dge1, design = design, trend.method = "none")
