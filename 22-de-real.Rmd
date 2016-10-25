@@ -25,8 +25,7 @@ control over all aspects of the data, and this facilitates the
 interpretation of the results. However, the transcriptional bursting
 model is unable to capture the full complexity of a real scRNA-seq
 dataset. Next, we are going to analyze the difference between the
-transcriptomes of the 2-cell and the 4-cell state of a mouse embryo as
-described by [deng et al](http://genome.cshlp.org/content/24/11/1787.short). For our purposes you need to download the [`deng`](http://hemberg-lab.github.io/scRNA.seq.course/deng/deng.txt) into the `deng` folder in your working directory. We can then look at the data:
+transcriptomes of the two stages of the mouse embryo development (_mid2cell_ and _16cell_) again from the `deng`. However, this time we need to use the raw counts instead of the normalized counts. This is a major requirement for the DE analysis tools like `DESeq2`, `edgeR`, `scde` etc.
 ```{r de-real-deng-fpkm}
 deng <- readRDS("deng/deng_raw.rds")
 # select cells at different stages
@@ -46,6 +45,11 @@ As you can see, the cells cluster well by their developmental stage.
 
 We can now use the same methods as before to obtain a list of
 differentially expressed genes.
+
+Because `scde` is very slow here we will only use a subset of genes. You should not do that with your real dataset, though. Here we do it just for demostration purposes:
+```{r}
+deng <- deng[sample(1:nrow(deng), 1000), ]
+```
 
 ## KS-test
 

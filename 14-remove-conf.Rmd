@@ -216,6 +216,7 @@ plotSmear(
 In the above analyses, we have ignored size factors between cells. A typical edgeR analysis would always include these.
 
 ```{r}
+umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15)
 dge_ruvs$samples$norm.factors <- sizeFactors(umi.qc)[keep]
 dge_ruvs_sf <- estimateDisp(dge_ruvs, design = design_ruvs, trend.method = "none")
 plotBCV(dge_ruvs_sf)

@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Confounders Removal (Reads)
+# Dealing with confounders (Reads)
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -31,6 +31,8 @@ ruvg <- RUVg(counts(reads.qc), erccs, k = 1)
 set_exprs(reads.qc, "ruvg1") <- ruvg$normalizedCounts
 ruvg <- RUVg(counts(reads.qc), erccs, k = 2)
 set_exprs(reads.qc, "ruvg2") <- ruvg$normalizedCounts
+set_exprs(reads.qc, "ruvg2_logcpm") <- log2(t(t(ruvg$normalizedCounts) / 
+                                           colSums(ruvg$normalizedCounts)) + 1)
 ```
 
 ### RUVs
@@ -48,6 +50,8 @@ ruvs <- RUVs(counts(reads.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
 set_exprs(reads.qc, "ruvs1") <- ruvs$normalizedCounts
 ruvs <- RUVs(counts(reads.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
 set_exprs(reads.qc, "ruvs2") <- ruvs$normalizedCounts
+set_exprs(reads.qc, "ruvs2_logcpm") <- log2(t(t(ruvs$normalizedCounts) / 
+                                           colSums(ruvs$normalizedCounts)) + 1)
 ```
 
 ## Effectiveness 1
@@ -81,6 +85,13 @@ plotPCA(
     shape_by = "individual",
     exprs_values = "ruvs2") +
     ggtitle("PCA - RUVs normalisation: k = 2")
+plotPCA(
+    reads.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "ruvs2_logcpm") +
+    ggtitle("PCA - RUVs normalisation log2-cpm: k = 2")
 ```
 
 ## Effectiveness 2
@@ -118,45 +129,56 @@ res1 <- glmLRT(fit1, coef = 2)
 topTags(res1)
 summary(decideTestsDGE(res1))
 plotSmear(
-    res1, 
+    res1, lowess = TRUE,
     de.tags = rownames(topTags(res1, n = sum(abs(decideTestsDGE(res1))))$table)
 )
+
 ```
 
 ### DE (RUVg, k = 2)
 ```{r}
-dge2 <- DGEList(
-    counts = get_exprs(reads.qc[, keep], "ruvg2"), 
-    norm.factors = rep(1, sum(keep)),
-    group = reads.qc[, keep]$batch
-)
-dge2 <- estimateDisp(dge2, design = design, trend.method = "none")
-plotBCV(dge2)
-fit2 <- glmFit(dge2, design)
-res2 <- glmLRT(fit2, coef = 2)
+design_ruvg <- model.matrix(~ruvg$W[keep,] + reads.qc[, keep]$batch)
+head(design_ruvg)
+dge_ruvg <- estimateDisp(dge1, design = design_ruvg, trend.method = "none")
+plotBCV(dge_ruvg)
+fit2 <- glmFit(dge_ruvg, design_ruvg)
+res2 <- glmLRT(fit2)
 topTags(res2)
 summary(decideTestsDGE(res2))
 plotSmear(
-    res2, 
+    res2, lowess = TRUE,
     de.tags = rownames(topTags(res2, n = sum(abs(decideTestsDGE(res2))))$table)
 )
 ```
 
 ### DE (RUVs, k = 2)
 ```{r}
-dge3 <- DGEList(
-    counts = get_exprs(reads.qc[, keep], "ruvs2"), 
-    norm.factors = rep(1, sum(keep)),
-    group = reads.qc[, keep]$batch
-)
-dge3 <- estimateDisp(dge3, design = design, trend.method = "none")
-plotBCV(dge3)
-fit3 <- glmFit(dge3, design)
-res3 <- glmLRT(fit3, coef = 2)
+design_ruvs <- model.matrix(~ruvs$W[keep,] + reads.qc[, keep]$batch)
+head(design_ruvs)
+dge_ruvs <- estimateDisp(dge1, design = design_ruvs, trend.method = "none")
+plotBCV(dge_ruvs)
+fit3 <- glmFit(dge_ruvs, design_ruvs)
+res3 <- glmLRT(fit3)
 topTags(res3)
 summary(decideTestsDGE(res3))
 plotSmear(
-    res3, 
+    res3, lowess = TRUE,
     de.tags = rownames(topTags(res3, n = sum(abs(decideTestsDGE(res3))))$table)
 )
+```
+
+```{r}
+reads.qc <- scran::computeSumFactors(reads.qc, sizes = 15)
+dge_ruvs$samples$norm.factors <- sizeFactors(reads.qc)[keep]
+dge_ruvs_sf <- estimateDisp(dge_ruvs, design = design_ruvs, trend.method = "none")
+plotBCV(dge_ruvs_sf)
+fit4 <- glmFit(dge_ruvs_sf, design_ruvs)
+res4 <- glmLRT(fit4)
+topTags(res4)
+summary(decideTestsDGE(res4))
+plotSmear(
+    res4, lowess = TRUE,
+    de.tags = rownames(topTags(res4, n = sum(abs(decideTestsDGE(res4))))$table)
+)
+
 ```
