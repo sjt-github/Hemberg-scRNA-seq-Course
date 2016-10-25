@@ -2,13 +2,20 @@
 output: html_document
 ---
 
-# Confounders Removal
+# Dealing with confounders
 
 ## Introduction
 
-In the previous chapter we normalized for library size, effectively removing it as a confounder. Now we will consider removing other less well defined confounders from our data using the ERCC spike-in controls. Technical confounders (aka batch effects) can arise from difference in reagents, isolation methods, the lab/experimenter who performed the experiment, even which day/time the experiment was performed. 
+In the previous chapter we normalized for library size, effectively removing it as a confounder. Now we will consider removing other less well defined confounders from our data. Technical confounders (aka batch effects) can arise from difference in reagents, isolation methods, the lab/experimenter who performed the experiment, even which day/time the experiment was performed. Accounting for technical confounders, and batch effects particularly, is a large topic that also involves principles of experimental design. Here we address approaches that can be taken to account for confounders when the experimental design is appropriate.
 
-Since the same amount of ERCC spike-in was added to each cell in our experiment we know that all the variablity we observe for these genes is due to technical noise; whereas endogenous genes are affected by both technical noise and biological variability. Technical noise can be removed by fitting a model to the spike-ins and "substracting" this from the endogenous genes. There are several methods available based on this premise (eg. [BASiCS](https://github.com/catavallejos/BASiCS), [scLVM](https://github.com/PMBio/scLVM), [RUV](http://bioconductor.org/packages/release/bioc/html/RUVSeq.html)); each using different noise models and different fitting procedures. Alternatively, one can identify genes which exhibit significant variation beyond technical noise (eg. Distance to median, [Highly variable genes](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html))
+Fundamentally, accounting for technical confounders involves identifying and, ideally, removing sources of variation in the expression data that are not related to (i.e. are confounding) the biological signal of interest. Various approaches exist, some of which use spike-in or housekeeping genes, and some of which use endogenous genes.
+
+The use of spike-ins as control genes is appealing, since the same amount of ERCC (or other) spike-in was added to each cell in our experiment. In principel, all the variablity we observe for these genes is due to technical noise; whereas endogenous genes are affected by both technical noise and biological variability. Technical noise can be removed by fitting a model to the spike-ins and "substracting" this from the endogenous genes. There are several methods available based on this premise (eg. [BASiCS](https://github.com/catavallejos/BASiCS), [scLVM](https://github.com/PMBio/scLVM), [RUVg](http://bioconductor.org/packages/release/bioc/html/RUVSeq.html)); each using different noise models and different fitting procedures. Alternatively, one can identify genes which exhibit significant variation beyond technical noise (eg. Distance to median, [Highly variable genes](http://www.nature.com/nmeth/journal/v10/n11/full/nmeth.2645.html)). However, there are issues with the use of spike-ins for normalisation (particularly ERCCs, derived from bacterial sequences), including that their variability can, for various reasons, actually be *higher* than that of endogenous genes.
+
+Given the issues with using spike-ins, better results can often be obtained by using endogenous genes instead. Where we have a large number of endogenous genes that, on average, do not vary systematically between cells and where we expect technical effects to affect a large number of genes (a very common and reasonable assumption), then such methods (for example, the RUVs method) can perform well. 
+
+We explore both general approaches below.
+
 
 ```{r, echo=FALSE}
 library(knitr)
@@ -54,6 +61,8 @@ ruvg <- RUVg(counts(umi.qc), erccs, k = 1)
 set_exprs(umi.qc, "ruvg1") <- ruvg$normalizedCounts
 ruvg <- RUVg(counts(umi.qc), erccs, k = 2)
 set_exprs(umi.qc, "ruvg2") <- ruvg$normalizedCounts
+set_exprs(umi.qc, "ruvg2_logcpm") <- log2(t(t(ruvg$normalizedCounts) / 
+                                           colSums(ruvg$normalizedCounts)) + 1)
 ```
 
 ### RUVs
@@ -71,6 +80,8 @@ ruvs <- RUVs(counts(umi.qc), cIdx, k = 1, scIdx = scIdx, isLog = FALSE)
 set_exprs(umi.qc, "ruvs1") <- ruvs$normalizedCounts
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
 set_exprs(umi.qc, "ruvs2") <- ruvs$normalizedCounts
+set_exprs(umi.qc, "ruvs2_logcpm") <- log2(t(t(ruvs$normalizedCounts) / 
+                                           colSums(ruvs$normalizedCounts)) + 1)
 ```
 
 ## Effectiveness 1
@@ -110,7 +121,16 @@ plotPCA(
     shape_by = "individual",
     exprs_values = "ruvs2") +
     ggtitle("PCA - RUVs normalisation: k = 2")
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "ruvs2_logcpm") +
+    ggtitle("PCA - RUVs normalisation log2-cpm: k = 2")
 ```
+
+Plotting log2-normalized CPM from RUVs with k = 2 looks to give the best separation of cells by individual.
 
 ## Effectiveness 2
 
@@ -137,7 +157,9 @@ keep <- umi.qc$individual == "NA19101"
 design <- model.matrix(~umi.qc[, keep]$batch)
 ```
 
-We will use the [edgeR](http://bioconductor.org/packages/edgeR) package to calculate DE genes.
+We will use the [edgeR](http://bioconductor.org/packages/edgeR) package to calculate DE genes between plates for this particular individual. Recall that the input data for edgeR (and similar methods like DESeq2) must always be raw counts.
+
+The particular coefficient that we test for DE in each case below tests to for genes that show a difference in expression between replicate plate 3 and replicate plate 1.
 
 ### DE (raw counts)
 ```{r}
@@ -153,48 +175,61 @@ res1 <- glmLRT(fit1, coef = 2)
 topTags(res1)
 summary(decideTestsDGE(res1))
 plotSmear(
-    res1, 
+    res1, lowess = TRUE,
     de.tags = rownames(topTags(res1, n = sum(abs(decideTestsDGE(res1))))$table)
 )
+
 ```
 
 ### DE (RUVg, k = 2)
 ```{r}
-dge2 <- DGEList(
-    counts = get_exprs(umi.qc[, keep], "ruvg2"), 
-    norm.factors = rep(1, sum(keep)),
-    group = umi.qc[, keep]$batch
-)
-dge2 <- estimateDisp(dge2, design = design, trend.method = "none")
-plotBCV(dge2)
-fit2 <- glmFit(dge2, design)
-res2 <- glmLRT(fit2, coef = 2)
+design_ruvg <- model.matrix(~ruvg$W[keep,] + umi.qc[, keep]$batch)
+head(design_ruvg)
+dge_ruvg <- estimateDisp(dge1, design = design_ruvg, trend.method = "none")
+plotBCV(dge_ruvg)
+fit2 <- glmFit(dge_ruvg, design_ruvg)
+res2 <- glmLRT(fit2)
 topTags(res2)
 summary(decideTestsDGE(res2))
 plotSmear(
-    res2, 
+    res2, lowess = TRUE,
     de.tags = rownames(topTags(res2, n = sum(abs(decideTestsDGE(res2))))$table)
 )
 ```
 
 ### DE (RUVs, k = 2)
 ```{r}
-dge3 <- DGEList(
-    counts = get_exprs(umi.qc[, keep], "ruvs2"), 
-    norm.factors = rep(1, sum(keep)),
-    group = umi.qc[, keep]$batch
-)
-dge3 <- estimateDisp(dge3, design = design, trend.method = "none")
-plotBCV(dge3)
-fit3 <- glmFit(dge3, design)
-res3 <- glmLRT(fit3, coef = 2)
+design_ruvs <- model.matrix(~ruvs$W[keep,] + umi.qc[, keep]$batch)
+head(design_ruvs)
+dge_ruvs <- estimateDisp(dge1, design = design_ruvs, trend.method = "none")
+plotBCV(dge_ruvs)
+fit3 <- glmFit(dge_ruvs, design_ruvs)
+res3 <- glmLRT(fit3)
 topTags(res3)
 summary(decideTestsDGE(res3))
 plotSmear(
-    res3, 
+    res3, lowess = TRUE,
     de.tags = rownames(topTags(res3, n = sum(abs(decideTestsDGE(res3))))$table)
 )
 ```
+
+In the above analyses, we have ignored size factors between cells. A typical edgeR analysis would always include these.
+
+```{r}
+dge_ruvs$samples$norm.factors <- sizeFactors(umi.qc)[keep]
+dge_ruvs_sf <- estimateDisp(dge_ruvs, design = design_ruvs, trend.method = "none")
+plotBCV(dge_ruvs_sf)
+fit4 <- glmFit(dge_ruvs_sf, design_ruvs)
+res4 <- glmLRT(fit4)
+topTags(res4)
+summary(decideTestsDGE(res4))
+plotSmear(
+    res4, lowess = TRUE,
+    de.tags = rownames(topTags(res4, n = sum(abs(decideTestsDGE(res4))))$table)
+)
+
+```
+
 
 ## Exercise
 
