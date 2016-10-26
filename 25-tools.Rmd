@@ -12,8 +12,16 @@ output: html_document
 * [UMI](http://www.nature.com/nmeth/journal/v11/n2/abs/nmeth.2772.html)
 * [STRT-Seq](http://www.ncbi.nlm.nih.gov/pubmed/21543516)
 
+## External RNA Control Consortium (ERCC)
+
+[ERCCs](https://www.thermofisher.com/order/catalog/product/4456740)
+
 ## scRNA-seq analysis tools
 
 Extensive list of software packages (and the people developing these methods) for single-cell data analysis:
 
 * [awesome-single-cell](https://github.com/seandavi/awesome-single-cell)
+
+Tallulah Andrews' single cell processing scripts:
+
+* [scRNASeqPipeline](https://github.com/tallulandrews/scRNASeqPipeline)

@@ -104,13 +104,6 @@ knitr::kable(
 )
 ```
 
-```{r total-features-vs-counts-reads, fig.cap = "Library size vs number of detected genes"}
-scater::plotPhenoData(
-    reads,
-    aes(x = total_features, y = log10(total_counts), colour = batch)
-)
-```
-
 ```{r mt-vs-counts-reads, fig.cap = "Percentage of counts in MT genes"}
 scater::plotPhenoData(
     reads,

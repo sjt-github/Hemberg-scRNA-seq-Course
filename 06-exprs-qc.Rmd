@@ -344,7 +344,7 @@ It is often instructive to consider the number of reads consumed by the top 50 e
 scater::plotQC(umi, type = "highest-expression")
 ```
 
-The distribution relatively flat indicating (but not guaraneeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
+The distributions are relatively flat indicating (but not guaranteeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
 
 
 ### Gene filtering
