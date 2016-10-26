@@ -8,7 +8,41 @@ For the final part of the course we would like you to work on more open ended pr
 
 Participants who have their own dataset that they are interested in should feel free to work with them. 
 
-For other participants we recommend downloading a dataset from the [conquer](http://imlspenticton.uzh.ch:3838/conquer/) resource. As you can see, several different QC metrics have already been pre-calculated and you can obtain the data as a scater-object.
+For other participants we recommend downloading a dataset from the [conquer](http://imlspenticton.uzh.ch:3838/conquer/) resource (<b>co</b>nsistent <b>qu</b>antification of <b>e</b>xternal <b>r</b>na-seq data). [conquer](http://imlspenticton.uzh.ch:3838/conquer/) uses [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html) to quantify the transcript abundances in a given sample. For a given organism, the fasta files containing cDNA and ncRNA sequences from Ensembl are complemented with ERCC spike-in sequences, and a Salmon quasi-mapping index is built for the entire catalog. Then [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html) is run to estimate the abundance of each transcript. The abundances estimated by [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html) are summarised and provided to the user in the form of a `MultiAssayExperiment` object. This object can be downloaded via the buttons in the _MultiAssayExperiment_ column. The provided `MultiAssayExperiment` object contains two "experiments", corresponding to the gene-level and transcript-level values.
+
+The gene-level experiment contains four "assays":
+
+* TPM
+* count
+* count_lstpm (count-scale length-scaled TPMs)
+* avetxlength (the average transcript length, which can be used as offsets in count models based on the count assay, see [here](http://f1000research.com/articles/4-1521/)).
+
+The transcript-level experiment contains three "assays":
+
+* TPM
+* count
+* efflength (the effective length estimated by [Salmon](http://salmon.readthedocs.io/en/latest/salmon.html))
+
+The `MultiAssayExperiment` also contains the phenotypic data (in the `pData` slot), as well as some metadata for the data set (the genome, the organism and the Salmon index that was used for the quantification).
+
+Here we will show you how to create an SCESet from a `MultiAssayExperiment` object. For example, if you download `Shalek2013` dataset you will be able to create an SCESet using the following code:
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+library(MultiAssayExperiment)
+library(SummarizedExperiment)
+library(scater)
+d <- readRDS("~/Desktop/GSE41265.rds")
+cts <- assays(experiments(d)[["gene"]])[["count_lstpm"]]
+tpms <- assays(experiments(d)[["gene"]])[["TPM"]]
+phn <- pData(d)
+sceset <- newSCESet(
+    countData = cts, 
+    tpmData = tpms,
+    phenoData = new("AnnotatedDataFrame", data = as.data.frame(phn))
+)
+```
+
+You can also see that several different QC metrics have already been pre-calculated on the [conquer](http://imlspenticton.uzh.ch:3838/conquer/) website.
 
 Here are some suggestions for questions that you can explore:
 
