@@ -129,7 +129,7 @@ dge1 <- DGEList(
 dge1 <- estimateDisp(dge1, design = design, trend.method = "none")
 plotBCV(dge1)
 fit1 <- glmFit(dge1, design)
-res1 <- glmLRT(fit1, coef = 2)
+res1 <- glmLRT(fit1)
 topTags(res1)
 summary(decideTestsDGE(res1))
 plotSmear(

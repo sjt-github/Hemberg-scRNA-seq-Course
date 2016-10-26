@@ -173,5 +173,12 @@ sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /
 
 * See the [help page](http://hms-dbmi.github.io/scde/help.html) for additional support.
 
+## Extra tools
 
+[MultiAssayExperiment](https://bioconductor.org/packages/MultiAssayExperiment) for working with [conquer](http://imlspenticton.uzh.ch:3838/conquer/) datasets:
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+## try http:// if https:// URLs are not supported
+source("https://bioconductor.org/biocLite.R")
+biocLite("MultiAssayExperiment")
+```
 
