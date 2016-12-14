@@ -29,9 +29,9 @@ The easiest thing to overview the data is to transform it using the principal co
 
 [Principal component analysis (PCA)](https://en.wikipedia.org/wiki/Principal_component_analysis) is a statistical procedure that uses a transformation to convert a set of observations into a set of values of linearly uncorrelated variables called principal components (PCs). The number of principal components is less than or equal to the number of original variables.
 
-Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. Typically, the eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components.
+Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. Typically, the eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html)).
 
-```{r clust-pca, echo=FALSE, fig.cap="Schematic representation of PCA dimensionality reduction (taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html))", out.width='100%'}
+```{r clust-pca, echo=FALSE, fig.cap="Schematic representation of PCA dimensionality reduction", out.width='100%'}
 knitr::include_graphics("figures/pca.png")
 ```
 
