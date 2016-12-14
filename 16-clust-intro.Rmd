@@ -77,7 +77,7 @@ In [_k_-means clustering](https://en.wikipedia.org/wiki/K-means_clustering), the
 different clusters. In an iterative manner, cluster centers are
 assigned and each cell is assigned to its nearest cluster:
 
-```{r clust-k-means, out.width = '100%', fig.cap="Schematic representation of the _k_-means clustering"}
+```{r clust-k-means, out.width = '100%', fig.cap="Schematic representation of the k-means clustering"}
 knitr::include_graphics("figures/k-means.png")
 ```
 
