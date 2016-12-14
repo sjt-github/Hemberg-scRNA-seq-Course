@@ -31,7 +31,7 @@ opts_chunk$set(fig.align = "center", echo=FALSE)
 
 ## Protocol
 
-```{r intro-rna-seq-workflow, out.width = '90%', fig.cap="Single cell sequencing (taken from [here](https://en.wikipedia.org/wiki/Single_cell_sequencing))"}
+```{r intro-rna-seq-workflow, out.width = '90%', fig.cap="Single cell sequencing (taken from Wikipedia)"}
 knitr::include_graphics("figures/RNA-Seq_workflow-5.pdf.jpg")
 ```
 
