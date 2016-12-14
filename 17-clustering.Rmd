@@ -90,6 +90,10 @@ panel.
 
 `pcaReduce` does not provide QC or normalisation function neither. It operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will used the default `SC3` gene filter
 
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+patient.sceset <- sc3_prepare(patient.sceset, ks = 2:5)
+```
+
 ```{r}
 # use the same gene filter as in SC3
 input <- patient.data[fData(patient.sceset)$sc3_gene_filter, ]
