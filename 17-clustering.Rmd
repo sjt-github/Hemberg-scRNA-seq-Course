@@ -161,7 +161,7 @@ Note that all points on the plot above are black. This is different from what we
 Now we are going to apply _k_-means clustering algorithm to the cloud of points on the tSNE map. Do you see 2/3/4/5 groups in the cloud?
 
 We will start with $k=2$:
-```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 2 colored clusters, identified by the _k_-means clustering algorithm"}
+```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 2 colored clusters, identified by the k-means clustering algorithm"}
 clusts <- kmeans(
     tsne_out$Y,
     centers = 2,
