@@ -19,14 +19,14 @@ install:
   - Rscript -e "if (!require('pheatmap')) install.packages('pheatmap')"
   - Rscript -e "if (!require('limma')) {source('https://bioconductor.org/biocLite.R');biocLite('limma')}"
 
-  - Rscript -e "if (!require('scater')) devtools::install_github('davismcc/scater')"
+  - Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('scater')"
   - Rscript -e "if (!require('statmod')) install.packages('statmod')"
   - Rscript -e "if (!require('mvoutlier')) install.packages('mvoutlier')"
   - Rscript -e "if (!require('Rtsne')) install.packages('Rtsne')"
   - Rscript -e "if (!require('scran')) {source('https://bioconductor.org/biocLite.R');biocLite('scran')}"
   - Rscript -e "if (!require('RUVSeq')) {source('https://bioconductor.org/biocLite.R');biocLite('RUVSeq')}"
 
-  - Rscript -e "if (!require('SC3'))devtools::install_github('hemberg-lab/SC3')"
+  - Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('SC3')"
   - Rscript -e "if (!require('pcaMethods')) {source('https://bioconductor.org/biocLite.R');biocLite('pcaMethods')}"
   - Rscript -e "if (!require('pcaReduce')) devtools::install_github('JustinaZ/pcaReduce')"
   - Rscript -e "if (!require('lfa')) {source('https://bioconductor.org/biocLite.R');biocLite('lfa')}"
