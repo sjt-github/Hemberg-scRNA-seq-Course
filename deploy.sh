@@ -1,12 +1,15 @@
 #!/bin/bash
 
+WORKSPACE=$1
+
 # get the docker
 docker pull hemberglab/scrna.seq.course:latest
 # run the docker
 docker run hemberglab/scrna.seq.course:latest
 
 # copy files from the docker
-docker cp `dl`:_book/ $WORKSPACE/scRNA.seq.course/docs/
+docker cp `dl`:_book $WORKSPACE/scRNA.seq.course/
+mv _book docs
 
 # push changes to the website
 cd scRNA.seq.course
