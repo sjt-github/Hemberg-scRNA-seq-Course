@@ -4,4 +4,4 @@ FROM hemberglab/scrna.seq.course-docker
 ADD . /
 
 # run scripts
-CMD bash _build.sh
+CMD bash build.sh
