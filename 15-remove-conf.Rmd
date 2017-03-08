@@ -62,7 +62,7 @@ set_exprs(umi.qc, "ruvg1") <- ruvg$normalizedCounts
 ruvg <- RUVg(counts(umi.qc), erccs, k = 2)
 set_exprs(umi.qc, "ruvg2") <- ruvg$normalizedCounts
 set_exprs(umi.qc, "ruvg2_logcpm") <- log2(t(t(ruvg$normalizedCounts) / 
-                                           colSums(ruvg$normalizedCounts)) + 1)
+                                           colSums(ruvg$normalizedCounts) * 1e6) + 1)
 ```
 
 ### RUVs
@@ -81,7 +81,7 @@ set_exprs(umi.qc, "ruvs1") <- ruvs$normalizedCounts
 ruvs <- RUVs(counts(umi.qc), cIdx, k = 2, scIdx = scIdx, isLog = FALSE)
 set_exprs(umi.qc, "ruvs2") <- ruvs$normalizedCounts
 set_exprs(umi.qc, "ruvs2_logcpm") <- log2(t(t(ruvs$normalizedCounts) / 
-                                           colSums(ruvs$normalizedCounts)) + 1)
+                                           colSums(ruvs$normalizedCounts) * 1e6) + 1)
 ```
 
 ## Effectiveness 1
