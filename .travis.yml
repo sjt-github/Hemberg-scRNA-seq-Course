@@ -4,7 +4,7 @@ r:
   - release
 sudo: false
 cache:
-  packages: yes
+  packages: no
   directories:
     - $TRAVIS_BUILD_DIR/_book/_bookdown_files
 
