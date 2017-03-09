@@ -99,14 +99,14 @@ d <- d[!duplicated(rownames(d)), ]
 
 Now run monocle:
 ```{r monocle-all-genes, message=FALSE, warning=FALSE}
+colnames(d) <- 1:ncol(d)
+geneNames <- rownames(d)
+rownames(d) <- 1:nrow(d)
 pd <- data.frame(timepoint = cellLabels)
 pd <- new("AnnotatedDataFrame", data=pd)
-rownames(pd) <- colnames(d)
-fd <- as.data.frame(rownames(d))
-names(fd) <- "gene"
+fd <- data.frame(gene = geneNames)
 fd <- new("AnnotatedDataFrame", data=fd)
-colnames(d) <- 1:ncol(d)
-rownames(d) <- 1:nrow(d)
+
 dCellData <- monocle::newCellDataSet(d, phenoData = pd, featureData = fd)
 dCellData <- monocle::setOrderingFilter(dCellData, 1:length(m3dGenes))
 dCellDataSet <- monocle::reduceDimension(dCellData, pseudo_expr = 1)
