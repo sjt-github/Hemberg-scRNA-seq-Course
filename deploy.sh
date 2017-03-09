@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# configure your name and email if you have not done so
-git config --global user.email "vladimir.yu.kiselev@gmail.com"
-git config --global user.name "wikiselev"
+# # configure your name and email if you have not done so
+# git config --global user.email "vladimir.yu.kiselev@gmail.com"
+# git config --global user.name "wikiselev"
 
 WORKSPACE=$1
 
@@ -23,7 +23,7 @@ mv _book docs
 # push changes to the website
 git add docs/*
 git commit -m "update the course website"
-git push origin master
+# git push origin master
 
 # cleanup after docker usage
 docker rm $(docker ps -a -q)
