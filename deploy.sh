@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# # configure your name and email if you have not done so
-# git config --global user.email "vladimir.yu.kiselev@gmail.com"
-# git config --global user.name "wikiselev"
-
 WORKSPACE=$1
 
 # get the docker
@@ -14,10 +10,7 @@ docker run hemberglab/scrna.seq.course:latest
 # copy files from the docker
 alias dl='docker ps -l -q'
 docker cp `dl`:_book $WORKSPACE/docs
-
-# mkdir docs/blischak
-# cp blischak/umi.rds docs/blischak/
-# cp blischak/reads.rds docs/blischak/
+docker cp `dl`:blischak $WORKSPACE/docs/blischak
 
 # push changes to the website
 git add docs/*
