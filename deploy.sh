@@ -12,10 +12,10 @@ docker pull hemberglab/scrna.seq.course:latest
 docker run hemberglab/scrna.seq.course:latest
 
 # copy files from the docker
-alias dl='docker ps -l -q'
-docker cp `dl`:_book $WORKSPACE/scRNA.seq.course/
 rm -r docs
-mv _book docs
+alias dl='docker ps -l -q'
+docker cp `dl`:_book $WORKSPACE/docs
+
 # mkdir docs/blischak
 # cp blischak/umi.rds docs/blischak/
 # cp blischak/reads.rds docs/blischak/
