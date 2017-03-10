@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-03-09">
+<meta name="date" content="2017-03-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
   
   
 <link rel="prev" href="pseudotime-analysis.html">
-<link rel="next" href="ideal-scrnaseq-pipeline-as-of-oct-2016.html">
+<link rel="next" href="de-in-a-real-dataset.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -147,22 +147,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html"><i class="fa fa-check"></i><b>3</b> Introduction to single-cell RNA-seq</a><ul>
 <li class="chapter" data-level="3.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#bulk-rna-seq"><i class="fa fa-check"></i><b>3.1</b> Bulk RNA-seq</a></li>
 <li class="chapter" data-level="3.2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#scrna-seq"><i class="fa fa-check"></i><b>3.2</b> scRNA-seq</a></li>
-<li class="chapter" data-level="3.3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#protocol"><i class="fa fa-check"></i><b>3.3</b> Protocol</a></li>
+<li class="chapter" data-level="3.3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#workflow"><i class="fa fa-check"></i><b>3.3</b> Workflow</a></li>
 <li class="chapter" data-level="3.4" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#computational-analysis"><i class="fa fa-check"></i><b>3.4</b> Computational Analysis</a></li>
 <li class="chapter" data-level="3.5" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#challenges"><i class="fa fa-check"></i><b>3.5</b> Challenges</a></li>
-<li class="chapter" data-level="3.6" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#controls"><i class="fa fa-check"></i><b>3.6</b> Controls</a><ul>
-<li class="chapter" data-level="3.6.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#spike-ins"><i class="fa fa-check"></i><b>3.6.1</b> Spike-ins</a></li>
-<li class="chapter" data-level="3.6.2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#umis"><i class="fa fa-check"></i><b>3.6.2</b> UMIs</a></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="overview-of-experimental-methods-for-generating-scrna-seq-data.html"><a href="overview-of-experimental-methods-for-generating-scrna-seq-data.html"><i class="fa fa-check"></i><b>4</b> Overview of experimental methods for generating scRNA-seq data</a></li>
+<li class="chapter" data-level="5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>5</b> Construction of expression matrix</a><ul>
+<li class="chapter" data-level="5.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>5.1</b> Reads QC</a></li>
+<li class="chapter" data-level="5.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>5.2</b> Reads alignment</a></li>
+<li class="chapter" data-level="5.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>5.3</b> Alignment example</a></li>
+<li class="chapter" data-level="5.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>5.4</b> Mapping QC</a></li>
+<li class="chapter" data-level="5.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>5.5</b> Reads quantification</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>4</b> Construction of expression matrix</a><ul>
-<li class="chapter" data-level="4.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>4.1</b> Reads QC</a></li>
-<li class="chapter" data-level="4.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>4.2</b> Reads alignment</a></li>
-<li class="chapter" data-level="4.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>4.3</b> Alignment example</a></li>
-<li class="chapter" data-level="4.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>4.4</b> Mapping QC</a></li>
-<li class="chapter" data-level="4.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>4.5</b> Reads quantification</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="overview-of-experimental-methods-for-generating-scrna-seq-data.html"><a href="overview-of-experimental-methods-for-generating-scrna-seq-data.html"><i class="fa fa-check"></i><b>5</b> Overview of experimental methods for generating scRNA-seq data</a></li>
 <li class="chapter" data-level="6" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html"><i class="fa fa-check"></i><b>6</b> Unique Molecular Identifiers (UMIs)</a><ul>
 <li class="chapter" data-level="6.1" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
 <li class="chapter" data-level="6.2" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#mapping-barcodes"><i class="fa fa-check"></i><b>6.2</b> Mapping Barcodes</a></li>
@@ -313,26 +309,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="22" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html"><i class="fa fa-check"></i><b>22</b> Differential Expression (DE) analysis</a><ul>
 <li class="chapter" data-level="22.1" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>22.1</b> Bulk RNA-seq</a></li>
 <li class="chapter" data-level="22.2" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>22.2</b> Single cell RNA-seq</a></li>
-<li class="chapter" data-level="22.3" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#scrna-seq-synthetic-data"><i class="fa fa-check"></i><b>22.3</b> scRNA-seq synthetic data</a></li>
-<li class="chapter" data-level="22.4" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#single-gene-expression"><i class="fa fa-check"></i><b>22.4</b> Single gene expression</a></li>
-<li class="chapter" data-level="22.5" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#poisson-beta-distribution"><i class="fa fa-check"></i><b>22.5</b> Poisson-Beta distribution</a></li>
-<li class="chapter" data-level="22.6" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#sample-size"><i class="fa fa-check"></i><b>22.6</b> Sample size</a></li>
-<li class="chapter" data-level="22.7" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#dropout-noise"><i class="fa fa-check"></i><b>22.7</b> Dropout noise</a></li>
-<li class="chapter" data-level="22.8" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#dispersion-noise"><i class="fa fa-check"></i><b>22.8</b> Dispersion noise</a></li>
+<li class="chapter" data-level="22.3" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>22.3</b> Differences in Distribution</a></li>
+<li class="chapter" data-level="22.4" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>22.4</b> Models of single-cell RNASeq data</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><i class="fa fa-check"></i><b>23</b> “Ideal” scRNAseq pipeline (as of Oct 2016)</a><ul>
-<li class="chapter" data-level="23.1" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#experimental-design"><i class="fa fa-check"></i><b>23.1</b> Experimental Design</a></li>
-<li class="chapter" data-level="23.2" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#processing-reads"><i class="fa fa-check"></i><b>23.2</b> Processing Reads</a></li>
-<li class="chapter" data-level="23.3" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>23.3</b> Preparing Expression Matrix</a></li>
-<li class="chapter" data-level="23.4" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#biological-interpretation"><i class="fa fa-check"></i><b>23.4</b> Biological Interpretation</a></li>
+<li class="chapter" data-level="23" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html"><i class="fa fa-check"></i><b>23</b> DE in a real dataset</a><ul>
+<li class="chapter" data-level="23.1" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#introduction-8"><i class="fa fa-check"></i><b>23.1</b> Introduction</a></li>
+<li class="chapter" data-level="23.2" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>23.2</b> Kolmogorov-Smirnov test</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#evaluating-accuracy"><i class="fa fa-check"></i><b>23.2.1</b> Evaluating Accuracy</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>24</b> Advanced exercises</a></li>
-<li class="chapter" data-level="25" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>25</b> Resources</a><ul>
-<li class="chapter" data-level="25.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>25.1</b> scRNA-seq protocols</a></li>
-<li class="chapter" data-level="25.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>25.2</b> External RNA Control Consortium (ERCC)</a></li>
-<li class="chapter" data-level="25.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>25.3</b> scRNA-seq analysis tools</a></li>
+<li class="chapter" data-level="23.3" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>23.3</b> Wilcox/Mann-Whitney-U Test</a></li>
+<li class="chapter" data-level="23.4" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#edger"><i class="fa fa-check"></i><b>23.4</b> edgeR</a></li>
+<li class="chapter" data-level="23.5" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#monocle-1"><i class="fa fa-check"></i><b>23.5</b> Monocle</a></li>
+<li class="chapter" data-level="23.6" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#mast"><i class="fa fa-check"></i><b>23.6</b> MAST</a></li>
+<li class="chapter" data-level="23.7" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#slow-methods-1h-to-run---these-methods-are-too-slow-to-run-today-but-we-encourage-you-to-try-them-out-on-your-own"><i class="fa fa-check"></i><b>23.7</b> Slow Methods (&gt;1h to run) - These methods are too slow to run today but we encourage you to try them out on your own:</a></li>
+<li class="chapter" data-level="23.8" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#bpsc"><i class="fa fa-check"></i><b>23.8</b> BPSC</a></li>
+<li class="chapter" data-level="23.9" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#scde"><i class="fa fa-check"></i><b>23.9</b> SCDE</a></li>
 </ul></li>
-<li class="chapter" data-level="26" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>26</b> References</a></li>
+<li class="chapter" data-level="24" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><i class="fa fa-check"></i><b>24</b> “Ideal” scRNAseq pipeline (as of Oct 2016)</a><ul>
+<li class="chapter" data-level="24.1" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#experimental-design"><i class="fa fa-check"></i><b>24.1</b> Experimental Design</a></li>
+<li class="chapter" data-level="24.2" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#processing-reads"><i class="fa fa-check"></i><b>24.2</b> Processing Reads</a></li>
+<li class="chapter" data-level="24.3" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>24.3</b> Preparing Expression Matrix</a></li>
+<li class="chapter" data-level="24.4" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#biological-interpretation"><i class="fa fa-check"></i><b>24.4</b> Biological Interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>25</b> Advanced exercises</a></li>
+<li class="chapter" data-level="26" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>26</b> Resources</a><ul>
+<li class="chapter" data-level="26.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>26.1</b> scRNA-seq protocols</a></li>
+<li class="chapter" data-level="26.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>26.2</b> External RNA Control Consortium (ERCC)</a></li>
+<li class="chapter" data-level="26.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>26.3</b> scRNA-seq analysis tools</a></li>
+</ul></li>
+<li class="chapter" data-level="27" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>27</b> References</a></li>
 <li class="divider"></li>
 <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2016</a></li>
 
@@ -362,165 +367,45 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="single-cell-rna-seq" class="section level2">
 <h2><span class="header-section-number">22.2</span> Single cell RNA-seq</h2>
-<p>In contrast to the bulk RNA-seq in scRNA-seq we usually do not have a defined set of experimental conditions, but instead, as was shown in the previous chapter (<a href="clust-methods.html#clust-methods">19</a>) we can identify the cell groups by using the unsupervised clustering approach. Once the groups have been identified one can find differentially expressed genes by either looking at the differencies in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for the comparison of the two groups of cells.</p>
+<p>In contrast to the bulk RNA-seq in scRNA-seq we usually do not have a defined set of experimental conditions, but instead, as was shown in the previous chapter (<a href="clust-methods.html#clust-methods">19</a>) we can identify the cell groups by using the unsupervised clustering approach. Once the groups have been identified one can find differentially expressed genes by either looking at the differences in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for the comparison of the two groups of cells.</p>
 </div>
-<div id="scrna-seq-synthetic-data" class="section level2">
-<h2><span class="header-section-number">22.3</span> scRNA-seq synthetic data</h2>
-<p>One advantage of working with single-cell data is that there is a reliable, analytically tractable mathematical model for the expression levels, the Poisson-Beta distribution. Importantly, the Poisson-Beta distribution has strong experimental support, and it provides a good fit to scRNA-seq data.</p>
-<p>In this module, we first discuss the Poisson-Beta distribution. We then use the model to generate synthetic data which we can use to compare different DE finding algorithms. In the final section we investigate a real scRNA-seq dataset.</p>
+<div id="differences-in-distribution" class="section level2">
+<h2><span class="header-section-number">22.3</span> Differences in Distribution</h2>
+<p>Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) for each group we are comparing in single-cell experiments. Thus we can take advantage of the whole distribution of expression values in each group to identify differences between groups rather than only comparing estimates of mean-expression as is standard for bulk RNASeq.</p>
+<p>There are two main approaches to comparing distributions. Firstly, we can use existing statistical models/distributions and fit the same type of model to the expression in each group then test for differences in the parameters for each model, or test whether the model fits better if a particular paramter is allowed to be different according to group. For instance in Chapter 15 we used edgeR to test whether allowing mean expression to be different in different batches significantly improved the fit of a negative binomial model of the data.</p>
+<p>Alternatively, we can use a non-parametric test which does not assume expression values follow any particular distribution, e.g. the KS-test. Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data.</p>
 </div>
-<div id="single-gene-expression" class="section level2">
-<h2><span class="header-section-number">22.4</span> Single gene expression</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scRNA.seq.funcs)
-<span class="kw">set.seed</span>(<span class="dv">1</span>)</code></pre></div>
-<p>For single-cell data, the analytically tractable stochastic bursting model provides a good fit. Thus, we can use it to generate realistic data. We start by generating samples from one gene:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span>scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
-<p>We then plot the results as a histogram:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(s,
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">main =</span> <span class="st">&quot;Transcript distribution&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:poisson-beta-plot"></span>
-<img src="21-de-intro_files/figure-html/poisson-beta-plot-1.png" alt="Distribution of read counts for a single genes across 100 cells based on the Poisson-Beta model" width="672" />
+<div id="models-of-single-cell-rnaseq-data" class="section level2">
+<h2><span class="header-section-number">22.4</span> Models of single-cell RNASeq data</h2>
+<p>The most common model of RNASeq data is the negative binomial model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+<span class="kw">hist</span>(<span class="kw">rnbinom</span>(<span class="dv">1000</span>, <span class="dt">mu=</span><span class="dv">10</span>, <span class="dt">size=</span><span class="dv">100</span>), <span class="dt">col=</span><span class="st">&quot;grey50&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:nb-plot"></span>
+<img src="21-de-intro_files/figure-html/nb-plot-1.png" alt="Distribution of read counts for a single gene across 1000 cells based on the Negative Binomial model" width="672" />
 <p class="caption">
-Figure 22.1: Distribution of read counts for a single genes across 100 cells based on the Poisson-Beta model
+Figure 22.1: Distribution of read counts for a single gene across 1000 cells based on the Negative Binomial model
 </p>
 </div>
-<p>The probability mass function of the Poisson-Beta distribution is challenging to work with since it involves special functions. However, the mean and variance can be calculated as:</p>
-<p><span class="math inline">\(\mu = k\cdot a/(a+b)\)</span></p>
-<p><span class="math inline">\(\sigma^2 = k^2\cdot a\cdot b/((a+b+1)\cdot(a+b)^2)\)</span></p>
-</div>
-<div id="poisson-beta-distribution" class="section level2">
-<h2><span class="header-section-number">22.5</span> Poisson-Beta distribution</h2>
-<p>There are three regimes of the Poisson-Beta distribution and they are determined by the values of the parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.</p>
-<p>When <span class="math inline">\(a&lt;1\)</span> and <span class="math inline">\(b&lt;1\)</span> we have a bimodal distribution with one mode at 0 and the other at <span class="math inline">\(k\)</span>, when <span class="math inline">\(a&lt;1\)</span> and <span class="math inline">\(b&gt;1\)</span> we have a monotonically decreasing distribution and otherwise we have a unimodal distribution with a mode at <span class="math inline">\(ka/(a+b)\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, .<span class="dv">2</span>, .<span class="dv">3</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">120</span>, <span class="dv">10</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, .<span class="dv">2</span>, <span class="dv">3</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">120</span>, <span class="dv">10</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, <span class="dv">2</span>, .<span class="dv">3</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">120</span>, <span class="dv">10</span>))</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:poisson-beta-shapes"></span>
-<img src="21-de-intro_files/figure-html/poisson-beta-shapes-1.png" alt="Different distributions of read counts for a single genes across 100 cells based on the Poisson-Beta model corresponding to different paramete sets" width="672" />
+<p><span class="math inline">\(\mu = mu\)</span> <span class="math inline">\(\sigma^2 = mu + mu^2/size\)</span></p>
+<p>It is parameterized by the mean expression (mu) and the dispersion (size), which is inversely related to the variance. The negative binomial model fits bulk RNA-seq data very well and underlies most statistical methods designed for such data. In addition, it has been show to fit the distribution of molecule counts obtained from data tagged by unique molecular identifiers (UMIs) quite well (<a href="http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html">Grun et al. 2014</a>, <a href="http://genome.cshlp.org/content/21/7/1160">Islam et al. 2011</a>).</p>
+<p>However, a raw negative binomial model does not fit full-transcript data very well due to the high dropout rates relative to the non-zero read counts. For this type of data a variety of zero-inflated negative binomial models have been proposed (e.g. <a href="https://bioconductor.org/packages/release/bioc/html/MAST.html">MAST</a>, <a href="https://bioconductor.org/packages/release/bioc/html/scde.html">SCDE</a>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d =<span class="st"> </span><span class="fl">0.5</span>;
+counts &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">1000</span>, <span class="dt">mu=</span><span class="dv">10</span>, <span class="dt">size=</span><span class="dv">100</span>);
+counts[<span class="kw">runif</span>(<span class="dv">1000</span>) &lt;<span class="st"> </span>d] =<span class="st"> </span><span class="dv">0</span>;
+<span class="kw">hist</span>(counts, <span class="dt">col=</span><span class="st">&quot;grey50&quot;</span>);</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:zero-inflation-plot"></span>
+<img src="21-de-intro_files/figure-html/zero-inflation-plot-1.png" alt="Distribution of read counts for a single gene based on a zero-inflated Negative Binomial model" width="672" />
 <p class="caption">
-Figure 22.2: Different distributions of read counts for a single genes across 100 cells based on the Poisson-Beta model corresponding to different paramete sets
+Figure 22.2: Distribution of read counts for a single gene based on a zero-inflated Negative Binomial model
 </p>
 </div>
-<p><strong>Exercise 1</strong>: Vary the parameters <em>a</em>, <em>b</em> and <em>k</em> to explore how the location and shape of the distribution changes.</p>
-</div>
-<div id="sample-size" class="section level2">
-<h2><span class="header-section-number">22.6</span> Sample size</h2>
-<p>The difficulty in determining the parameters of the distribution also depends on the sample size. In the example below, it is not clear if the distribution is bimodal when only 10 samples are drawn.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">10</span>, .<span class="dv">6</span>, <span class="fl">1.2</span>, <span class="dv">10</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">1</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">10</span>, .<span class="dv">6</span>, <span class="fl">1.2</span>, <span class="dv">50</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">1</span>),
-     <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:poisson-beta-sample-size"></span>
-<img src="21-de-intro_files/figure-html/poisson-beta-sample-size-1.png" alt="Effect of sampling size on the distribution of read counts based on the Poisson-Beta model" width="672" />
-<p class="caption">
-Figure 22.3: Effect of sampling size on the distribution of read counts based on the Poisson-Beta model
-</p>
-</div>
-<p><strong>Exercise 2</strong>: Modify the number of samples (i.e. cells) drawn to explore how difficult it is to correctly infer the correct shape.</p>
-</div>
-<div id="dropout-noise" class="section level2">
-<h2><span class="header-section-number">22.7</span> Dropout noise</h2>
-<p>The stochastic bursting model only captures the biological variability. In practice there will also be experimental variability. We model the noise as drop-outs, i.e. we assume that there is a small probality that each transcript is lost. For gene <span class="math inline">\(i\)</span> and cell <span class="math inline">\(j\)</span> it is assumed that the probability of loosing the transcript is given by <span class="math inline">\(p_d = \mu/(d+\mu)\)</span>, where <span class="math inline">\(\mu\)</span> is the mean expression level of the gene and <span class="math inline">\(d\)</span> is a drop-out parameter. Thus, the probability of drop-outs monotonically decreases as the mean expression level increases.</p>
-<p>To visualize the impact of the drop-outs on a sample, we can tune the drop-out parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">08</span>),
-     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">120</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">10</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">08</span>),
-     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">120</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">100</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">08</span>),
-     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">120</span>))</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:poisson-beta-dropout-example"></span>
-<img src="21-de-intro_files/figure-html/poisson-beta-dropout-example-1.png" alt="Effect of dropouts on the distribution of read counts based on the Poisson-Beta model" width="672" />
-<p class="caption">
-Figure 22.4: Effect of dropouts on the distribution of read counts based on the Poisson-Beta model
-</p>
-</div>
-<p><strong>Exercise 3</strong>: Explore the different parameter regimes for the same drop-out rate. Do you think that we are more sensitive to drop-outs in any specific regime?</p>
-</div>
-<div id="dispersion-noise" class="section level2">
-<h2><span class="header-section-number">22.8</span> Dispersion noise</h2>
-<p>Another example of noise is under- or over-dispersion. This can be modelled using a single parameter multiplying the parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> in the Poisson-Beta distribution by a scalar <span class="math inline">\(s\)</span>. We can see that the mean is left unchanged while the variance is inversely proportional to <span class="math inline">\(s\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span><span class="dv">10</span>^(-<span class="dv">3</span>:<span class="dv">3</span>)
-k &lt;-<span class="st"> </span><span class="dv">100</span>
-a &lt;-<span class="st"> </span><span class="dv">2</span>
-b &lt;-<span class="st"> </span><span class="dv">3</span>
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="kw">plot</span>(s,
-     k*a*s/(a*s +<span class="st"> </span>b*s),
-     <span class="dt">log =</span> <span class="st">&quot;x&quot;</span>,
-     <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>,
-     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">50</span>),
-     <span class="dt">ylab =</span> <span class="st">&quot;Moments&quot;</span>)
-<span class="kw">points</span>(s,
-       k*a*s*b*s/((a*s +<span class="st"> </span>b*s)^<span class="dv">2</span>*(a*s +<span class="st"> </span>b*s +<span class="st"> </span><span class="dv">1</span>)),
-       <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:poisson-beta-dispersion-analytical"></span>
-<img src="21-de-intro_files/figure-html/poisson-beta-dispersion-analytical-1.png" alt="The mean and the variance of the distribution of read counts based on the Poisson-Beta model" width="672" />
-<p class="caption">
-Figure 22.5: The mean and the variance of the distribution of read counts based on the Poisson-Beta model
-</p>
-</div>
-<p>To illustrate the effect of the dispersion parameter on the distribution consider:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">100</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">05</span>),
-     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">120</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, <span class="dv">2</span>/<span class="dv">10</span>, <span class="dv">3</span>/<span class="dv">10</span>, <span class="dv">100</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">05</span>),
-     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">120</span>))
-<span class="kw">hist</span>(scRNA.seq.funcs::<span class="kw">PoiBeta</span>(<span class="dv">100</span>, <span class="dv">2</span>*<span class="dv">10</span>, <span class="dv">3</span>*<span class="dv">10</span>, <span class="dv">100</span>),
-     <span class="dt">freq =</span> <span class="ot">FALSE</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;# transcripts&quot;</span>,
-     <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>/<span class="dv">4</span>),
-     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">05</span>),
-     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">120</span>))</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:poisson-beta-dispersion-effect"></span>
-<img src="21-de-intro_files/figure-html/poisson-beta-dispersion-effect-1.png" alt="Effect of dispersion on the distribution of read counts based on the Poisson-Beta model" width="672" />
-<p class="caption">
-Figure 22.6: Effect of dispersion on the distribution of read counts based on the Poisson-Beta model
-</p>
-</div>
-<p><strong>Exercise 4</strong>: Explore what happens when you have both drop-outs and under/over-dispersion. Can the effects be deconvoluted?</p>
+<p><span class="math inline">\(\mu = mu \cdot (1 - d)\)</span> <span class="math inline">\(\sigma^2 = mu \cdot (1-d) \cdot (1 + d \cdot mu + mu / size)\)</span></p>
+<p>These models introduce a new parameter d, for the dropout rate, to the negative binomial model. As we saw in Chapter 19, the dropout rate of a gene is strongly correlated with the mean expression of the gene. Different zero-inflated negative binomial models use different relationships between mu and d and some may fit mu and d to the expression of each gene independently.</p>
+<p>Finally, several methods use a Poisson-Beta distribution which is based on a mechanistic model of transcriptional bursting. There is strong experimental support for this model (<a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-1-r7">Kim and Marioni, 2013</a>) and it provides a good fit to scRNA-seq data but it is less easy to use than the negative-binomial models and much less existing methods upon which to build than the negative binomial model.</p>
+<p><code>{r pois-beta-plot, fit.cap=&quot;Distribution of read counts for a single gene based on a Poisson-Beta model&quot;) a = 0.1 b = 0.1 g = 100 lambdas = rbeta(1000, a, b) counts = sapply(lambdas, function(l) {rpois(1, lambda=l)}) hist(counts, col=&quot;grey50&quot;)</code> <span class="math inline">\(\mu = g \cdot a / (a + b)\)</span> <span class="math inline">\(\sigma^2 = g^2 \cdot a \cdot b/((a + b + 1) \cdot (a + b)^2)\)</span></p>
+<p>This model uses three parameters: “a” the rate of activation of transcription; “b” the rate of inhibition of transcription; and “g” the rate of transcript production while transcription is active at the locus. Differential expression methods may test each of the parameters for differences across groups or only one (often “g”).</p>
+<p>All of these models may be further expanded to explicitly account for other sources of gene expression differences such as batch-effect or library depth depending on the particular DE algorithm.</p>
+<p><strong>Exercise</strong>: Vary the parameters of each distribution to explore how they affect the distribution of gene expression. How similar are the Poisson-Beta and Negative Binomial models?</p>
 
 </div>
 </div>
@@ -530,7 +415,7 @@ Figure 22.6: Effect of dispersion on the distribution of read counts based on th
         </div>
       </div>
 <a href="pseudotime-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="de-in-a-real-dataset.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

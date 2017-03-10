@@ -23,17 +23,18 @@ knit: bookdown::preview_chapter
 * Allows to study new biological questions in which __cell-specific changes in transcriptome are important__, e.g. cell type identification, heterogeneity of cell responses, stochasticity of gene expression, inference of gene regulatory networks across the cells.
 * Datasets range __from $10^2$ to $10^5$ cells__ and increase in size every year
 * Currently there are several different protocols in use, e.g. SMART-seq2 [@Picelli2013-sb], CELL-seq [@Hashimshony2012-kd] and Drop-seq [@Macosko2015-ix]
+* There are also commercial platforms available, including the [Fluidigm C1](https://www.fluidigm.com/products/c1-system) and the [10X Genomics Chromium](https://www.10xgenomics.com/single-cell/)
 * Several computational analysis methods from bulk RNA-seq __can__ be used
 * __In most cases__ computational analysis requires adaptation of the existing methods or development of new ones
 
-## Protocol
+## Workflow
 
 <div class="figure" style="text-align: center">
 <img src="figures/RNA-Seq_workflow-5.pdf.jpg" alt="Single cell sequencing (taken from Wikipedia)" width="90%" />
 <p class="caption">(\#fig:intro-rna-seq-workflow)Single cell sequencing (taken from Wikipedia)</p>
 </div>
 
-Overall, experimental scRNA-seq protocols are similar to the methods used for bulk RNA-seq. For a discussion on experimental methods, please see reviews by [@Saliba2014-dy], [@Handley2015-yi] or [@Kolodziejczyk2015-xy].
+Overall, experimental scRNA-seq protocols are similar to the methods used for bulk RNA-seq. We will be discussing some of the most common approaches in the next chapter.
 
 ## Computational Analysis
 
@@ -54,16 +55,5 @@ The main difference between bulk and single cell RNA-seq is that each sequencing
 * __Amplification__ (up to 1 million fold)
 * __Gene 'dropouts'__ in which a gene is observed at a moderate expression level in one cell but is not detected in another cell [@Kharchenko2014-ts].
 
-In both cases the discrepancies are introduced due to low starting amounts of transcripts since the RNA comes from one cell only. Improving the transcript capture efficiency and reducing the amplification bias are currently active areas of research.
+In both cases the discrepancies are introduced due to low starting amounts of transcripts since the RNA comes from one cell only. Improving the transcript capture efficiency and reducing the amplification bias are currently active areas of research. However, as we shall see in this course, it is also possible to alleviate some of these issues through proper normalization and corrections.
 
-## Controls
-
-To provide better estimates of the technical variation between scRNA sequencing libraries two quantitative standards are frequently used. The aim of using spike-ins and UMIs is to facilitate normalization of gene expression levels across different cells.
-
-### Spike-ins
-
-Spike-ins are extrinsic RNA molecules of known concentration which are added to the lysate of each cell prior to the reverse transcription reaction. The most popular and widely used spike-ins are synthetic spikes from the [External RNA Control Consortium (ERCC)](https://www.thermofisher.com/order/catalog/product/4456740). This set of 96 synthetic mRNAs of differing length and GC content based on bacterial sequences [@Jiang2011-mu].
-
-### UMIs
-
-Another method of standardisation is to use Unique Molecular Identifiers (UMIs) [@Kivioja2012-yt]. These are 4-20 bp barcode sequences which are added to the 3' or 5' end of each transcript prior to amplification (typically during reverse transcription). This is usually followed by targetted sequencing of the respective end of the transcripts. The barcodes make it possible to quantify the number of transcripts prior to the amplification step.

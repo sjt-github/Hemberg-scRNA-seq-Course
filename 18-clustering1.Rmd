@@ -4,10 +4,12 @@ output: html_document
 
 # Clustering example {#clust-methods}
 
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = "center")
+```
 
-
-
-```r
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(scRNA.seq.funcs)
 library(pcaMethods)
 library(pcaReduce)
@@ -33,13 +35,12 @@ been carried out for this patient and it has revealed the presence of
 identify clusters corresponding to the three genotypes from the
 scRNA-seq data.
 
-
-```r
+```{r}
 patient.data <- read.table("clustering/patient.txt", sep = "\t")
 ```
 
 For convenience we have performed all quality control and normalization steps (SF + RUVg) in advance. The
-dataset contains 51 cells and 8710 genes.
+dataset contains `r dim(patient.data)[2]` cells and `r dim(patient.data)[1]` genes.
 
 Now we are ready to cluster the data using the methods described in the previous chapter.
 
@@ -48,23 +49,20 @@ Now we are ready to cluster the data using the methods described in the previous
 `SC3` is a purely clustering tool and it does not provide functions for the sequencing quality control (QC) or normalisation. On the contrary it is expected that these preprocessing steps are performed by a user in advance. To encourage the preprocessing, SC3 is built on top of the [scater](http://bioconductor.org/packages/scater/) package (see previous chapters). To our knowledge the scater is the most comprehensive toolkit for the QC and normalisation analysis of the single-cell RNA-Seq data.
 
 If you already have an object of `scater` class `SCESet` then you should proceed to the next code chunk. If you have a matrix containing cell/gene expression values then you can create a `scater` object using your matrix:
-
-```r
+```{r}
 patient.sceset <- newSCESet(countData = patient.data)
 patient.sceset <- calculateQCMetrics(patient.sceset)
 ```
 
 Now we are ready ro run the `SC3` clustering:
-
-```r
+```{r, eval=FALSE}
 patient.sceset <- sc3(patient.sceset, ks = 2:5, k_estimator = TRUE, biology = TRUE)
 ```
 
 When the clustering is done you will be able to visualise the clustering results in many different ways. See the [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details.
 
 `SC3` also has a useful function for summarising/visualising the results in the interactive `Shiny` session:
-
-```r
+```{r, eval=FALSE}
 sc3_interactive(patient.sceset)
 ```
 
@@ -92,10 +90,11 @@ panel.
 
 `pcaReduce` does not provide QC or normalisation function neither. It operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will used the default `SC3` gene filter
 
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+patient.sceset <- sc3_prepare(patient.sceset, ks = 2:5)
+```
 
-
-
-```r
+```{r}
 # use the same gene filter as in SC3
 input <- patient.data[fData(patient.sceset)$sc3_gene_filter, ]
 # log transform before the analysis
@@ -108,43 +107,36 @@ There are several parameters used by `pcaReduce`:
 * `method` defines a method used for clustering. `S` - to perform sampling based merging, `M` - to perform merging based on largest probability.
 
 We will run `pcaReduce` 10 times:
-
-```r
+```{r}
 # run pcaReduce 10 times creating hierarchies from 1 to 30 clusters
 pca.red <- PCAreduce(t(input.log), nbt = 10, q = 30, method = 'S')
 ```
 
 Let's compare the clusterings (with $k$ = 3) provided after running `pcaReduce` 10 times:
-
-```r
+```{r clust-pca-reduce3, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$"}
 res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 3))
 pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
 ```
-
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce3-1.png" alt="Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$" width="672" />
-<p class="caption">(\#fig:clust-pca-reduce3)Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$</p>
-</div>
 
 __Exercise 6__: Run pcaReduce for $k=2$, $k=4$ and $k=5$. Is it easy to choose the optimal $k$?
 
 __Hint__: When running pcaReduce for different $k$s you do not need to rerun pcaReduce::PCAreduce function, just use already calculated `pca.red` object.
 
 __Our solutions__:
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce2-1.png" alt="Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=2$." width="672" />
-<p class="caption">(\#fig:clust-pca-reduce2)Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=2$.</p>
-</div>
+```{r clust-pca-reduce2, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=2$.", echo=FALSE}
+res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 2))
+pheatmap::pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
+```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce4-1.png" alt="Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=4$." width="672" />
-<p class="caption">(\#fig:clust-pca-reduce4)Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=4$.</p>
-</div>
+```{r clust-pca-reduce4, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=4$.", echo=FALSE}
+res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 4))
+pheatmap::pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
+```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce5-1.png" alt="Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=5$." width="672" />
-<p class="caption">(\#fig:clust-pca-reduce5)Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=5$.</p>
-</div>
+```{r clust-pca-reduce5, fig.cap = "Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=5$.", echo=FALSE}
+res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 5))
+pheatmap::pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
+```
 
 __Exercise 7__: Compare the results between `SC3` and `pcaReduce`. What is
 the main difference between the solutions provided by the two
@@ -153,8 +145,7 @@ different methods?
 ## tSNE + kmeans
 
 [tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. We can create a similar plots explicitly:
-
-```r
+```{r clust-tsne, fig.cap = "tSNE map of the patient data"}
 tsne_out <- Rtsne::Rtsne(t(input.log), perplexity = 10)
 df_to_plot <- as.data.frame(tsne_out$Y)
 comps <- colnames(df_to_plot)[1:2]
@@ -165,18 +156,12 @@ ggplot2::ggplot(df_to_plot, aes_string(x = comps[1], y = comps[2])) +
     theme_bw()
 ```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-1.png" alt="tSNE map of the patient data" width="672" />
-<p class="caption">(\#fig:clust-tsne)tSNE map of the patient data</p>
-</div>
-
 Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.
 
 Now we are going to apply _k_-means clustering algorithm to the cloud of points on the tSNE map. Do you see 2/3/4/5 groups in the cloud?
 
 We will start with $k=2$:
-
-```r
+```{r clust-tsne-kmeans2, fig.cap = "tSNE map of the patient data with 2 colored clusters, identified by the k-means clustering algorithm"}
 clusts <- kmeans(
     tsne_out$Y,
     centers = 2,
@@ -192,11 +177,6 @@ ggplot2::ggplot(df_to_plot,
     theme_bw()
 ```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans2-1.png" alt="tSNE map of the patient data with 2 colored clusters, identified by the k-means clustering algorithm" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans2)tSNE map of the patient data with 2 colored clusters, identified by the k-means clustering algorithm</p>
-</div>
-
 __Exercise 7__: Make the same plots for $k=3$, $k=4$ and $k=5$.
 
 __Exercise 8__: Compare the results between `SC3` and `tSNE+kmeans`. Can the
@@ -208,8 +188,7 @@ overview of the solutions, we need to run the methods multiple times. Here
 we run __tSNE+kmeans__ clustering 10 times with $k = 3$ (with perplexity =
 10):
 
-
-```r
+```{r}
 tsne.res <- scRNA.seq.funcs::tsne_mult(input.log, 3, 10)
 res <- unique(do.call(rbind, tsne.res))
 ```
@@ -218,27 +197,27 @@ __Exercise 9__: Visualize the different clustering solutions using a
 heatmap. Then run tSNE+kmeans algorithm with $k = 2$ or $k = 4$ and
 see how the clustering looks like in these cases.
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans3-1.png" alt="Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=3$" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans3)Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=3$</p>
-</div>
+```{r clust-tsne-kmeans3, fig.cap = "Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=3$", echo=FALSE}
+pheatmap::pheatmap(res, show_colnames = FALSE, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
+```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans2-mult-1.png" alt="Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=2$" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans2-mult)Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=2$</p>
-</div>
+```{r clust-tsne-kmeans2-mult, fig.cap = "Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=2$", echo=FALSE}
+tsne.res <- scRNA.seq.funcs::tsne_mult(input.log, 2, 10)
+res <- unique(do.call(rbind, tsne.res))
+pheatmap::pheatmap(res, show_colnames = FALSE, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
+```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans4-1.png" alt="Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=4$" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans4)Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=4$</p>
-</div>
+```{r clust-tsne-kmeans4, fig.cap = "Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=4$", echo=FALSE}
+tsne.res <- scRNA.seq.funcs::tsne_mult(input.log, 4, 10)
+res <- unique(do.call(rbind, tsne.res))
+pheatmap::pheatmap(res, show_colnames = FALSE, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
+```
 
 ## SNN-Cliq
 
 Here we run SNN-cliq with te default parameters provided in the author's example:
 
-
-```r
+```{r}
 distan <- "euclidean"
 par.k <- 3
 par.r <- 0.7
@@ -263,16 +242,6 @@ snn.res <-
         intern = TRUE
     )
 cat(paste(snn.res, collapse = "\n"))
-```
-
-```
-## input file snn-cliq.txt
-## find 7 quasi-cliques
-## merged into 2 clusters
-## unique assign done
-```
-
-```r
 snn.res <- read.table("res-snn-cliq.txt")
 # remove files that were created during the analysis
 system("rm snn-cliq.txt res-snn-cliq.txt")
@@ -284,8 +253,7 @@ __Exercise 10__: How can you characterize the solution identified by SNN-Cliq? R
 
 As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
 
-
-```r
+```{r, echo=TRUE, fig.height=7, fig.width=7}
 # perform gene-by-gene per-sample z-score transformation
 dat <- apply(input, 1, function(y) scRNA.seq.funcs::z.transform.helper(y))
 # hierarchical clustering
@@ -294,8 +262,7 @@ hc <- hclust(dd, method = "average")
 ```
 
 If the number of cluster is not known [SINCERA](https://research.cchmc.org/pbge/sincera.html) can identify __k__ as the minimum height of the hierarchical tree that generates no more than a specified number of singleton clusters (clusters containing only 1 cell)
-
-```r
+```{r, echo=TRUE}
 num.singleton <- 0
 kk <- 1
 for (i in 2:dim(dat)[2]) {
@@ -311,18 +278,19 @@ for (i in 2:dim(dat)[2]) {
 cat(kk)
 ```
 
-```
-## 1
-```
-
 __Exercise 11__: Visualize the SINCERA results as a heatmap. How do the
 results compare to the other methods? What happens if you choose $k = 3$?
 
 __Our answer:__
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-sincera-1.png" alt="Clustering solutions of SINCERA method using $k=3$" width="672" />
-<p class="caption">(\#fig:clust-sincera)Clustering solutions of SINCERA method using $k=3$</p>
-</div>
+```{r clust-sincera, fig.cap = "Clustering solutions of SINCERA method using $k=3$", echo=FALSE}
+pheatmap(
+    t(dat),
+    cluster_cols = hc,
+    cutree_cols = 3,
+    kmeans_k = 100,
+    show_rownames = FALSE
+)
+```
 
 __Exercise 12__: Is using the singleton cluster criteria for finding __k__ a good idea?
 
@@ -332,8 +300,7 @@ Here we follow an [example](http://satijalab.org/seurat/seurat_clustering_tutori
 
 __Note__ In the newest versions of SEURAT (v. 1.3-1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. In this tutorial we are still using an old version (v. 1.2) of `SEURAT` (this will be updated by the next time this course is run - approximately Spring 2017):
 
-
-```r
+```{r, message=FALSE, warning=FALSE}
 library(Seurat)
 # Create a SEURAT object
 d <- new("seurat", raw.data = as.data.frame(log(patient.data + 1)))
@@ -358,11 +325,7 @@ d <- mean.var.plot(
     fxn.x = expMean,
     fxn.y = logVarDivMean
 )
-```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" />
-
-```r
 # Run a PCA using the variable genes as input
 d <- pca(d, do.print = FALSE, pcs.store = 25)
 
@@ -405,19 +368,6 @@ for (i in unique(pAll.l$PC)){
 
 # There are no significant PCs:
 head(score.df)
-```
-
-```
-##    PC Score
-## 1 PC1     1
-## 2 PC2     1
-## 3 PC3     1
-## 4 PC4     1
-## 5 PC5     1
-## 6 PC6     1
-```
-
-```r
 ndim <- 2
 
 # Project data on a 2D using tSNE
@@ -434,8 +384,6 @@ d <- DBclust_dimension(
 )
 tsne.plot(d, pt.size = 1)
 ```
-
-<img src="18-clustering_files/figure-html/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 13__: As you can see DBSCAN could find only one cluster. It is known that DBSCAN cannot cluster data sets well with large differences in densities, since the _G.use_ parameter cannot then be chosen appropriately for all clusters. Try to change _G.use_ to be able to find more than one cluster in the data.
 

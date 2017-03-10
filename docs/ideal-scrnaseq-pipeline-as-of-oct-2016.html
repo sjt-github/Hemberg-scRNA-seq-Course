@@ -26,14 +26,14 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-03-09">
+<meta name="date" content="2017-03-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="differential-expression-de-analysis.html">
+<link rel="prev" href="de-in-a-real-dataset.html">
 <link rel="next" href="advanced-exercises.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -147,22 +147,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html"><i class="fa fa-check"></i><b>3</b> Introduction to single-cell RNA-seq</a><ul>
 <li class="chapter" data-level="3.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#bulk-rna-seq"><i class="fa fa-check"></i><b>3.1</b> Bulk RNA-seq</a></li>
 <li class="chapter" data-level="3.2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#scrna-seq"><i class="fa fa-check"></i><b>3.2</b> scRNA-seq</a></li>
-<li class="chapter" data-level="3.3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#protocol"><i class="fa fa-check"></i><b>3.3</b> Protocol</a></li>
+<li class="chapter" data-level="3.3" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#workflow"><i class="fa fa-check"></i><b>3.3</b> Workflow</a></li>
 <li class="chapter" data-level="3.4" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#computational-analysis"><i class="fa fa-check"></i><b>3.4</b> Computational Analysis</a></li>
 <li class="chapter" data-level="3.5" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#challenges"><i class="fa fa-check"></i><b>3.5</b> Challenges</a></li>
-<li class="chapter" data-level="3.6" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#controls"><i class="fa fa-check"></i><b>3.6</b> Controls</a><ul>
-<li class="chapter" data-level="3.6.1" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#spike-ins"><i class="fa fa-check"></i><b>3.6.1</b> Spike-ins</a></li>
-<li class="chapter" data-level="3.6.2" data-path="introduction-to-single-cell-rna-seq.html"><a href="introduction-to-single-cell-rna-seq.html#umis"><i class="fa fa-check"></i><b>3.6.2</b> UMIs</a></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="overview-of-experimental-methods-for-generating-scrna-seq-data.html"><a href="overview-of-experimental-methods-for-generating-scrna-seq-data.html"><i class="fa fa-check"></i><b>4</b> Overview of experimental methods for generating scRNA-seq data</a></li>
+<li class="chapter" data-level="5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>5</b> Construction of expression matrix</a><ul>
+<li class="chapter" data-level="5.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>5.1</b> Reads QC</a></li>
+<li class="chapter" data-level="5.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>5.2</b> Reads alignment</a></li>
+<li class="chapter" data-level="5.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>5.3</b> Alignment example</a></li>
+<li class="chapter" data-level="5.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>5.4</b> Mapping QC</a></li>
+<li class="chapter" data-level="5.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>5.5</b> Reads quantification</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html"><i class="fa fa-check"></i><b>4</b> Construction of expression matrix</a><ul>
-<li class="chapter" data-level="4.1" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-qc"><i class="fa fa-check"></i><b>4.1</b> Reads QC</a></li>
-<li class="chapter" data-level="4.2" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-alignment"><i class="fa fa-check"></i><b>4.2</b> Reads alignment</a></li>
-<li class="chapter" data-level="4.3" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#alignment-example"><i class="fa fa-check"></i><b>4.3</b> Alignment example</a></li>
-<li class="chapter" data-level="4.4" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#mapping-qc"><i class="fa fa-check"></i><b>4.4</b> Mapping QC</a></li>
-<li class="chapter" data-level="4.5" data-path="construction-of-expression-matrix.html"><a href="construction-of-expression-matrix.html#reads-quantification"><i class="fa fa-check"></i><b>4.5</b> Reads quantification</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="overview-of-experimental-methods-for-generating-scrna-seq-data.html"><a href="overview-of-experimental-methods-for-generating-scrna-seq-data.html"><i class="fa fa-check"></i><b>5</b> Overview of experimental methods for generating scRNA-seq data</a></li>
 <li class="chapter" data-level="6" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html"><i class="fa fa-check"></i><b>6</b> Unique Molecular Identifiers (UMIs)</a><ul>
 <li class="chapter" data-level="6.1" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#introduction"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
 <li class="chapter" data-level="6.2" data-path="unique-molecular-identifiers-umis.html"><a href="unique-molecular-identifiers-umis.html#mapping-barcodes"><i class="fa fa-check"></i><b>6.2</b> Mapping Barcodes</a></li>
@@ -313,26 +309,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="22" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html"><i class="fa fa-check"></i><b>22</b> Differential Expression (DE) analysis</a><ul>
 <li class="chapter" data-level="22.1" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>22.1</b> Bulk RNA-seq</a></li>
 <li class="chapter" data-level="22.2" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#single-cell-rna-seq"><i class="fa fa-check"></i><b>22.2</b> Single cell RNA-seq</a></li>
-<li class="chapter" data-level="22.3" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#scrna-seq-synthetic-data"><i class="fa fa-check"></i><b>22.3</b> scRNA-seq synthetic data</a></li>
-<li class="chapter" data-level="22.4" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#single-gene-expression"><i class="fa fa-check"></i><b>22.4</b> Single gene expression</a></li>
-<li class="chapter" data-level="22.5" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#poisson-beta-distribution"><i class="fa fa-check"></i><b>22.5</b> Poisson-Beta distribution</a></li>
-<li class="chapter" data-level="22.6" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#sample-size"><i class="fa fa-check"></i><b>22.6</b> Sample size</a></li>
-<li class="chapter" data-level="22.7" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#dropout-noise"><i class="fa fa-check"></i><b>22.7</b> Dropout noise</a></li>
-<li class="chapter" data-level="22.8" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#dispersion-noise"><i class="fa fa-check"></i><b>22.8</b> Dispersion noise</a></li>
+<li class="chapter" data-level="22.3" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#differences-in-distribution"><i class="fa fa-check"></i><b>22.3</b> Differences in Distribution</a></li>
+<li class="chapter" data-level="22.4" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#models-of-single-cell-rnaseq-data"><i class="fa fa-check"></i><b>22.4</b> Models of single-cell RNASeq data</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><i class="fa fa-check"></i><b>23</b> “Ideal” scRNAseq pipeline (as of Oct 2016)</a><ul>
-<li class="chapter" data-level="23.1" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#experimental-design"><i class="fa fa-check"></i><b>23.1</b> Experimental Design</a></li>
-<li class="chapter" data-level="23.2" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#processing-reads"><i class="fa fa-check"></i><b>23.2</b> Processing Reads</a></li>
-<li class="chapter" data-level="23.3" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>23.3</b> Preparing Expression Matrix</a></li>
-<li class="chapter" data-level="23.4" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#biological-interpretation"><i class="fa fa-check"></i><b>23.4</b> Biological Interpretation</a></li>
+<li class="chapter" data-level="23" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html"><i class="fa fa-check"></i><b>23</b> DE in a real dataset</a><ul>
+<li class="chapter" data-level="23.1" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#introduction-8"><i class="fa fa-check"></i><b>23.1</b> Introduction</a></li>
+<li class="chapter" data-level="23.2" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#kolmogorov-smirnov-test"><i class="fa fa-check"></i><b>23.2</b> Kolmogorov-Smirnov test</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#evaluating-accuracy"><i class="fa fa-check"></i><b>23.2.1</b> Evaluating Accuracy</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>24</b> Advanced exercises</a></li>
-<li class="chapter" data-level="25" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>25</b> Resources</a><ul>
-<li class="chapter" data-level="25.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>25.1</b> scRNA-seq protocols</a></li>
-<li class="chapter" data-level="25.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>25.2</b> External RNA Control Consortium (ERCC)</a></li>
-<li class="chapter" data-level="25.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>25.3</b> scRNA-seq analysis tools</a></li>
+<li class="chapter" data-level="23.3" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#wilcoxmann-whitney-u-test"><i class="fa fa-check"></i><b>23.3</b> Wilcox/Mann-Whitney-U Test</a></li>
+<li class="chapter" data-level="23.4" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#edger"><i class="fa fa-check"></i><b>23.4</b> edgeR</a></li>
+<li class="chapter" data-level="23.5" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#monocle-1"><i class="fa fa-check"></i><b>23.5</b> Monocle</a></li>
+<li class="chapter" data-level="23.6" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#mast"><i class="fa fa-check"></i><b>23.6</b> MAST</a></li>
+<li class="chapter" data-level="23.7" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#slow-methods-1h-to-run---these-methods-are-too-slow-to-run-today-but-we-encourage-you-to-try-them-out-on-your-own"><i class="fa fa-check"></i><b>23.7</b> Slow Methods (&gt;1h to run) - These methods are too slow to run today but we encourage you to try them out on your own:</a></li>
+<li class="chapter" data-level="23.8" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#bpsc"><i class="fa fa-check"></i><b>23.8</b> BPSC</a></li>
+<li class="chapter" data-level="23.9" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#scde"><i class="fa fa-check"></i><b>23.9</b> SCDE</a></li>
 </ul></li>
-<li class="chapter" data-level="26" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>26</b> References</a></li>
+<li class="chapter" data-level="24" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><i class="fa fa-check"></i><b>24</b> “Ideal” scRNAseq pipeline (as of Oct 2016)</a><ul>
+<li class="chapter" data-level="24.1" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#experimental-design"><i class="fa fa-check"></i><b>24.1</b> Experimental Design</a></li>
+<li class="chapter" data-level="24.2" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#processing-reads"><i class="fa fa-check"></i><b>24.2</b> Processing Reads</a></li>
+<li class="chapter" data-level="24.3" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#preparing-expression-matrix"><i class="fa fa-check"></i><b>24.3</b> Preparing Expression Matrix</a></li>
+<li class="chapter" data-level="24.4" data-path="ideal-scrnaseq-pipeline-as-of-oct-2016.html"><a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#biological-interpretation"><i class="fa fa-check"></i><b>24.4</b> Biological Interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="advanced-exercises.html"><a href="advanced-exercises.html"><i class="fa fa-check"></i><b>25</b> Advanced exercises</a></li>
+<li class="chapter" data-level="26" data-path="resources.html"><a href="resources.html"><i class="fa fa-check"></i><b>26</b> Resources</a><ul>
+<li class="chapter" data-level="26.1" data-path="resources.html"><a href="resources.html#scrna-seq-protocols"><i class="fa fa-check"></i><b>26.1</b> scRNA-seq protocols</a></li>
+<li class="chapter" data-level="26.2" data-path="resources.html"><a href="resources.html#external-rna-control-consortium-ercc"><i class="fa fa-check"></i><b>26.2</b> External RNA Control Consortium (ERCC)</a></li>
+<li class="chapter" data-level="26.3" data-path="resources.html"><a href="resources.html#scrna-seq-analysis-tools"><i class="fa fa-check"></i><b>26.3</b> scRNA-seq analysis tools</a></li>
+</ul></li>
+<li class="chapter" data-level="27" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>27</b> References</a></li>
 <li class="divider"></li>
 <li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2016</a></li>
 
@@ -354,11 +359,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="ideal-scrnaseq-pipeline-as-of-oct-2016" class="section level1">
-<h1><span class="header-section-number">23</span> “Ideal” scRNAseq pipeline (as of Oct 2016)</h1>
+<h1><span class="header-section-number">24</span> “Ideal” scRNAseq pipeline (as of Oct 2016)</h1>
 <div id="experimental-design" class="section level2">
-<h2><span class="header-section-number">23.1</span> Experimental Design</h2>
+<h2><span class="header-section-number">24.1</span> Experimental Design</h2>
 <ul>
-<li>Avoid confounding biological and batch effects (Figure <a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#fig:pipeline-batches">23.1</a>)
+<li>Avoid confounding biological and batch effects (Figure <a href="ideal-scrnaseq-pipeline-as-of-oct-2016.html#fig:pipeline-batches">24.1</a>)
 <ul>
 <li>Multiple conditions should be captured on the same chip if possible</li>
 <li>Perform multiple replicates of each condition where replicates of different conditions should be performed together if possible</li>
@@ -388,12 +393,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="figure" style="text-align: center"><span id="fig:pipeline-batches"></span>
 <img src="figures/Pipeline-batches.png" alt="Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction." width="90%" />
 <p class="caption">
-Figure 23.1: Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction.
+Figure 24.1: Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction.
 </p>
 </div>
 </div>
 <div id="processing-reads" class="section level2">
-<h2><span class="header-section-number">23.2</span> Processing Reads</h2>
+<h2><span class="header-section-number">24.2</span> Processing Reads</h2>
 <ul>
 <li>Read QC &amp; Trimming
 <ul>
@@ -413,7 +418,7 @@ Figure 23.1: Appropriate approaches to batch effects in scRNASeq. Red arrows ind
 </ul>
 </div>
 <div id="preparing-expression-matrix" class="section level2">
-<h2><span class="header-section-number">23.3</span> Preparing Expression Matrix</h2>
+<h2><span class="header-section-number">24.3</span> Preparing Expression Matrix</h2>
 <ul>
 <li>Cell QC
 <ul>
@@ -431,7 +436,7 @@ Figure 23.1: Appropriate approaches to batch effects in scRNASeq. Red arrows ind
 </ul>
 </div>
 <div id="biological-interpretation" class="section level2">
-<h2><span class="header-section-number">23.4</span> Biological Interpretation</h2>
+<h2><span class="header-section-number">24.4</span> Biological Interpretation</h2>
 <ul>
 <li>Feature Selection
 <ul>
@@ -461,7 +466,7 @@ Figure 23.1: Appropriate approaches to batch effects in scRNASeq. Red arrows ind
           </div>
         </div>
       </div>
-<a href="differential-expression-de-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="de-in-a-real-dataset.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="advanced-exercises.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
