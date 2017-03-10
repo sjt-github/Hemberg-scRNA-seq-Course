@@ -321,7 +321,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="23.4" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#edger"><i class="fa fa-check"></i><b>23.4</b> edgeR</a></li>
 <li class="chapter" data-level="23.5" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#monocle-1"><i class="fa fa-check"></i><b>23.5</b> Monocle</a></li>
 <li class="chapter" data-level="23.6" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#mast"><i class="fa fa-check"></i><b>23.6</b> MAST</a></li>
-<li class="chapter" data-level="23.7" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#slow-methods-1h-to-run---these-methods-are-too-slow-to-run-today-but-we-encourage-you-to-try-them-out-on-your-own"><i class="fa fa-check"></i><b>23.7</b> Slow Methods (&gt;1h to run) - These methods are too slow to run today but we encourage you to try them out on your own:</a></li>
+<li class="chapter" data-level="23.7" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>23.7</b> Slow Methods (&gt;1h to run)</a></li>
 <li class="chapter" data-level="23.8" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#bpsc"><i class="fa fa-check"></i><b>23.8</b> BPSC</a></li>
 <li class="chapter" data-level="23.9" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#scde"><i class="fa fa-check"></i><b>23.9</b> SCDE</a></li>
 </ul></li>
@@ -368,7 +368,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">set.seed</span>(<span class="dv">1</span>)</code></pre></div>
 <div id="introduction-8" class="section level2">
 <h2><span class="header-section-number">23.1</span> Introduction</h2>
-<p>To test different single-cell differential expression methods we will be using the Blischak dataset from Chapters 7-17. For this experiment bulk RNA-seq data for each cell-line was generated in addition to single-cell data. We will use the differentially expressed genes identified using standard methods on this bulk data as the ground truth for evaluating the accuracy of each single-cell method. To save time we have pre-computed these for you, run the commands below to load these data.</p>
+<p>To test different single-cell differential expression methods we will be using the Blischak dataset from Chapters 7-17. For this experiment bulk RNA-seq data for each cell-line was generated in addition to single-cell data. We will use the differentially expressed genes identified using standard methods on the respective bulk data as the ground truth for evaluating the accuracy of each single-cell method. To save time we have pre-computed these for you, run the commands below to load these data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DE &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;blischak/TPs.txt&quot;</span>)
 notDE &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;blischak/TNs.txt&quot;</span>)
 GroundTruth &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">DE=</span><span class="kw">as.character</span>(<span class="kw">unlist</span>(DE)), <span class="dt">notDE=</span><span class="kw">as.character</span>(<span class="kw">unlist</span>(notDE)))</code></pre></div>
@@ -384,14 +384,14 @@ gkeep &lt;-<span class="st"> </span><span class="kw">rowSums</span>(data &gt;<sp
 counts &lt;-<span class="st"> </span>data[gkeep,]
 <span class="co"># Library size normalization</span>
 lib_size =<span class="st"> </span><span class="kw">colSums</span>(counts)
-norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(counts)/lib_size*<span class="kw">median</span>(lib_size)) <span class="co"># Variant of CPM for datasets with library sizes of fewer than 1,000,000 molecules</span></code></pre></div>
+norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(counts)/lib_size*<span class="kw">median</span>(lib_size)) 
+<span class="co"># Variant of CPM for datasets with library sizes of fewer than 1 mil molecules</span></code></pre></div>
 <p>Now we will compare various single-cell DE methods. Note that we will only be running methods which are available as R-packages and run relatively quickly.</p>
 </div>
 <div id="kolmogorov-smirnov-test" class="section level2">
 <h2><span class="header-section-number">23.2</span> Kolmogorov-Smirnov test</h2>
 <p>The types of test that are easiest to work with are non-parametric ones. The most commonly used non-parametric test is the <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test">Kolmogorov-Smirnov test</a> (KS-test) and we can use it to compare the distributions for each gene in the two individuals.</p>
 <p>The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;figures/KS2_Example.png&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:ks-statistic"></span>
 <img src="figures/KS2_Example.png" alt="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))" width="60%" />
 <p class="caption">
@@ -399,23 +399,25 @@ Figure 23.1: Illustration of the two-sample Kolmogorov–Smirnov statistic. Red 
 </p>
 </div>
 <p>Now run the test:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pVals &lt;-<span class="st"> </span><span class="kw">apply</span>(norm, <span class="dv">1</span>, function(x) {<span class="kw">ks.test</span>(x[group ==<span class="st">&quot;NA19101&quot;</span>], x[group==<span class="st">&quot;NA19239&quot;</span>])$p.value})
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pVals &lt;-<span class="st"> </span><span class="kw">apply</span>(norm, <span class="dv">1</span>, function(x) {
+        <span class="kw">ks.test</span>(x[group ==<span class="st">&quot;NA19101&quot;</span>], 
+                x[group==<span class="st">&quot;NA19239&quot;</span>])$p.value
+         })
 <span class="co"># multiple testing correction</span>
 pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <span class="dt">method =</span> <span class="st">&quot;fdr&quot;</span>)</code></pre></div>
 <p>This code “applies” the function to each row (specified by 1) of the expression matrix, data. In the function we are returning just the p.value from the ks.test output. We can now consider how many of the ground truth positive and negative DE genes are detected by the KS-test:</p>
 <div id="evaluating-accuracy" class="section level3">
 <h3><span class="header-section-number">23.2.1</span> Evaluating Accuracy</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sigDE &lt;-<span class="st"> </span><span class="kw">names</span>(pVals)[pVals &lt;<span class="st"> </span><span class="fl">0.05</span>]
-<span class="kw">length</span>(sigDE)</code></pre></div>
+<span class="kw">length</span>(sigDE) </code></pre></div>
 <pre><code>## [1] 5095</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(GroundTruth$DE %in%<span class="st"> </span>sigDE)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Number of KS-DE genes</span>
+<span class="kw">sum</span>(GroundTruth$DE %in%<span class="st"> </span>sigDE) </code></pre></div>
 <pre><code>## [1] 792</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(GroundTruth$DE)</code></pre></div>
-<pre><code>## [1] 1083</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(GroundTruth$notDE %in%<span class="st"> </span>sigDE)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Number of KS-DE genes that are true DE genes</span>
+<span class="kw">sum</span>(GroundTruth$notDE %in%<span class="st"> </span>sigDE)</code></pre></div>
 <pre><code>## [1] 3190</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(GroundTruth$notDE)</code></pre></div>
-<pre><code>## [1] 10897</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Number of KS-DE genes that are truly not-DE</span></code></pre></div>
 <p>As you can see many more of our ground truth negative genes were identified as DE by the KS-test (false positives) than ground truth positive genes (true positives), however this may be due to the larger number of notDE genes thus we typically normalize these counts as the True positive rate (TPR), TP/(TP + FN), and False positive rate (FPR), FP/(FP+TP).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tp &lt;-<span class="st"> </span><span class="kw">sum</span>(GroundTruth$DE %in%<span class="st"> </span>sigDE)
 fp &lt;-<span class="st"> </span><span class="kw">sum</span>(GroundTruth$notDE %in%<span class="st"> </span>sigDE)
@@ -427,7 +429,9 @@ fpr &lt;-<span class="st"> </span>fp/(fp +<span class="st"> </span>tn)
 <pre><code>## 0.7346939 0.2944706</code></pre>
 <p>Now we can see the TPR is much higher than the FPR indicating the KS test is identifying DE genes.</p>
 <p>So far we’ve only evaluated the performance at a single significance threshold. Often it is informative to vary the threshold and evaluate performance across a range of values. This is then plotted as a reveiver-operating-characteristic curve (ROC) and a general accuracy statistic can be calculated as the area under this curve (AUC). We will use the ROCR package to facilitate this plotting.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pVals &lt;-<span class="st"> </span>pVals[<span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$DE |<span class="st"> </span><span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$notDE] <span class="co"># Only consider genes for which we know the ground truth</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Only consider genes for which we know the ground truth</span>
+pVals &lt;-<span class="st"> </span>pVals[<span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$DE |<span class="st"> </span>
+<span class="st">               </span><span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$notDE] 
 truth &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="dt">times =</span> <span class="kw">length</span>(pVals));
 truth[<span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$DE] =<span class="st"> </span><span class="dv">0</span>;
 pred &lt;-<span class="st"> </span>ROCR::<span class="kw">prediction</span>(pVals, truth)
@@ -444,7 +448,8 @@ aucObj@y.values[[<span class="dv">1</span>]] <span class="co"># AUC</span></code
 <pre><code>## [1] 0.7954796</code></pre>
 <p>Finally to facilitate the comparisons of other DE methods let’s put this code into a function so we don’t need to repeat it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DE_Quality_AUC &lt;-<span class="st"> </span>function(pVals) {
-        pVals &lt;-<span class="st"> </span>pVals[<span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$DE |<span class="st"> </span><span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$notDE] <span class="co"># Only consider genes for which we know the ground truth</span>
+        pVals &lt;-<span class="st"> </span>pVals[<span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$DE |<span class="st"> </span>
+<span class="st">                       </span><span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$notDE]
         truth &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="dt">times =</span> <span class="kw">length</span>(pVals));
         truth[<span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$DE] =<span class="st"> </span><span class="dv">0</span>;
         pred &lt;-<span class="st"> </span>ROCR::<span class="kw">prediction</span>(pVals, truth)
@@ -458,7 +463,10 @@ aucObj@y.values[[<span class="dv">1</span>]] <span class="co"># AUC</span></code
 <div id="wilcoxmann-whitney-u-test" class="section level2">
 <h2><span class="header-section-number">23.3</span> Wilcox/Mann-Whitney-U Test</h2>
 <p>The Wilcox-rank-sum test is another non-parametric test, but tests specifically if values in one group are greater/less than the values in the other group. Thus it is often considered a test for difference in median expression between two groups; whereas the KS-test is sensitive to any change in distribution of expression values.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pVals &lt;-<span class="st"> </span><span class="kw">apply</span>(norm, <span class="dv">1</span>, function(x) {<span class="kw">ks.test</span>(x[group ==<span class="st">&quot;NA19101&quot;</span>], x[group==<span class="st">&quot;NA19239&quot;</span>])$p.value})
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pVals &lt;-<span class="st"> </span><span class="kw">apply</span>(norm, <span class="dv">1</span>, function(x) {
+        <span class="kw">wilcox.test</span>(x[group ==<span class="st">&quot;NA19101&quot;</span>], 
+                x[group==<span class="st">&quot;NA19239&quot;</span>])$p.value
+        })
 <span class="co"># multiple testing correction</span>
 pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <span class="dt">method =</span> <span class="st">&quot;fdr&quot;</span>)
 <span class="kw">DE_Quality_AUC</span>(pVals)</code></pre></div>
@@ -468,11 +476,11 @@ pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <spa
 Figure 23.3: ROC curve for Wilcox test.
 </p>
 </div>
-<pre><code>## [1] 0.7954796</code></pre>
+<pre><code>## [1] 0.8320326</code></pre>
 </div>
 <div id="edger" class="section level2">
 <h2><span class="header-section-number">23.4</span> edgeR</h2>
-<p>We’ve already used edgeR for differential expression in Chapter 16. edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.</p>
+<p>We’ve already used edgeR for differential expression in Chapter <a href="dealing-with-confounders.html#dealing-with-confounders">16</a>. edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dge &lt;-<span class="st"> </span><span class="kw">DGEList</span>(<span class="dt">counts=</span>counts, <span class="dt">norm.factors =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(counts[<span class="dv">1</span>,])), <span class="dt">group=</span>group)
 group_edgeR &lt;-<span class="st"> </span><span class="kw">factor</span>(group)
 design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~group_edgeR)
@@ -499,13 +507,11 @@ Figure 23.4: ROC curve for edgeR.
 <span class="kw">rownames</span>(pd) &lt;-<span class="st"> </span><span class="kw">colnames</span>(counts)
 pd &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;AnnotatedDataFrame&quot;</span>, <span class="dt">data =</span> pd)
 
-Obj &lt;-<span class="st"> </span><span class="kw">newCellDataSet</span>(<span class="kw">as.matrix</span>(counts), <span class="dt">phenoData=</span>pd, <span class="dt">expressionFamily=</span><span class="kw">negbinomial.size</span>())
+Obj &lt;-<span class="st"> </span><span class="kw">newCellDataSet</span>(<span class="kw">as.matrix</span>(counts), <span class="dt">phenoData=</span>pd, 
+        <span class="dt">expressionFamily=</span><span class="kw">negbinomial.size</span>())
 Obj &lt;-<span class="st"> </span><span class="kw">estimateSizeFactors</span>(Obj)
-Obj &lt;-<span class="st"> </span><span class="kw">estimateDispersions</span>(Obj)</code></pre></div>
-<pre><code>## Warning: Deprecated, use tibble::rownames_to_column() instead.</code></pre>
-<pre><code>## Warning in log(ifelse(y == 0, 1, y/mu)): NaNs produced</code></pre>
-<pre><code>## Warning: step size truncated due to divergence</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">differentialGeneTest</span>(Obj,<span class="dt">fullModelFormulaStr=</span><span class="st">&quot;~group&quot;</span>)
+Obj &lt;-<span class="st"> </span><span class="kw">estimateDispersions</span>(Obj)
+res &lt;-<span class="st"> </span><span class="kw">differentialGeneTest</span>(Obj,<span class="dt">fullModelFormulaStr=</span><span class="st">&quot;~group&quot;</span>)
 
 pVals &lt;-<span class="st"> </span>res[,<span class="dv">3</span>]
 <span class="kw">names</span>(pVals) &lt;-<span class="st"> </span><span class="kw">rownames</span>(res)
@@ -541,7 +547,8 @@ obj &lt;-<span class="st"> </span><span class="kw">FromMatrix</span>(<span class
 <span class="kw">colData</span>(obj)$cngeneson &lt;-<span class="st"> </span><span class="kw">scale</span>(<span class="kw">colSums</span>(<span class="kw">assay</span>(obj)&gt;<span class="dv">0</span>))
 cond &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">colData</span>(obj)$cond)
 
-zlmCond &lt;-<span class="st"> </span><span class="kw">zlm.SingleCellAssay</span>(~cond +<span class="st"> </span>cngeneson, obj) <span class="co"># Recommended to model </span></code></pre></div>
+<span class="co"># Model expression as function of condition &amp; number of detected genes</span>
+zlmCond &lt;-<span class="st"> </span><span class="kw">zlm.SingleCellAssay</span>(~cond +<span class="st"> </span>cngeneson, obj) </code></pre></div>
 <pre><code>## Warning in .nextMethod(object = object, value = value): Coefficients
 ## condNA19239 are never estimible and will be dropped.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">summaryCond &lt;-<span class="st"> </span><span class="kw">summary</span>(zlmCond, <span class="dt">doLRT=</span><span class="st">&quot;condNA19101&quot;</span>)
@@ -560,8 +567,9 @@ Figure 23.7: ROC curve for MAST.
 </div>
 <pre><code>## [1] 0.8284046</code></pre>
 </div>
-<div id="slow-methods-1h-to-run---these-methods-are-too-slow-to-run-today-but-we-encourage-you-to-try-them-out-on-your-own" class="section level2">
-<h2><span class="header-section-number">23.7</span> Slow Methods (&gt;1h to run) - These methods are too slow to run today but we encourage you to try them out on your own:</h2>
+<div id="slow-methods-1h-to-run" class="section level2">
+<h2><span class="header-section-number">23.7</span> Slow Methods (&gt;1h to run)</h2>
+<p>These methods are too slow to run today but we encourage you to try them out on your own:</p>
 </div>
 <div id="bpsc" class="section level2">
 <h2><span class="header-section-number">23.8</span> BPSC</h2>
@@ -573,7 +581,8 @@ bpsc_group =<span class="st"> </span>group[batch==<span class="st">&quot;NA19101
 control_cells &lt;-<span class="st"> </span><span class="kw">which</span>(bpsc_group ==<span class="st"> &quot;NA19101&quot;</span>)
 design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~bpsc_group)
 coef=<span class="dv">2</span> <span class="co"># group label</span>
-res=<span class="kw">BPglm</span>(<span class="dt">data=</span>bpsc_data, <span class="dt">controlIds=</span>control_cells, <span class="dt">design=</span>design, <span class="dt">coef=</span>coef, <span class="dt">estIntPar=</span><span class="ot">FALSE</span>, <span class="dt">useParallel =</span> <span class="ot">FALSE</span>)
+res=<span class="kw">BPglm</span>(<span class="dt">data=</span>bpsc_data, <span class="dt">controlIds=</span>control_cells, <span class="dt">design=</span>design, <span class="dt">coef=</span>coef, 
+                <span class="dt">estIntPar=</span><span class="ot">FALSE</span>, <span class="dt">useParallel =</span> <span class="ot">FALSE</span>)
 pVals =<span class="st"> </span>res$PVAL
 pVals &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(pVals, <span class="dt">method =</span> <span class="st">&quot;fdr&quot;</span>)
 <span class="kw">DE_Quality_AUC</span>(pVals)</code></pre></div>

@@ -321,7 +321,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="23.4" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#edger"><i class="fa fa-check"></i><b>23.4</b> edgeR</a></li>
 <li class="chapter" data-level="23.5" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#monocle-1"><i class="fa fa-check"></i><b>23.5</b> Monocle</a></li>
 <li class="chapter" data-level="23.6" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#mast"><i class="fa fa-check"></i><b>23.6</b> MAST</a></li>
-<li class="chapter" data-level="23.7" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#slow-methods-1h-to-run---these-methods-are-too-slow-to-run-today-but-we-encourage-you-to-try-them-out-on-your-own"><i class="fa fa-check"></i><b>23.7</b> Slow Methods (&gt;1h to run) - These methods are too slow to run today but we encourage you to try them out on your own:</a></li>
+<li class="chapter" data-level="23.7" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#slow-methods-1h-to-run"><i class="fa fa-check"></i><b>23.7</b> Slow Methods (&gt;1h to run)</a></li>
 <li class="chapter" data-level="23.8" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#bpsc"><i class="fa fa-check"></i><b>23.8</b> BPSC</a></li>
 <li class="chapter" data-level="23.9" data-path="de-in-a-real-dataset.html"><a href="de-in-a-real-dataset.html#scde"><i class="fa fa-check"></i><b>23.9</b> SCDE</a></li>
 </ul></li>
@@ -365,6 +365,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(scater, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
 <span class="kw">library</span>(scran)
 <span class="kw">library</span>(edgeR)
+<span class="kw">set.seed</span>(<span class="dv">1234567</span>)
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 reads &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;blischak/reads.rds&quot;</span>)
 reads.qc &lt;-<span class="st"> </span>reads[<span class="kw">fData</span>(reads)$use, <span class="kw">pData</span>(reads)$use]
@@ -477,22 +478,22 @@ dge1 &lt;-<span class="st"> </span><span class="kw">estimateDisp</span>(dge1, <s
 res1 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit1)
 <span class="kw">topTags</span>(res1)</code></pre></div>
 <pre><code>## Coefficient:  reads.qc[, keep]$batchNA19101.r3 
-##                     logFC   logCPM       LR       PValue          FDR
-## ENSG00000118855  8.621408 3.329487 36.92639 1.226744e-09 1.970274e-05
-## ENSG00000050767 -6.830721 1.272193 28.89991 7.621657e-08 6.120572e-04
-## ENSG00000203814 -7.790881 3.366541 27.81471 1.335072e-07 7.147528e-04
-## ENSG00000171174  7.227995 2.883476 26.48678 2.653480e-07 1.065439e-03
-## ENSG00000164430 -7.879346 2.147507 25.68488 4.019650e-07 1.137170e-03
-## ENSG00000146856  7.561196 1.822867 25.57817 4.248193e-07 1.137170e-03
-## ENSG00000145284  7.573230 1.825023 25.06133 5.553560e-07 1.274225e-03
-## ENSG00000130005  5.692851 3.028824 24.60747 7.027866e-07 1.376189e-03
-## ENSG00000100505 -6.917710 2.287720 24.12320 9.036509e-07 1.376189e-03
-## ENSG00000146350  5.883349 2.755230 24.07409 9.269924e-07 1.376189e-03</code></pre>
+##                     logFC    logCPM       LR       PValue          FDR
+## ENSG00000245680  6.769933 2.4140394 29.57165 5.388728e-08 0.0008043469
+## ENSG00000157680  6.929079 1.3773980 28.37086 1.001615e-07 0.0008043469
+## ENSG00000169857  7.241350 3.0968670 27.43852 1.621686e-07 0.0008681968
+## ENSG00000151690  6.362547 1.3564536 26.51047 2.621139e-07 0.0008699941
+## ENSG00000197261  6.156435 3.2574320 26.44720 2.708406e-07 0.0008699941
+## ENSG00000021300  7.140051 1.6568860 25.65818 4.075650e-07 0.0009893710
+## ENSG00000123612 -6.807787 1.3010583 25.54937 4.312059e-07 0.0009893710
+## ENSG00000078579  6.931629 1.3951041 25.10872 5.418732e-07 0.0010878783
+## ENSG00000018869  5.873107 0.7109472 24.74574 6.541323e-07 0.0011090305
+## ENSG00000182575  6.251666 0.9288213 24.64143 6.905115e-07 0.0011090305</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res1))</code></pre></div>
 <pre><code>##    [,1] 
-## -1   516
-## 0  14872
-## 1    673</code></pre>
+## -1   464
+## 0  14851
+## 1    746</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res1, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res1, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res1))))$table)
@@ -504,12 +505,12 @@ res1 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit1)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_ruvg &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~ruvg$W[keep,] +<span class="st"> </span>reads.qc[, keep]$batch)
 <span class="kw">head</span>(design_ruvg)</code></pre></div>
 <pre><code>##   (Intercept) ruvg$W[keep, ]W_1 ruvg$W[keep, ]W_2
-## 1           1       0.030955368       0.054997999
-## 2           1       0.039005432       0.008739589
-## 3           1      -0.020946537      -0.020047056
-## 4           1      -0.009896783       0.019871106
-## 5           1       0.026969278       0.014887328
-## 6           1      -0.002485334       0.039227992
+## 1           1       0.018190004        0.04764997
+## 2           1       0.023547154        0.03231790
+## 3           1      -0.043540927        0.03411069
+## 4           1      -0.011047886       -0.05379651
+## 5           1      -0.002009755        0.04140351
+## 6           1       0.055027809        0.05877063
 ##   reads.qc[, keep]$batchNA19101.r2 reads.qc[, keep]$batchNA19101.r3
 ## 1                                0                                0
 ## 2                                0                                0
@@ -524,22 +525,22 @@ res1 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit1)
 res2 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit2)
 <span class="kw">topTags</span>(res2)</code></pre></div>
 <pre><code>## Coefficient:  reads.qc[, keep]$batchNA19101.r3 
-##                     logFC      logCPM       LR       PValue          FDR
-## ENSG00000118855  8.463866  3.32947862 36.34741 1.650982e-09 2.651642e-05
-## ENSG00000105383 -4.442921  0.23356542 32.76664 1.039130e-08 4.332399e-05
-## ENSG00000106384 -4.442921  0.23356542 32.76664 1.039130e-08 4.332399e-05
-## ENSG00000261603 -5.100550  0.58341361 32.69348 1.078986e-08 4.332399e-05
-## ENSG00000125337 -5.045237  0.53583923 31.37855 2.123132e-08 6.819924e-05
-## ENSG00000183208 -4.610764  0.27118319 30.91130 2.700950e-08 7.229993e-05
-## ENSG00000149201 -2.657566  0.39110994 30.22098 3.855169e-08 8.845410e-05
-## ENSG00000197140 -6.628971  1.12370449 29.44053 5.765918e-08 1.050819e-04
-## ENSG00000050767 -6.818698  1.27245990 29.39979 5.888410e-08 1.050819e-04
-## ENSG00000023445 -3.746487 -0.04975573 28.30273 1.037498e-07 1.659159e-04</code></pre>
+##                     logFC    logCPM       LR       PValue          FDR
+## ENSG00000088926 -7.520594 1.8872095 31.75667 1.747483e-08 0.0002806632
+## ENSG00000169857  7.944401 3.0967722 29.69136 5.066020e-08 0.0002887833
+## ENSG00000245680  6.894702 2.4140553 29.56971 5.394121e-08 0.0002887833
+## ENSG00000143127  5.641200 1.0238358 27.99202 1.218168e-07 0.0003519555
+## ENSG00000153233  6.197221 0.8234713 27.75578 1.376366e-07 0.0003519555
+## ENSG00000175318 -6.747507 1.0999870 27.73641 1.390212e-07 0.0003519555
+## ENSG00000144962 -7.747163 1.8142340 27.54608 1.533957e-07 0.0003519555
+## ENSG00000081923 -7.047319 1.1647043 25.76440 3.857376e-07 0.0005768692
+## ENSG00000062282  5.554112 0.8624379 25.73278 3.921092e-07 0.0005768692
+## ENSG00000114737 -7.712987 2.0853276 25.54660 4.318272e-07 0.0005768692</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res2))</code></pre></div>
 <pre><code>##    [,1] 
-## -1   550
-## 0  15285
-## 1    226</code></pre>
+## -1   395
+## 0  15341
+## 1    325</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res2, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res2, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res2))))$table)
@@ -551,12 +552,12 @@ res2 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit2)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_ruvs &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~ruvs$W[keep,] +<span class="st"> </span>reads.qc[, keep]$batch)
 <span class="kw">head</span>(design_ruvs)</code></pre></div>
 <pre><code>##   (Intercept) ruvs$W[keep, ]W_1 ruvs$W[keep, ]W_2
-## 1           1         0.2701635         0.1806164
-## 2           1         0.3437096         0.2013995
-## 3           1         0.3439868         0.1636682
-## 4           1         0.3176779         0.2226902
-## 5           1         0.3482541         0.1820908
-## 6           1         0.3760740         0.1978700
+## 1           1         0.3772545         0.1683790
+## 2           1         0.3470296         0.2160446
+## 3           1         0.3371526         0.1701236
+## 4           1         0.2576765         0.1992972
+## 5           1         0.3527278         0.2031540
+## 6           1         0.3008299         0.1209562
 ##   reads.qc[, keep]$batchNA19101.r2 reads.qc[, keep]$batchNA19101.r3
 ## 1                                0                                0
 ## 2                                0                                0
@@ -571,22 +572,22 @@ res2 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit2)
 res3 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit3)
 <span class="kw">topTags</span>(res3)</code></pre></div>
 <pre><code>## Coefficient:  reads.qc[, keep]$batchNA19101.r3 
-##                     logFC    logCPM       LR       PValue          FDR
-## ENSG00000103888 -6.285342 0.8025081 39.90423 2.667244e-10 4.283860e-06
-## ENSG00000137252 -5.788134 0.5136255 37.23517 1.047084e-09 6.365277e-06
-## ENSG00000127533 -5.743047 0.4897261 36.98739 1.188957e-09 6.365277e-06
-## ENSG00000203780 -5.505964 0.3704316 35.66849 2.339174e-09 7.751590e-06
-## ENSG00000267941 -5.411256 0.2983855 35.60782 2.413172e-09 7.751590e-06
-## ENSG00000104432 -5.679853 0.4404412 34.67016 3.905735e-09 1.045500e-05
-## ENSG00000118855  8.247953 3.3294767 33.57198 6.867504e-09 1.506759e-05
-## ENSG00000147174 -5.210265 0.2636056 33.39928 7.505181e-09 1.506759e-05
-## ENSG00000000005  8.077882 1.6975357 32.72750 1.060262e-08 1.892097e-05
-## ENSG00000144649 -8.599711 2.0479901 31.47450 2.020762e-08 3.245546e-05</code></pre>
+##                     logFC   logCPM       LR       PValue          FDR
+## ENSG00000175105 -7.881072 3.056358 29.62129 5.252477e-08 0.0003983720
+## ENSG00000245680  6.771561 2.414062 29.20563 6.508967e-08 0.0003983720
+## ENSG00000138650 -8.404976 2.589017 28.94635 7.441105e-08 0.0003983720
+## ENSG00000157680  6.974511 1.377270 28.16394 1.114619e-07 0.0004475476
+## ENSG00000127366 -7.311757 1.919586 26.84980 2.198967e-07 0.0005301343
+## ENSG00000197261  6.276350 3.257436 26.77877 2.281295e-07 0.0005301343
+## ENSG00000151690  6.506839 1.356669 26.75417 2.310529e-07 0.0005301343
+## ENSG00000250506  6.738161 2.079191 26.17409 3.119801e-07 0.0005614098
+## ENSG00000169228  8.240724 2.405449 25.92722 3.545347e-07 0.0005614098
+## ENSG00000143127  5.971608 1.023916 25.47575 4.479788e-07 0.0005614098</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res3))</code></pre></div>
 <pre><code>##    [,1] 
-## -1   317
-## 0  15479
-## 1    265</code></pre>
+## -1   303
+## 0  15219
+## 1    539</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res3, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res3, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res3))))$table)
@@ -602,21 +603,21 @@ res4 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit4)
 <span class="kw">topTags</span>(res4)</code></pre></div>
 <pre><code>## Coefficient:  reads.qc[, keep]$batchNA19101.r3 
 ##                     logFC     logCPM       LR       PValue          FDR
-## ENSG00000103888 -6.386901 0.58792252 38.70312 4.934191e-10 7.924803e-06
-## ENSG00000137252 -5.889957 0.28880830 36.05362 1.919616e-09 1.165796e-05
-## ENSG00000127533 -5.844999 0.26394192 35.80796 2.177565e-09 1.165796e-05
-## ENSG00000203780 -5.609078 0.13950779 34.50022 4.262030e-09 1.224810e-05
-## ENSG00000267941 -5.518057 0.06448738 34.42550 4.428829e-09 1.224810e-05
-## ENSG00000118855  8.392195 3.31140228 34.36205 4.575592e-09 1.224810e-05
-## ENSG00000104432 -5.785359 0.21290934 33.31585 7.834163e-09 1.578081e-05
-## ENSG00000000005  8.487394 1.66527082 33.30934 7.860437e-09 1.578081e-05
-## ENSG00000147174 -5.320627 0.02348538 31.98118 1.556733e-08 2.778076e-05
-## ENSG00000144649 -8.676705 1.80776695 29.76526 4.876515e-08 7.832171e-05</code></pre>
+## ENSG00000245680  7.007457 2.42248075 29.46449 5.695077e-08 0.0007083699
+## ENSG00000157680  7.237809 1.36241855 28.17447 1.108570e-07 0.0007083699
+## ENSG00000197261  6.418993 3.15686745 27.50494 1.566940e-07 0.0007083699
+## ENSG00000138650 -8.274919 2.35084765 27.26492 1.774010e-07 0.0007083699
+## ENSG00000151690  6.547575 1.20130072 26.28609 2.944008e-07 0.0007083699
+## ENSG00000185686  5.101937 0.73285441 26.00984 3.396824e-07 0.0007083699
+## ENSG00000244607  4.559426 0.01356324 25.73511 3.916360e-07 0.0007083699
+## ENSG00000175105 -7.497481 2.83568134 25.65137 4.090053e-07 0.0007083699
+## ENSG00000127366 -7.248685 1.81131942 25.42882 4.590090e-07 0.0007083699
+## ENSG00000169228  8.417010 2.31022748 25.39601 4.668829e-07 0.0007083699</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res4))</code></pre></div>
 <pre><code>##    [,1] 
-## -1   249
-## 0  15539
-## 1    273</code></pre>
+## -1   232
+## 0  15307
+## 1    522</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res4, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res4, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res4))))$table)

@@ -20,7 +20,7 @@ set.seed(1)
 
 To test different single-cell differential expression methods we will be using the Blischak dataset from Chapters 7-17.
 For this experiment bulk RNA-seq data for each cell-line was generated in addition to single-cell data. We will use the
-differentially expressed genes identified using standard methods on this bulk data as the ground truth for evaluating the
+differentially expressed genes identified using standard methods on the respective bulk data as the ground truth for evaluating the
 accuracy of each single-cell method. To save time we have pre-computed these for you, run the commands below to load these data.
 
 
@@ -45,7 +45,8 @@ gkeep <- rowSums(data > 0) > 5;
 counts <- data[gkeep,]
 # Library size normalization
 lib_size = colSums(counts)
-norm <- t(t(counts)/lib_size*median(lib_size)) # Variant of CPM for datasets with library sizes of fewer than 1,000,000 molecules
+norm <- t(t(counts)/lib_size*median(lib_size)) 
+# Variant of CPM for datasets with library sizes of fewer than 1 mil molecules
 ```
 
 Now we will compare various single-cell DE methods. Note that we will only be running methods which are available as R-packages and run relatively quickly.
@@ -58,11 +59,6 @@ ones. The most commonly used non-parametric test is the
 
 The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros).
 
-
-```r
-knitr::include_graphics("figures/KS2_Example.png")
-```
-
 <div class="figure" style="text-align: center">
 <img src="figures/KS2_Example.png" alt="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))" width="60%" />
 <p class="caption">(\#fig:ks-statistic)Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))</p>
@@ -72,7 +68,10 @@ Now run the test:
 
 
 ```r
-pVals <- apply(norm, 1, function(x) {ks.test(x[group =="NA19101"], x[group=="NA19239"])$p.value})
+pVals <- apply(norm, 1, function(x) {
+        ks.test(x[group =="NA19101"], 
+                x[group=="NA19239"])$p.value
+         })
 # multiple testing correction
 pVals <- p.adjust(pVals, method = "fdr")
 ```
@@ -82,7 +81,7 @@ This code "applies" the function to each row (specified by 1) of the expression 
 
 ```r
 sigDE <- names(pVals)[pVals < 0.05]
-length(sigDE)
+length(sigDE) 
 ```
 
 ```
@@ -90,7 +89,8 @@ length(sigDE)
 ```
 
 ```r
-sum(GroundTruth$DE %in% sigDE)
+# Number of KS-DE genes
+sum(GroundTruth$DE %in% sigDE) 
 ```
 
 ```
@@ -98,14 +98,7 @@ sum(GroundTruth$DE %in% sigDE)
 ```
 
 ```r
-length(GroundTruth$DE)
-```
-
-```
-## [1] 1083
-```
-
-```r
+# Number of KS-DE genes that are true DE genes
 sum(GroundTruth$notDE %in% sigDE)
 ```
 
@@ -114,11 +107,7 @@ sum(GroundTruth$notDE %in% sigDE)
 ```
 
 ```r
-length(GroundTruth$notDE)
-```
-
-```
-## [1] 10897
+# Number of KS-DE genes that are truly not-DE
 ```
 
 As you can see many more of our ground truth negative genes were identified as DE by the KS-test (false positives) than ground truth positive genes (true positives), however this may be due to the larger number of notDE genes thus we typically normalize these counts as the True positive rate (TPR), TP/(TP + FN), and False positive rate (FPR), FP/(FP+TP).
@@ -143,7 +132,9 @@ So far we've only evaluated the performance at a single significance threshold. 
 
 
 ```r
-pVals <- pVals[names(pVals) %in% GroundTruth$DE | names(pVals) %in% GroundTruth$notDE] # Only consider genes for which we know the ground truth
+# Only consider genes for which we know the ground truth
+pVals <- pVals[names(pVals) %in% GroundTruth$DE | 
+               names(pVals) %in% GroundTruth$notDE] 
 truth <- rep(1, times = length(pVals));
 truth[names(pVals) %in% GroundTruth$DE] = 0;
 pred <- ROCR::prediction(pVals, truth)
@@ -169,7 +160,8 @@ Finally to facilitate the comparisons of other DE methods let's put this code in
 
 ```r
 DE_Quality_AUC <- function(pVals) {
-        pVals <- pVals[names(pVals) %in% GroundTruth$DE | names(pVals) %in% GroundTruth$notDE] # Only consider genes for which we know the ground truth
+        pVals <- pVals[names(pVals) %in% GroundTruth$DE | 
+                       names(pVals) %in% GroundTruth$notDE]
         truth <- rep(1, times = length(pVals));
         truth[names(pVals) %in% GroundTruth$DE] = 0;
         pred <- ROCR::prediction(pVals, truth)
@@ -185,7 +177,10 @@ The Wilcox-rank-sum test is another non-parametric test, but tests specifically 
 
 
 ```r
-pVals <- apply(norm, 1, function(x) {ks.test(x[group =="NA19101"], x[group=="NA19239"])$p.value})
+pVals <- apply(norm, 1, function(x) {
+        wilcox.test(x[group =="NA19101"], 
+                x[group=="NA19239"])$p.value
+        })
 # multiple testing correction
 pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
@@ -197,11 +192,11 @@ DE_Quality_AUC(pVals)
 </div>
 
 ```
-## [1] 0.7954796
+## [1] 0.8320326
 ```
 
 ## edgeR
-We've already used edgeR for differential expression in Chapter 16. edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.
+We've already used edgeR for differential expression in Chapter \@ref(dealing-with-confounders). edgeR is based on a negative binomial model of gene expression and uses a generalized linear model (GLM) framework, the enables us to include other factors such as batch to the model.
 
 
 ```r
@@ -235,24 +230,10 @@ pd <- data.frame(group=group, batch=batch)
 rownames(pd) <- colnames(counts)
 pd <- new("AnnotatedDataFrame", data = pd)
 
-Obj <- newCellDataSet(as.matrix(counts), phenoData=pd, expressionFamily=negbinomial.size())
+Obj <- newCellDataSet(as.matrix(counts), phenoData=pd, 
+        expressionFamily=negbinomial.size())
 Obj <- estimateSizeFactors(Obj)
 Obj <- estimateDispersions(Obj)
-```
-
-```
-## Warning: Deprecated, use tibble::rownames_to_column() instead.
-```
-
-```
-## Warning in log(ifelse(y == 0, 1, y/mu)): NaNs produced
-```
-
-```
-## Warning: step size truncated due to divergence
-```
-
-```r
 res <- differentialGeneTest(Obj,fullModelFormulaStr="~group")
 
 pVals <- res[,3]
@@ -295,7 +276,8 @@ obj <- FromMatrix(as.matrix(log_counts), cData, fData)
 colData(obj)$cngeneson <- scale(colSums(assay(obj)>0))
 cond <- factor(colData(obj)$cond)
 
-zlmCond <- zlm.SingleCellAssay(~cond + cngeneson, obj) # Recommended to model 
+# Model expression as function of condition & number of detected genes
+zlmCond <- zlm.SingleCellAssay(~cond + cngeneson, obj) 
 ```
 
 ```
@@ -322,7 +304,9 @@ DE_Quality_AUC(pVals)
 ```
 ## [1] 0.8284046
 ```
-## Slow Methods (>1h to run) - These methods are too slow to run today but we encourage you to try them out on your own:
+## Slow Methods (>1h to run) 
+
+These methods are too slow to run today but we encourage you to try them out on your own:
 
 ## BPSC
 
@@ -337,7 +321,8 @@ bpsc_group = group[batch=="NA19101.r1" | batch=="NA19239.r1"]
 control_cells <- which(bpsc_group == "NA19101")
 design <- model.matrix(~bpsc_group)
 coef=2 # group label
-res=BPglm(data=bpsc_data, controlIds=control_cells, design=design, coef=coef, estIntPar=FALSE, useParallel = FALSE)
+res=BPglm(data=bpsc_data, controlIds=control_cells, design=design, coef=coef, 
+                estIntPar=FALSE, useParallel = FALSE)
 pVals = res$PVAL
 pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
