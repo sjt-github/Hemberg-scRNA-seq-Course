@@ -21,7 +21,7 @@ have been developed for bulk RNA-seq. Moreover, there are also
 extensive
 [datasets](http://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-9-r95)
 available where the RNA-seq data has been validated using
-RT-qPCR. These data can be used to benchmark DE finding algorithms. 
+RT-qPCR. These data can be used to benchmark DE finding algorithms.
 
 ## Single cell RNA-seq
 
@@ -29,232 +29,71 @@ In contrast to the bulk RNA-seq in scRNA-seq we usually do not have a defined
 set of experimental conditions, but instead, as was shown in the previous chapter
 (\@ref(clust-methods)) we can identify the cell groups by using the unsupervised
 clustering approach. Once the groups have been identified one can find differentially
-expressed genes by either looking at the differencies in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for the comparison of the two groups of cells.
+expressed genes by either looking at the differences in variance between the groups (like the Kruskal-Wallis test implemented in SC3), or by comparing gene expression between clusters in a pairwise manner. In the following chapter we will mainly consider tools developed for the comparison of the two groups of cells.
 
-## scRNA-seq synthetic data
+## Differences in Distribution
 
-One advantage of working with single-cell data is
-that there is a reliable, analytically tractable mathematical model for
-the expression levels, the Poisson-Beta distribution. Importantly, the
-Poisson-Beta distribution has strong experimental support, and it
-provides a good fit to scRNA-seq data.
+Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) for each group we are comparing in single-cell experiments. Thus we can take advantage of the whole distribution of expression values in each group to identify differences between groups rather than only comparing estimates of mean-expression as is standard for bulk RNASeq.
 
-In this module, we first discuss the Poisson-Beta distribution. We
-then use the model to generate synthetic data which we can use to
-compare different DE finding algorithms. In the final section we
-investigate a real scRNA-seq dataset.
+There are two main approaches to comparing distributions. Firstly, we can use existing statistical models/distributions and fit the same type of model to the expression in each group then test for differences in the parameters for each model, or test whether the model fits better if a particular paramter is allowed to be different according to group. For instance in Chapter 15 we used edgeR to test whether allowing mean expression to be different in different batches significantly improved the fit of a negative binomial model of the data.
 
-## Single gene expression
+Alternatively, we can use a non-parametric test which does not assume expression values follow any particular distribution, e.g. the KS-test. Non-parametric tests generally convert observed expression values to ranks and test whether the distribution of ranks for one group are signficantly different from the distribution of ranks for the other group. However, some non-parametric methods fail in the presence of a large number of tied values, such as the case for dropouts (zeros) in single-cell RNA-seq expression data.
+
+## Models of single-cell RNASeq data
+
+The most common model of RNASeq data is the negative binomial model:
+
 
 
 ```r
-library(scRNA.seq.funcs)
 set.seed(1)
-```
-
-For single-cell data, the analytically tractable stochastic bursting
-model provides a good fit. Thus, we can use it to generate realistic
-data. We start by generating samples from one gene:
-
-```r
-s <- scRNA.seq.funcs::PoiBeta(100, 2, 3)
-```
-
-We then plot the results as a histogram:
-
-```r
-hist(s,
-     freq = FALSE,
-     xlab = "# transcripts",
-     main = "Transcript distribution")
+hist(rnbinom(1000, mu=10, size=100), col="grey50")
 ```
 
 <div class="figure" style="text-align: center">
-<img src="21-de-intro_files/figure-html/poisson-beta-plot-1.png" alt="Distribution of read counts for a single genes across 100 cells based on the Poisson-Beta model" width="672" />
-<p class="caption">(\#fig:poisson-beta-plot)Distribution of read counts for a single genes across 100 cells based on the Poisson-Beta model</p>
+<img src="21-de-intro_files/figure-html/nb-plot-1.png" alt="Distribution of read counts for a single gene across 1000 cells based on the Negative Binomial model" width="672" />
+<p class="caption">(\#fig:nb-plot)Distribution of read counts for a single gene across 1000 cells based on the Negative Binomial model</p>
 </div>
+$\mu = mu$
+$\sigma^2 = mu + mu^2/size$
 
-The probability mass function of the Poisson-Beta distribution is
-challenging to work with since it involves special functions. However,
-the mean and variance can be calculated as:
+It is parameterized by the mean expression (mu) and the dispersion (size), which is inversely related to the variance. The negative binomial model fits bulk RNA-seq data very well and underlies most statistical methods designed for such data. In addition, it has been show to fit the distribution of molecule counts obtained from data tagged by unique molecular identifiers (UMIs) quite well ([Grun et al. 2014](http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html), [Islam et al. 2011](http://genome.cshlp.org/content/21/7/1160)).
 
-$\mu = k\cdot a/(a+b)$
-
-$\sigma^2 = k^2\cdot a\cdot b/((a+b+1)\cdot(a+b)^2)$
-
-## Poisson-Beta distribution
-
-There are three regimes of the Poisson-Beta distribution and they are
-determined by the values of the parameters $a$ and $b$.
-
-When $a<1$ and $b<1$ we have a bimodal distribution with one mode at 0 and
-the other at $k$, when $a<1$ and $b>1$ we have a monotonically decreasing
-distribution and otherwise we have a unimodal distribution with a mode
-at $ka/(a+b)$.
+However, a raw negative binomial model does not fit full-transcript data very well due to the high dropout rates relative to the non-zero read counts. For this type of data a variety of zero-inflated negative binomial models have been proposed (e.g. [MAST](https://bioconductor.org/packages/release/bioc/html/MAST.html), [SCDE](https://bioconductor.org/packages/release/bioc/html/scde.html)).
 
 
 ```r
-par(mfrow=c(3,1))
-hist(scRNA.seq.funcs::PoiBeta(100, .2, .3),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(0, 0, 1, 1/4),
-     breaks = seq(0, 120, 10))
-hist(scRNA.seq.funcs::PoiBeta(100, .2, 3),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(0,1,0,1/4),
-     breaks = seq(0, 120, 10))
-hist(scRNA.seq.funcs::PoiBeta(100, 2, .3),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(1, 0, 0, 1/4),
-     breaks = seq(0, 120, 10))
+d = 0.5;
+counts <- rnbinom(1000, mu=10, size=100);
+counts[runif(1000) < d] = 0;
+hist(counts, col="grey50");
 ```
 
 <div class="figure" style="text-align: center">
-<img src="21-de-intro_files/figure-html/poisson-beta-shapes-1.png" alt="Different distributions of read counts for a single genes across 100 cells based on the Poisson-Beta model corresponding to different paramete sets" width="672" />
-<p class="caption">(\#fig:poisson-beta-shapes)Different distributions of read counts for a single genes across 100 cells based on the Poisson-Beta model corresponding to different paramete sets</p>
+<img src="21-de-intro_files/figure-html/zero-inflation-plot-1.png" alt="Distribution of read counts for a single gene based on a zero-inflated Negative Binomial model" width="672" />
+<p class="caption">(\#fig:zero-inflation-plot)Distribution of read counts for a single gene based on a zero-inflated Negative Binomial model</p>
 </div>
+$\mu = mu \cdot (1 - d)$
+$\sigma^2 = mu \cdot (1-d) \cdot (1 + d \cdot mu + mu / size)$
 
-__Exercise 1__: Vary the parameters _a_, _b_ and _k_ to explore how the
-location and shape of the distribution changes.
+These models introduce a new parameter d, for the dropout rate, to the negative binomial model. As we saw in Chapter 19, the dropout rate of a gene is strongly correlated with the mean expression of the gene. Different zero-inflated negative binomial models use different relationships between mu and d and some may fit mu and d to the expression of each gene independently.
 
-## Sample size
+Finally, several methods use a Poisson-Beta distribution which is based on a mechanistic model of transcriptional bursting. There is strong experimental support for this model ([Kim and Marioni, 2013](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-1-r7)) and it provides a good fit to scRNA-seq data but it is less easy to use than the negative-binomial models and much less existing methods upon which to build than the negative binomial model.
 
-The difficulty in determining the parameters of the distribution also
-depends on the sample size. In the example below, it is not clear if
-the distribution is bimodal when only 10 samples are drawn.
-
-
-```r
-hist(scRNA.seq.funcs::PoiBeta(10, .6, 1.2, 10),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(1, 0, 0, 1/4),
-     breaks = seq(0, 20, 1))
-hist(scRNA.seq.funcs::PoiBeta(10, .6, 1.2, 50),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(0, 1, 0, 1/4),
-     breaks = seq(0, 20, 1),
-     add = TRUE)
+```{r pois-beta-plot, fit.cap="Distribution of read counts for a single gene based on a Poisson-Beta model")
+a = 0.1
+b = 0.1
+g = 100
+lambdas = rbeta(1000, a, b)
+counts = sapply(lambdas, function(l) {rpois(1, lambda=l)})
+hist(counts, col="grey50")
 ```
+$\mu = g \cdot a / (a + b)$
+$\sigma^2 = g^2 \cdot a \cdot b/((a + b + 1) \cdot (a + b)^2)$
 
-<div class="figure" style="text-align: center">
-<img src="21-de-intro_files/figure-html/poisson-beta-sample-size-1.png" alt="Effect of sampling size on the distribution of read counts based on the Poisson-Beta model" width="672" />
-<p class="caption">(\#fig:poisson-beta-sample-size)Effect of sampling size on the distribution of read counts based on the Poisson-Beta model</p>
-</div>
+This model uses three parameters: "a" the rate of activation of transcription; "b" the rate of inhibition of transcription; and "g" the rate of transcript production while transcription is active at the locus. Differential expression methods may test each of the parameters for differences across groups or only one (often "g").
 
-__Exercise 2__: Modify the number of samples (i.e. cells) drawn to
-explore how difficult it is to correctly infer the correct shape.
+All of these models may be further expanded to explicitly account for other sources of gene expression differences such as batch-effect or library depth depending on the particular DE algorithm.
 
-## Dropout noise
+__Exercise__: Vary the parameters of each distribution to explore how they affect the distribution of gene expression. How similar are the Poisson-Beta and Negative Binomial models?
 
-The stochastic bursting model only captures the biological
-variability. In practice there will also be experimental
-variability. We model the noise as drop-outs, i.e. we assume that
-there is a small probality that each transcript is lost. For gene $i$
-and cell $j$ it is assumed that the probability of loosing the
-transcript is given by $p_d = \mu/(d+\mu)$, where $\mu$ is
-the mean expression level of the gene and $d$ is a drop-out
-parameter. Thus, the probability of drop-outs monotonically decreases
-as the mean expression level increases.
-
-To visualize the impact of the drop-outs on a sample, we can tune the
-drop-out parameter:
-
-
-```r
-par(mfrow=c(3,1))
-hist(scRNA.seq.funcs::PoiBeta(100, 2, 3, 100, 1),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(1, 0, 0, 1/4),
-     ylim = c(0, .08),
-     xlim = c(0, 120))
-hist(scRNA.seq.funcs::PoiBeta(100, 2, 3, 100, 10),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(0, 1, 0, 1/4),
-     ylim = c(0, .08),
-     xlim = c(0, 120))
-hist(scRNA.seq.funcs::PoiBeta(100, 2, 3, 100, 100),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(0, 0, 1, 1/4),
-     ylim = c(0, .08),
-     xlim = c(0, 120))
-```
-
-<div class="figure" style="text-align: center">
-<img src="21-de-intro_files/figure-html/poisson-beta-dropout-example-1.png" alt="Effect of dropouts on the distribution of read counts based on the Poisson-Beta model" width="672" />
-<p class="caption">(\#fig:poisson-beta-dropout-example)Effect of dropouts on the distribution of read counts based on the Poisson-Beta model</p>
-</div>
-
-__Exercise 3__: Explore the different parameter regimes for the same
-drop-out rate. Do you think that we are more sensitive to drop-outs in
-any specific regime?
-
-## Dispersion noise
-
-Another example of noise is under- or over-dispersion. This can be
-modelled using a single parameter multiplying the parameters $a$ and $b$
-in the Poisson-Beta distribution by a scalar $s$. We can see that the
-mean is left unchanged while the variance is inversely proportional to $s$.
-
-
-```r
-s <- 10^(-3:3)
-k <- 100
-a <- 2
-b <- 3
-par(mfrow=c(1,1))
-plot(s,
-     k*a*s/(a*s + b*s),
-     log = "x",
-     col = "red",
-     ylim = c(0, 50),
-     ylab = "Moments")
-points(s,
-       k*a*s*b*s/((a*s + b*s)^2*(a*s + b*s + 1)),
-       col = "blue")
-```
-
-<div class="figure" style="text-align: center">
-<img src="21-de-intro_files/figure-html/poisson-beta-dispersion-analytical-1.png" alt="The mean and the variance of the distribution of read counts based on the Poisson-Beta model" width="672" />
-<p class="caption">(\#fig:poisson-beta-dispersion-analytical)The mean and the variance of the distribution of read counts based on the Poisson-Beta model</p>
-</div>
-
-To illustrate the effect of the dispersion parameter on the distribution consider:
-
-
-```r
-par(mfrow=c(3,1))
-hist(scRNA.seq.funcs::PoiBeta(100, 2, 3, 100),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(1, 0, 0, 1/4),
-     ylim = c(0, .05),
-     xlim = c(0, 120))
-hist(scRNA.seq.funcs::PoiBeta(100, 2/10, 3/10, 100),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(0, 1, 0, 1/4),
-     ylim = c(0, .05),
-     xlim = c(0, 120))
-hist(scRNA.seq.funcs::PoiBeta(100, 2*10, 3*10, 100),
-     freq = FALSE,
-     xlab = "# transcripts",
-     col = rgb(0, 0, 1, 1/4),
-     ylim = c(0, .05),
-     xlim = c(0, 120))
-```
-
-<div class="figure" style="text-align: center">
-<img src="21-de-intro_files/figure-html/poisson-beta-dispersion-effect-1.png" alt="Effect of dispersion on the distribution of read counts based on the Poisson-Beta model" width="672" />
-<p class="caption">(\#fig:poisson-beta-dispersion-effect)Effect of dispersion on the distribution of read counts based on the Poisson-Beta model</p>
-</div>
-
-__Exercise 4__: Explore what happens when you have both drop-outs and
-under/over-dispersion. Can the effects be deconvoluted?
