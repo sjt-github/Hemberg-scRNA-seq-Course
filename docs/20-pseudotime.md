@@ -12,6 +12,7 @@ library(TSCAN)
 library(M3Drop)
 library(monocle)
 library(destiny)
+library(SLICER)
 set.seed(1)
 ```
 
@@ -23,18 +24,66 @@ monitor the expression levels of an individual cell over
 time. Unfortunately, such monitoring is not possible with scRNA-seq
 since the cell is lysed (destroyed) when the RNA is extracted.
 
-Instead, we must sample at multiple time-points and obtain snapshots of
-the gene expression profiles. Since some of the cells will
-proceed faster along the differentiation than others, each snapshot may contain
-cells at varying points along the developmental progression. We use statistical methods
- to order the cells along one or more trajectories which represent the underlying
- developmental trajectories, this ordering is referred to as "pseudotime".
+Instead, we must sample at multiple time-points and obtain snapshots
+of the gene expression profiles. Since some of the cells will proceed
+faster along the differentiation than others, each snapshot may
+contain cells at varying points along the developmental
+progression. We use statistical methods to order the cells along one
+or more trajectories which represent the underlying developmental
+trajectories, this ordering is referred to as "pseudotime".
 
-In this chapter we will consider two different tools, Monocle and
-TSCAN for ordering cells according to their pseudotime development. To
-illustrate the methods we will be using a dataset on mouse embryonic
-development [@Deng2014-mx]. The dataset consists of
+In this chapter we will consider four different tools: Monocle, TSCAN,
+destiny and SLICER for ordering cells according to their pseudotime
+development. To illustrate the methods we will be using a dataset on
+mouse embryonic development [@Deng2014-mx]. The dataset consists of
 268 cells from 10 different time-points of early mouse development.
+
+A recent review by Cannoodt et al provides a detailed summary of the
+various computational methods for trajectory inference from
+single-cell transcriptomics [@Cannoodt2016-uj]. They discuss several
+tools, but unfortunately for our purposes many of these tools do not
+have complete or well-maintained implementations, and/or are not
+implemented in R.
+
+Cannoodt et al cover:
+
+* SCUBA - Matlab implementation
+* Wanderlust - Matlab (and requires registration to even download)
+* Wishbone - Python
+* SLICER - R, but package only available on Github
+* SCOUP - C++ command line tool
+* Waterfall - R, but one R script in supplement
+* Mpath - R pkg, but available as tar.gz on Github; function
+documentation but no vignette/workflow
+* Monocle - Bioconductor package
+* TSCAN - Bioconductor package
+
+Unfortunately only two tools discussed (Monocle and TSCAN) meet the
+gold standard of open-source software hosted in a reputable repository.
+
+The following figures from the paper summarise some of the features of
+the various tools.
+
+
+```r
+knitr::include_graphics("figures/cannoodt_pseudotime_properties.png")
+```
+
+<div class="figure" style="text-align: center">
+<img src="figures/cannoodt_pseudotime_properties.png" alt="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016)." width="90%" />
+<p class="caption">(\#fig:pseudotime-methods-description)Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).</p>
+</div>
+
+
+```r
+knitr::include_graphics("figures/cannoodt_pseudotime_methods.png")
+```
+
+<div class="figure" style="text-align: center">
+<img src="figures/cannoodt_pseudotime_methods.png" alt="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016)." width="90%" />
+<p class="caption">(\#fig:pseudotime-methods)Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).</p>
+</div>
+
 
 ## TSCAN
 
@@ -216,6 +265,207 @@ __Exercise 2__ Do you get a better resolution between the later time points by c
 
 __Exercise 3__ How does the ordering change if you only use the genes identified by M3Drop?
 
+
+## SLICER
+
+The SLICER method is an algorithm for constructing trajectories that
+describe gene expression changes during a sequential biological
+process, just as Monocle and TSCAN are. SLICER is designed to capture
+highly nonlinear gene expression changes, automatically select genes
+related to the process, and detect multiple branch and loop features
+in the trajectory [@Welch2016-jr]. The SLICER R package is available
+from its [GitHub repository](https://github.com/jw156605/SLICER) and
+can be installed from there using the `devtools` package.
+
+We use the `select_genes` function in SLICER to automatically select
+the genes to use in builing the cell trajectory. The function uses
+"neighbourhood variance" to identify genes that vary smoothly, rather
+than fluctuating randomly, across the set of cells. Following this, we
+determine which value of "k" (dimensions) yields an embedding that
+most resembles a trajectory. Then we estimate the locally linear
+embedding of the cells.
+
+
+```r
+slicer_genes <- select_genes(t(deng))
+k <- select_k(t(deng[slicer_genes,]), kmin = 5)
+```
+
+```
+## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates
+```
+
+```
+## Warning in if (posigual%/%2 == posigual/2) {: the condition has length > 1
+## and only the first element will be used
+```
+
+```
+## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
+## only the first used
+
+## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
+## only the first used
+
+## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
+## only the first used
+
+## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
+## only the first used
+```
+
+```
+## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)
+```
+
+```
+## finding neighbours
+## calculating weights
+## computing coordinates
+```
+
+```
+## Warning in min(compl[ind[compl[ind, "r"] > 0], "r"]): no non-missing
+## arguments to min; returning Inf
+```
+
+```
+## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates
+```
+
+```
+## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)
+```
+
+```
+## finding neighbours
+## calculating weights
+## computing coordinates
+```
+
+```
+## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)
+```
+
+```
+## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates
+```
+
+```r
+slicer_traj_lle <- lle(t(deng[slicer_genes,]), m = 2, k)$Y
+```
+
+```
+## finding neighbours
+## calculating weights
+## computing coordinates
+```
+
+```r
+plot(slicer_traj_lle, xlab = "LLE Comp 1", ylab = "LLE Comp 2",
+     main = "Locally linear embedding of cells from SLICER")
+```
+
+<img src="20-pseudotime_files/figure-html/slicer-analyis-1.png" width="672" style="display: block; margin: auto;" />
+
+With the locally linear embedding computed we can construct a
+k-nearest neighbour graph that is fully connected.
+
+
+```r
+slicer_traj_graph <- conn_knn_graph(slicer_traj_lle, 5)
+plot(slicer_traj_graph, main = "Fully connected kNN graph from SLICER")
+```
+
+<img src="20-pseudotime_files/figure-html/slicer-build-graph-1.png" width="672" style="display: block; margin: auto;" />
+
+From this graph we can identify "extreme" cells that are candidates
+for start/end cells in the trajectory.
+
+
+```r
+ends <- find_extreme_cells(slicer_traj_graph, slicer_traj_lle)
+```
+
+<img src="20-pseudotime_files/figure-html/slicer-1.png" width="672" style="display: block; margin: auto;" />
+
+```r
+start <- ends[1]
+```
+
+Having defined a start cell we can order the cells in the estimated pseudotime.
+
+
+```r
+pseudotime_order_slicer<- cell_order(slicer_traj_graph, start)
+branches <- assign_branches(slicer_traj_graph, start)
+
+pseudotime_slicer <-
+    data.frame(
+        Timepoint = cellLabels,
+        pseudotime = NA,
+        State = branches
+    )
+pseudotime_slicer$pseudotime[pseudotime_order_slicer] <-
+    1:length(pseudotime_order_slicer)
+```
+
+We can again compare the inferred pseudotime to the known sampling
+timepoints. SLICER does not provide a pseudotime value per se, just an
+ordering of cells.
+
+
+```r
+slicer_time_point <- factor(
+     pseudotime_slicer$Timepoint,
+     levels = c("early2cell", "mid2cell", "late2cell", "4cell", "8cell",
+                   "16cell", "earlyblast", "midblast", "lateblast")
+)
+
+plot(
+    pseudotime_slicer$pseudotime,
+    slicer_time_point,
+    xlab = "Pseudotime",
+    ylab = "Timepoint",
+    col = colours[slicer_time_point],
+    pch = 16
+)
+```
+
+<img src="20-pseudotime_files/figure-html/slicer-vs-truth-1.png" width="672" style="display: block; margin: auto;" />
+
+Like the previous method, SLICER here provides a good ordering for the
+early time points and struggles for later time points.
+
+__Exercise 4__ Do you get a better results if you use different
+"start" cells?
+
+__Exercise 5__ How does the ordering change if you use a different set
+of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?
+
+
+
 ## Comparison of the methods
 
 How do the trajectories inferred by TSCAN and Monocle compare?
@@ -239,7 +489,7 @@ plot(
 
 <img src="20-pseudotime_files/figure-html/tscan-monocle-compare-1.png" width="672" style="display: block; margin: auto;" />
 
-__Exercise 4__ Compare destiny to TSCAN and Monocle.
+__Exercise 6__: Compare destiny and SLICER to TSCAN and Monocle.
 
 ## Expression of genes through time
 Each package also enables the visualization of expression through pseudotime.
@@ -271,6 +521,7 @@ Of course, pseudotime values computed with any method can be added to
 the `pData` slot of an `SCESet` object. Having done that, the full
 plotting capabilities of the `scater` package can be used to
 investigate relationships between gene expression, cell populations
-and pseudotime.
+and pseudotime. This would be particularly useful for the SLICER
+results, as SLICER does not provide plotting functions.
 
-__Exercise 5__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes
+__Exercise 7__: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes

@@ -130,9 +130,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#video"><i class="fa fa-check"></i><b>1.1</b> Video</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#registration"><i class="fa fa-check"></i><b>1.2</b> Registration</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.3</b> GitHub</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i><b>1.4</b> License</a></li>
-<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.5</b> Prerequisites</a></li>
-<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.6</b> Contact</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#docker-container"><i class="fa fa-check"></i><b>1.4</b> Docker container</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i><b>1.5</b> License</a></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.6</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.7" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.7</b> Contact</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="technical-requirements.html"><a href="technical-requirements.html"><i class="fa fa-check"></i><b>2</b> Technical requirements</a><ul>
 <li class="chapter" data-level="2.1" data-path="technical-requirements.html"><a href="technical-requirements.html#general"><i class="fa fa-check"></i><b>2.1</b> General</a></li>
@@ -303,8 +304,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
 <li class="chapter" data-level="21.2" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#monocle"><i class="fa fa-check"></i><b>21.2</b> monocle</a></li>
 <li class="chapter" data-level="21.3" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>21.3</b> Diffusion maps</a></li>
-<li class="chapter" data-level="21.4" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>21.4</b> Comparison of the methods</a></li>
-<li class="chapter" data-level="21.5" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>21.5</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="21.4" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#slicer"><i class="fa fa-check"></i><b>21.4</b> SLICER</a></li>
+<li class="chapter" data-level="21.5" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>21.5</b> Comparison of the methods</a></li>
+<li class="chapter" data-level="21.6" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>21.6</b> Expression of genes through time</a></li>
 </ul></li>
 <li class="chapter" data-level="22" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html"><i class="fa fa-check"></i><b>22</b> Differential Expression (DE) analysis</a><ul>
 <li class="chapter" data-level="22.1" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>22.1</b> Bulk RNA-seq</a></li>
@@ -339,7 +341,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="27" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>27</b> References</a></li>
 <li class="divider"></li>
-<li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2016</a></li>
+<li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2017</a></li>
 
 </ul>
 
@@ -376,7 +378,7 @@ Figure 5.1: Example of FastQC output
 </div>
 <div id="reads-alignment" class="section level2">
 <h2><span class="header-section-number">5.2</span> Reads alignment</h2>
-<p>After trimming low quality bases from the reads, the remaining sequences can be mapped to a reference genome. Again, there is no need for a special purpose method for this, so we can use the <a href="https://github.com/alexdobin/STAR">STAR</a> or the <a href="https://ccb.jhu.edu/software/tophat/index.shtml">TopHat</a> aligner. For large full-transcript datasets from well annotated organisms (e.g. mouse, human) pseudo-alignment methods (e.g. <a href="https://pachterlab.github.io/kallisto/">Kallisto</a>, <a href="http://salmon.readthedocs.io/en/latest/salmon.html">Salmon</a>) may out-perform conventional alignment.</p>
+<p>After trimming low quality bases from the reads, the remaining sequences can be mapped to a reference genome. Again, there is no need for a special purpose method for this, so we can use the <a href="https://github.com/alexdobin/STAR">STAR</a> or the <a href="https://ccb.jhu.edu/software/tophat/index.shtml">TopHat</a> aligner. For large full-transcript datasets from well annotated organisms (e.g. mouse, human) pseudo-alignment methods (e.g. <a href="https://pachterlab.github.io/kallisto/">Kallisto</a>, <a href="http://salmon.readthedocs.io/en/latest/salmon.html">Salmon</a>) may out-perform conventional alignment. For drop-seq based datasets with tens- or hundreds of thousands of reads pseudoaligners become more appealing since their run-time can be several orders of magnitude less than traditional aligners.</p>
 <p>An example of how to map reads.bam to using STAR is</p>
 <pre><code>$&lt;path_to_STAR&gt;/STAR --runThreadN 1 --runMode alignReads
 --readFilesIn reads1.fq.gz reads2.fq.gz --readFilesCommand zcat --genomeDir &lt;path&gt;

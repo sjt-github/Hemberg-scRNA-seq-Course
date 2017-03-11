@@ -130,9 +130,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#video"><i class="fa fa-check"></i><b>1.1</b> Video</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#registration"><i class="fa fa-check"></i><b>1.2</b> Registration</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.3</b> GitHub</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i><b>1.4</b> License</a></li>
-<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.5</b> Prerequisites</a></li>
-<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.6</b> Contact</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#docker-container"><i class="fa fa-check"></i><b>1.4</b> Docker container</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i><b>1.5</b> License</a></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>1.6</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.7" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.7</b> Contact</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="technical-requirements.html"><a href="technical-requirements.html"><i class="fa fa-check"></i><b>2</b> Technical requirements</a><ul>
 <li class="chapter" data-level="2.1" data-path="technical-requirements.html"><a href="technical-requirements.html#general"><i class="fa fa-check"></i><b>2.1</b> General</a></li>
@@ -303,8 +304,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="21.1" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#tscan"><i class="fa fa-check"></i><b>21.1</b> TSCAN</a></li>
 <li class="chapter" data-level="21.2" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#monocle"><i class="fa fa-check"></i><b>21.2</b> monocle</a></li>
 <li class="chapter" data-level="21.3" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#diffusion-maps"><i class="fa fa-check"></i><b>21.3</b> Diffusion maps</a></li>
-<li class="chapter" data-level="21.4" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>21.4</b> Comparison of the methods</a></li>
-<li class="chapter" data-level="21.5" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>21.5</b> Expression of genes through time</a></li>
+<li class="chapter" data-level="21.4" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#slicer"><i class="fa fa-check"></i><b>21.4</b> SLICER</a></li>
+<li class="chapter" data-level="21.5" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#comparison-of-the-methods"><i class="fa fa-check"></i><b>21.5</b> Comparison of the methods</a></li>
+<li class="chapter" data-level="21.6" data-path="pseudotime-analysis.html"><a href="pseudotime-analysis.html#expression-of-genes-through-time"><i class="fa fa-check"></i><b>21.6</b> Expression of genes through time</a></li>
 </ul></li>
 <li class="chapter" data-level="22" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html"><i class="fa fa-check"></i><b>22</b> Differential Expression (DE) analysis</a><ul>
 <li class="chapter" data-level="22.1" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html#bulk-rna-seq-1"><i class="fa fa-check"></i><b>22.1</b> Bulk RNA-seq</a></li>
@@ -339,7 +341,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="27" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>27</b> References</a></li>
 <li class="divider"></li>
-<li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2016</a></li>
+<li><a href="http://www.sanger.ac.uk/science/groups/hemberg-group" target="blank">Hemberg Lab, 2017</a></li>
 
 </ul>
 
@@ -364,10 +366,40 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(M3Drop)
 <span class="kw">library</span>(monocle)
 <span class="kw">library</span>(destiny)
+<span class="kw">library</span>(SLICER)
 <span class="kw">set.seed</span>(<span class="dv">1</span>)</code></pre></div>
 <p>In many situations, one is studying a process where cells change continuously. This includes for example many differentiation processes taking place during development, where following a stimulus, cells will change from one cell-type to another. Ideally, we would like to monitor the expression levels of an individual cell over time. Unfortunately, such monitoring is not possible with scRNA-seq since the cell is lysed (destroyed) when the RNA is extracted.</p>
 <p>Instead, we must sample at multiple time-points and obtain snapshots of the gene expression profiles. Since some of the cells will proceed faster along the differentiation than others, each snapshot may contain cells at varying points along the developmental progression. We use statistical methods to order the cells along one or more trajectories which represent the underlying developmental trajectories, this ordering is referred to as “pseudotime”.</p>
-<p>In this chapter we will consider two different tools, Monocle and TSCAN for ordering cells according to their pseudotime development. To illustrate the methods we will be using a dataset on mouse embryonic development <span class="citation">(Deng et al. <a href="#ref-Deng2014-mx">2014</a>)</span>. The dataset consists of 268 cells from 10 different time-points of early mouse development.</p>
+<p>In this chapter we will consider four different tools: Monocle, TSCAN, destiny and SLICER for ordering cells according to their pseudotime development. To illustrate the methods we will be using a dataset on mouse embryonic development <span class="citation">(Deng et al. <a href="#ref-Deng2014-mx">2014</a>)</span>. The dataset consists of 268 cells from 10 different time-points of early mouse development.</p>
+<p>A recent review by Cannoodt et al provides a detailed summary of the various computational methods for trajectory inference from single-cell transcriptomics <span class="citation">(Cannoodt, Saelens, and Saeys <a href="#ref-Cannoodt2016-uj">2016</a>)</span>. They discuss several tools, but unfortunately for our purposes many of these tools do not have complete or well-maintained implementations, and/or are not implemented in R.</p>
+<p>Cannoodt et al cover:</p>
+<ul>
+<li>SCUBA - Matlab implementation</li>
+<li>Wanderlust - Matlab (and requires registration to even download)</li>
+<li>Wishbone - Python</li>
+<li>SLICER - R, but package only available on Github</li>
+<li>SCOUP - C++ command line tool</li>
+<li>Waterfall - R, but one R script in supplement</li>
+<li>Mpath - R pkg, but available as tar.gz on Github; function documentation but no vignette/workflow</li>
+<li>Monocle - Bioconductor package</li>
+<li>TSCAN - Bioconductor package</li>
+</ul>
+<p>Unfortunately only two tools discussed (Monocle and TSCAN) meet the gold standard of open-source software hosted in a reputable repository.</p>
+<p>The following figures from the paper summarise some of the features of the various tools.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;figures/cannoodt_pseudotime_properties.png&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:pseudotime-methods-description"></span>
+<img src="figures/cannoodt_pseudotime_properties.png" alt="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016)." width="90%" />
+<p class="caption">
+Figure 21.1: Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;figures/cannoodt_pseudotime_methods.png&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:pseudotime-methods"></span>
+<img src="figures/cannoodt_pseudotime_methods.png" alt="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016)." width="90%" />
+<p class="caption">
+Figure 21.2: Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).
+</p>
+</div>
 <div id="tscan" class="section level2">
 <h2><span class="header-section-number">21.1</span> TSCAN</h2>
 <p>TSCAN combines clustering with pseudotime analysis. First it clusters the cells using <code>mclust</code>, which is based on a mixture of normal distributions. Then it builds a minimum spanning tree to connect the clusters together. The branch of this tree that connects the largest number of clusters is the main branch which is used to determine pseudotime.</p>
@@ -489,8 +521,109 @@ tmp &lt;-<span class="st"> </span><span class="kw">factor</span>(
 <p><strong>Exercise 2</strong> Do you get a better resolution between the later time points by considering additional eigenvectors?</p>
 <p><strong>Exercise 3</strong> How does the ordering change if you only use the genes identified by M3Drop?</p>
 </div>
+<div id="slicer" class="section level2">
+<h2><span class="header-section-number">21.4</span> SLICER</h2>
+<p>The SLICER method is an algorithm for constructing trajectories that describe gene expression changes during a sequential biological process, just as Monocle and TSCAN are. SLICER is designed to capture highly nonlinear gene expression changes, automatically select genes related to the process, and detect multiple branch and loop features in the trajectory <span class="citation">(Welch, Hartemink, and Prins <a href="#ref-Welch2016-jr">2016</a>)</span>. The SLICER R package is available from its <a href="https://github.com/jw156605/SLICER">GitHub repository</a> and can be installed from there using the <code>devtools</code> package.</p>
+<p>We use the <code>select_genes</code> function in SLICER to automatically select the genes to use in builing the cell trajectory. The function uses “neighbourhood variance” to identify genes that vary smoothly, rather than fluctuating randomly, across the set of cells. Following this, we determine which value of “k” (dimensions) yields an embedding that most resembles a trajectory. Then we estimate the locally linear embedding of the cells.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slicer_genes &lt;-<span class="st"> </span><span class="kw">select_genes</span>(<span class="kw">t</span>(deng))
+k &lt;-<span class="st"> </span><span class="kw">select_k</span>(<span class="kw">t</span>(deng[slicer_genes,]), <span class="dt">kmin =</span> <span class="dv">5</span>)</code></pre></div>
+<pre><code>## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates</code></pre>
+<pre><code>## Warning in if (posigual%/%2 == posigual/2) {: the condition has length &gt; 1
+## and only the first element will be used</code></pre>
+<pre><code>## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
+## only the first used
+
+## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
+## only the first used
+
+## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
+## only the first used
+
+## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
+## only the first used</code></pre>
+<pre><code>## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)</code></pre>
+<pre><code>## finding neighbours
+## calculating weights
+## computing coordinates</code></pre>
+<pre><code>## Warning in min(compl[ind[compl[ind, &quot;r&quot;] &gt; 0], &quot;r&quot;]): no non-missing
+## arguments to min; returning Inf</code></pre>
+<pre><code>## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates</code></pre>
+<pre><code>## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)</code></pre>
+<pre><code>## finding neighbours
+## calculating weights
+## computing coordinates</code></pre>
+<pre><code>## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)</code></pre>
+<pre><code>## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates
+## finding neighbours
+## calculating weights
+## computing coordinates</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slicer_traj_lle &lt;-<span class="st"> </span><span class="kw">lle</span>(<span class="kw">t</span>(deng[slicer_genes,]), <span class="dt">m =</span> <span class="dv">2</span>, k)$Y</code></pre></div>
+<pre><code>## finding neighbours
+## calculating weights
+## computing coordinates</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(slicer_traj_lle, <span class="dt">xlab =</span> <span class="st">&quot;LLE Comp 1&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;LLE Comp 2&quot;</span>,
+     <span class="dt">main =</span> <span class="st">&quot;Locally linear embedding of cells from SLICER&quot;</span>)</code></pre></div>
+<p><img src="20-pseudotime_files/figure-html/slicer-analyis-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>With the locally linear embedding computed we can construct a k-nearest neighbour graph that is fully connected.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slicer_traj_graph &lt;-<span class="st"> </span><span class="kw">conn_knn_graph</span>(slicer_traj_lle, <span class="dv">5</span>)
+<span class="kw">plot</span>(slicer_traj_graph, <span class="dt">main =</span> <span class="st">&quot;Fully connected kNN graph from SLICER&quot;</span>)</code></pre></div>
+<p><img src="20-pseudotime_files/figure-html/slicer-build-graph-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>From this graph we can identify “extreme” cells that are candidates for start/end cells in the trajectory.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ends &lt;-<span class="st"> </span><span class="kw">find_extreme_cells</span>(slicer_traj_graph, slicer_traj_lle)</code></pre></div>
+<p><img src="20-pseudotime_files/figure-html/slicer-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">start &lt;-<span class="st"> </span>ends[<span class="dv">1</span>]</code></pre></div>
+<p>Having defined a start cell we can order the cells in the estimated pseudotime.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pseudotime_order_slicer&lt;-<span class="st"> </span><span class="kw">cell_order</span>(slicer_traj_graph, start)
+branches &lt;-<span class="st"> </span><span class="kw">assign_branches</span>(slicer_traj_graph, start)
+
+pseudotime_slicer &lt;-
+<span class="st">    </span><span class="kw">data.frame</span>(
+        <span class="dt">Timepoint =</span> cellLabels,
+        <span class="dt">pseudotime =</span> <span class="ot">NA</span>,
+        <span class="dt">State =</span> branches
+    )
+pseudotime_slicer$pseudotime[pseudotime_order_slicer] &lt;-
+<span class="st">    </span><span class="dv">1</span>:<span class="kw">length</span>(pseudotime_order_slicer)</code></pre></div>
+<p>We can again compare the inferred pseudotime to the known sampling timepoints. SLICER does not provide a pseudotime value per se, just an ordering of cells.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slicer_time_point &lt;-<span class="st"> </span><span class="kw">factor</span>(
+     pseudotime_slicer$Timepoint,
+     <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;early2cell&quot;</span>, <span class="st">&quot;mid2cell&quot;</span>, <span class="st">&quot;late2cell&quot;</span>, <span class="st">&quot;4cell&quot;</span>, <span class="st">&quot;8cell&quot;</span>,
+                   <span class="st">&quot;16cell&quot;</span>, <span class="st">&quot;earlyblast&quot;</span>, <span class="st">&quot;midblast&quot;</span>, <span class="st">&quot;lateblast&quot;</span>)
+)
+
+<span class="kw">plot</span>(
+    pseudotime_slicer$pseudotime,
+    slicer_time_point,
+    <span class="dt">xlab =</span> <span class="st">&quot;Pseudotime&quot;</span>,
+    <span class="dt">ylab =</span> <span class="st">&quot;Timepoint&quot;</span>,
+    <span class="dt">col =</span> colours[slicer_time_point],
+    <span class="dt">pch =</span> <span class="dv">16</span>
+)</code></pre></div>
+<p><img src="20-pseudotime_files/figure-html/slicer-vs-truth-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Like the previous method, SLICER here provides a good ordering for the early time points and struggles for later time points.</p>
+<p><strong>Exercise 4</strong> Do you get a better results if you use different “start” cells?</p>
+<p><strong>Exercise 5</strong> How does the ordering change if you use a different set of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?</p>
+</div>
 <div id="comparison-of-the-methods" class="section level2">
-<h2><span class="header-section-number">21.4</span> Comparison of the methods</h2>
+<h2><span class="header-section-number">21.5</span> Comparison of the methods</h2>
 <p>How do the trajectories inferred by TSCAN and Monocle compare?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">matched_ordering &lt;-
 <span class="st">    </span><span class="kw">match</span>(
@@ -507,10 +640,10 @@ timepoint_ordered &lt;-
     <span class="dt">pch =</span> <span class="dv">16</span>
 )</code></pre></div>
 <p><img src="20-pseudotime_files/figure-html/tscan-monocle-compare-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><strong>Exercise 4</strong> Compare destiny to TSCAN and Monocle.</p>
+<p><strong>Exercise 6</strong>: Compare destiny and SLICER to TSCAN and Monocle.</p>
 </div>
 <div id="expression-of-genes-through-time" class="section level2">
-<h2><span class="header-section-number">21.5</span> Expression of genes through time</h2>
+<h2><span class="header-section-number">21.6</span> Expression of genes through time</h2>
 <p>Each package also enables the visualization of expression through pseudotime.</p>
 <p><strong>TSCAN</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(deng) &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="kw">ncol</span>(deng)
@@ -525,8 +658,8 @@ TSCAN::<span class="kw">singlegeneplot</span>(
     <span class="dt">color_by =</span> <span class="st">&quot;timepoint&quot;</span>
 )</code></pre></div>
 <p><img src="20-pseudotime_files/figure-html/Obox6-monocle-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Of course, pseudotime values computed with any method can be added to the <code>pData</code> slot of an <code>SCESet</code> object. Having done that, the full plotting capabilities of the <code>scater</code> package can be used to investigate relationships between gene expression, cell populations and pseudotime.</p>
-<p><strong>Exercise 5</strong>: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes</p>
+<p>Of course, pseudotime values computed with any method can be added to the <code>pData</code> slot of an <code>SCESet</code> object. Having done that, the full plotting capabilities of the <code>scater</code> package can be used to investigate relationships between gene expression, cell populations and pseudotime. This would be particularly useful for the SLICER results, as SLICER does not provide plotting functions.</p>
+<p><strong>Exercise 7</strong>: Repeat the exercise using a subset of the genes, e.g. the set of highly variable genes that can be obtained using M3Drop::Brennecke_getVariableGenes</p>
 
 </div>
 </div>
@@ -534,6 +667,12 @@ TSCAN::<span class="kw">singlegeneplot</span>(
 <div id="refs" class="references">
 <div id="ref-Deng2014-mx">
 <p>Deng, Qiaolin, Daniel Ramsköld, Björn Reinius, and Rickard Sandberg. 2014. “Single-Cell RNA-seq Reveals Dynamic, Random Monoallelic Gene Expression in Mammalian Cells.” <em>Science</em> 343 (6167): 193–96.</p>
+</div>
+<div id="ref-Cannoodt2016-uj">
+<p>Cannoodt, Robrecht, Wouter Saelens, and Yvan Saeys. 2016. “Computational methods for trajectory inference from single-cell transcriptomics.” <em>European Journal of Immunology</em> 46 (11): 2496–2506. doi:<a href="https://doi.org/10.1002/eji.201646347">10.1002/eji.201646347</a>.</p>
+</div>
+<div id="ref-Welch2016-jr">
+<p>Welch, Joshua D, Alexander J Hartemink, and Jan F Prins. 2016. “SLICER: inferring branched, nonlinear cellular trajectories from single cell RNA-seq data.” <em>Genome Biology</em> 17 (1): 106. doi:<a href="https://doi.org/10.1186/s13059-016-0975-3">10.1186/s13059-016-0975-3</a>.</p>
 </div>
 </div>
             </section>
