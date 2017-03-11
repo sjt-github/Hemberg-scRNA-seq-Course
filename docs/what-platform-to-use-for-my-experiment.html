@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="normalization-for-library-size.html">
-<link rel="next" href="dealing-with-confounders.html">
+<link rel="prev" href="overview-of-experimental-methods-for-generating-scrna-seq-data.html">
+<link rel="next" href="construction-of-expression-matrix.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -361,104 +361,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="normalization-for-library-size-reads" class="section level1">
-<h1><span class="header-section-number">16</span> Normalization for library size (Reads)</h1>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-raw-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-raw-reads-1.png" alt="PCA plot of the blischak data" width="90%" />
-<p class="caption">
-Figure 16.1: PCA plot of the blischak data
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-raw-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-raw-reads-1.png" alt="Cell-wise RLE of the blischak data" width="90%" />
-<p class="caption">
-Figure 16.2: Cell-wise RLE of the blischak data
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-cpm-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-cpm-reads-1.png" alt="PCA plot of the blischak data after CPM normalisation" width="90%" />
-<p class="caption">
-Figure 16.3: PCA plot of the blischak data after CPM normalisation
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-cpm-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-cpm-reads-1.png" alt="Cell-wise RLE of the blischak data" width="90%" />
-<p class="caption">
-Figure 16.4: Cell-wise RLE of the blischak data
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-tmm-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-tmm-reads-1.png" alt="PCA plot of the blischak data after TMM normalisation" width="90%" />
-<p class="caption">
-Figure 16.5: PCA plot of the blischak data after TMM normalisation
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-tmm-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-tmm-reads-1.png" alt="Cell-wise RLE of the blischak data" width="90%" />
-<p class="caption">
-Figure 16.6: Cell-wise RLE of the blischak data
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-lsf-umi"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-lsf-umi-1.png" alt="PCA plot of the blischak data after LSF normalisation" width="90%" />
-<p class="caption">
-Figure 16.7: PCA plot of the blischak data after LSF normalisation
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-scran-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-scran-reads-1.png" alt="Cell-wise RLE of the blischak data" width="90%" />
-<p class="caption">
-Figure 16.8: Cell-wise RLE of the blischak data
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-rle-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-rle-reads-1.png" alt="PCA plot of the blischak data after RLE normalisation" width="90%" />
-<p class="caption">
-Figure 16.9: PCA plot of the blischak data after RLE normalisation
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-rle-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-rle-reads-1.png" alt="Cell-wise RLE of the blischak data" width="90%" />
-<p class="caption">
-Figure 16.10: Cell-wise RLE of the blischak data
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-uq-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-uq-reads-1.png" alt="PCA plot of the blischak data after UQ normalisation" width="90%" />
-<p class="caption">
-Figure 16.11: PCA plot of the blischak data after UQ normalisation
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-uq-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-uq-reads-1.png" alt="Cell-wise RLE of the blischak data" width="90%" />
-<p class="caption">
-Figure 16.12: Cell-wise RLE of the blischak data
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-downsample-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-downsample-reads-1.png" alt="PCA plot of the blischak data after downsampling" width="90%" />
-<p class="caption">
-Figure 16.13: PCA plot of the blischak data after downsampling
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-downsample-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-ours-rle-downsample-reads-1.png" alt="Cell-wise RLE of the blischak data" width="90%" />
-<p class="caption">
-Figure 16.14: Cell-wise RLE of the blischak data
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-fpkm-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-fpkm-reads-1.png" alt="PCA plot of the blischak data after FPKM normalisation" width="90%" />
-<p class="caption">
-Figure 16.15: PCA plot of the blischak data after FPKM normalisation
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:norm-pca-tpm-reads"></span>
-<img src="14-exprs-norm-reads_files/figure-html/norm-pca-tpm-reads-1.png" alt="PCA plot of the blischak data after TPM normalisation" width="90%" />
-<p class="caption">
-Figure 16.16: PCA plot of the blischak data after TPM normalisation
-</p>
-</div>
+<div id="what-platform-to-use-for-my-experiment" class="section level1">
+<h1><span class="header-section-number">5</span> What platform to use for my experiment?</h1>
+<p>The most suitable platform depends on the biological question at hand. For example, if one is interested in characterizing the composition of a tissue, then a droplet-based method which will allow a very large number of cells to be captured is likely to be the most appropriate. On the other hand, if one is interesting in characterizing a rare cell-population for which there is a known surface marker, then it is probably best to enrich using FACS and then sequence a smaller number of cells.</p>
+<p>Clearly, full-length transcript quantification will be more appropriate if one is interested in studying different isoforms since tagged protocols are much more limited. By contrast, UMIs can only be used with tagged protocols and they can facilitate gene-level quantification.</p>
 
 </div>
             </section>
@@ -466,8 +372,8 @@ Figure 16.16: PCA plot of the blischak data after TPM normalisation
           </div>
         </div>
       </div>
-<a href="normalization-for-library-size.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="dealing-with-confounders.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="overview-of-experimental-methods-for-generating-scrna-seq-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="construction-of-expression-matrix.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -495,7 +401,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/14-exprs-norm-reads.Rmd",
+"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/03-exp-methods.Rmd",
 "text": "Edit"
 },
 "download": ["scRNA-seq-course.pdf"],
