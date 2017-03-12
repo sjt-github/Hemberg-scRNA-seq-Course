@@ -6,6 +6,8 @@ knit: bookdown::preview_chapter
 
 
 
+Many analyses of scRNA-seq data take as their starting point an __expression matrix__. By convention, the each row of the expression matrix represents a gene and each column represents a cell. Each entry represents the expression level of a particular gene in a given cell. The units by which the expression is meassured depends on the protocol and the normalization strategy used.
+
 ## Reads QC
 
 The output from a scRNA-seq experiment is a large collection of cDNA reads. The first step is to ensure that the reads are of high quality. The quality control can be performed by using standard tools, such as [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) or [Kraken](http://www.ebi.ac.uk/research/enright/software/kraken). 
