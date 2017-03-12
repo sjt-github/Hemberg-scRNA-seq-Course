@@ -386,7 +386,7 @@ endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(umi.qc)
 Figure 13.1: PCA plot of the blischak data
 </p>
 </div>
-<p>scater allows one to identify principle components that correlate with experimental and QC variables of interest (it ranks principle components by <span class="math inline">\(R^2\)</span> from a linear model regressing PC value against the variable of interest).</p>
+<p>scater allows one to identify principal components that correlate with experimental and QC variables of interest (it ranks principle components by <span class="math inline">\(R^2\)</span> from a linear model regressing PC value against the variable of interest).</p>
 <p>Let’s test whether some of the variables correlate with any of the PCs.</p>
 <div id="detected-genes" class="section level3">
 <h3><span class="header-section-number">13.2.1</span> Detected genes</h3>
@@ -400,7 +400,7 @@ Figure 13.1: PCA plot of the blischak data
 Figure 13.2: PC correlation with the number of detected genes
 </p>
 </div>
-<p>Indeed, we can see that PC1 can be completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described <a href="http://biorxiv.org/content/early/2015/12/27/025528">here</a>.</p>
+<p>Indeed, we can see that PC1 can be almost completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described <a href="http://biorxiv.org/content/early/2015/12/27/025528">here</a>.</p>
 </div>
 </div>
 <div id="explanatory-variables" class="section level2">
@@ -421,7 +421,7 @@ Figure 13.2: PC correlation with the number of detected genes
 Figure 13.3: Explanatory variables
 </p>
 </div>
-<p>This analysis indicates that the number of detected genes (again) and also the sequencing depth (number of counts) have substantial explanatory power for many genes, so these variables are good candidates for conditioning out in a normalisation step, or including in downstream statistical models. Expression of ERCCs also appears to be an important explanatory variable.</p>
+<p>This analysis indicates that the number of detected genes (again) and also the sequencing depth (number of counts) have substantial explanatory power for many genes, so these variables are good candidates for conditioning out in a normalisation step, or including in downstream statistical models. Expression of ERCCs also appears to be an important explanatory variable. One notable feature of the above plot is that batch explains more than individual, what does that tell us about the technical and biological variability of the data?</p>
 </div>
 <div id="other-confounders" class="section level2">
 <h2><span class="header-section-number">13.4</span> Other confounders</h2>

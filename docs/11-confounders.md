@@ -37,7 +37,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
 <p class="caption">(\#fig:confound-pca)PCA plot of the blischak data</p>
 </div>
 
-scater allows one to identify principle components that correlate with experimental and QC variables of interest (it ranks principle components by $R^2$ from a linear model regressing PC value against the variable of interest).
+scater allows one to identify principal components that correlate with experimental and QC variables of interest (it ranks principle components by $R^2$ from a linear model regressing PC value against the variable of interest).
 
 Let's test whether some of the variables correlate with any of the PCs.
 
@@ -56,7 +56,7 @@ scater::plotQC(umi.qc[endog_genes, ],
 <p class="caption">(\#fig:confound-find-pcs-total-features)PC correlation with the number of detected genes</p>
 </div>
 
-Indeed, we can see that PC1 can be completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
+Indeed, we can see that PC1 can be almost completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
 
 ## Explanatory variables
 
@@ -80,7 +80,7 @@ scater::plotQC(umi.qc[endog_genes, ],
 <p class="caption">(\#fig:confound-find-expl-vars)Explanatory variables</p>
 </div>
 
-This analysis indicates that the number of detected genes (again) and also the sequencing depth (number of counts) have substantial explanatory power for many genes, so these variables are good candidates for conditioning out in a normalisation step, or including in downstream statistical models. Expression of ERCCs also appears to be an important explanatory variable.
+This analysis indicates that the number of detected genes (again) and also the sequencing depth (number of counts) have substantial explanatory power for many genes, so these variables are good candidates for conditioning out in a normalisation step, or including in downstream statistical models. Expression of ERCCs also appears to be an important explanatory variable. One notable feature of the above plot is that batch explains more than individual, what does that tell us about the technical and biological variability of the data?
 
 ## Other confounders
 
