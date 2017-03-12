@@ -424,9 +424,9 @@ Figure 7.3: Potential Errors in UMIs
 <ol style="list-style-type: decimal">
 <li><p><a href="https://github.com/CGATOxford/UMI-tools">UMI-tools’</a> directional-adjacency method implements a procedure which considers both the number of mismatches and the relative frequency of similar UMIs to identify likely PCR/sequencing errors.</p></li>
 <li><p>Currently an open question. The problem may be mitigated by removing UMIs with few reads to support their association with a particular transcript, or by removing all multi-mapping reads.</p></li>
-<li><p>Simple saturation (aka “collision probability”) correction proposed by <a href="http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html#methods">Grun, Kester and van Oudenaarden (2014)</a> :</p></li>
+<li><p>Simple saturation (aka “collision probability”) correction proposed by <a href="http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html#methods">Grun, Kester and van Oudenaarden (2014)</a> to estimate the true number of molecules <span class="math inline">\(M\)</span>:</p></li>
 </ol>
-<p><span class="math display">\[True \approx -N*log(1 - \frac{n}{N})\]</span> where N = total number of unique UMI barcodes and n = number of observations of a specific barcode. + An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content.</p>
+<p><span class="math display">\[M \approx -N*log(1 - \frac{n}{N})\]</span> where N = total number of unique UMI barcodes and n = number of observations of a specific barcode. + An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content.</p>
 <div class="figure" style="text-align: center"><span id="fig:intro-umi-amp"></span>
 <img src="figures/UMI-Seq-amp.png" alt="Per gene amplification rate" width="60%" />
 <p class="caption">
@@ -435,7 +435,7 @@ Figure 7.4: Per gene amplification rate
 </div>
 <p><strong>Exercise 1</strong> Blischak et al. used 6bp UMI barcodes for their experiments and you can load this data using the command below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">molecules &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;blischak/molecules.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</code></pre></div>
-<p>Correct this data for collisions and sequencing errors assuming a 1% per base-pair sequencing error rate.</p>
+<p>Estimate the true number of molecules by correcting for collisions and sequencing errors using the simple saturation approach. Assume a 1% per base-pair sequencing error rate and that the errors follow a binomial distribution.</p>
 </div>
 <div id="downstream-analysis" class="section level2">
 <h2><span class="header-section-number">7.5</span> Downstream Analysis</h2>
