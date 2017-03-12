@@ -375,9 +375,9 @@ endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(umi.qc)
 </div>
 <div id="visual-pca" class="section level2">
 <h2><span class="header-section-number">11.2</span> PCA plot</h2>
-<p>The easiest thing to overview the data is to transform it using the principal component analysis and then visualize the first two principal components.</p>
+<p>The easiest way to overview the data is by transforming it using the principal component analysis and then visualize the first two principal components.</p>
 <p><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Principal component analysis (PCA)</a> is a statistical procedure that uses a transformation to convert a set of observations into a set of values of linearly uncorrelated variables called principal components (PCs). The number of principal components is less than or equal to the number of original variables.</p>
-<p>Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. Typically, the eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from <a href="http://www.nlpca.org/pca_principal_component_analysis.html">here</a>).</p>
+<p>Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. The eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from <a href="http://www.nlpca.org/pca_principal_component_analysis.html">here</a>).</p>
 <div class="figure" style="text-align: center"><span id="fig:clust-pca"></span>
 <img src="figures/pca.png" alt="Schematic representation of PCA dimensionality reduction" width="100%" />
 <p class="caption">
@@ -415,7 +415,7 @@ Figure 11.3: PCA plot of the blischak data
 </div>
 <p>Comparing Figure <a href="data-visualization.html#fig:expr-overview-pca-before-qc">11.2</a> and Figure <a href="data-visualization.html#fig:expr-overview-pca-after-qc">11.3</a>, it is clear that after quality control the NA19098.r2 cells no longer form a group of outliers.</p>
 <p>By default only the top 500 most variable genes are used by scater to calculate the PCA. This can be adjusted by changing the <code>ntop</code> argument.</p>
-<p><strong>Exercise 1</strong> How do the PCA plots change if when all 14,214 genes are used? Or when only top 50 genes are used?</p>
+<p><strong>Exercise 1</strong> How do the PCA plots change if when all 14,214 genes are used? Or when only top 50 genes are used? Why does the fraction of variance accounted for by the first PC change so dramatically?</p>
 <p><strong>Our answer</strong></p>
 <div class="figure" style="text-align: center"><span id="fig:expr-overview-pca-after-qc-exercise1-1"></span>
 <img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-exercise1-1-1.png" alt="PCA plot of the blischak data (14214 genes)" width="90%" />
@@ -471,7 +471,7 @@ Figure 11.7: tSNE map of the blischak data
 <p>Interpreting PCA and tSNE plots is often challenging and due to their stochastic and non-linear nature, they are less intuitive. However, in this case it is clear that they provide a similar picture of the data. Comparing Figure <a href="data-visualization.html#fig:expr-overview-tsne-before-qc">11.6</a> and <a href="data-visualization.html#fig:expr-overview-tsne-after-qc">11.7</a>, it is again clear that the samples from NA19098.r2 are no longer outliers after the QC filtering.</p>
 <p>Furthermore tSNE requires you to provide a value of “perplexity” which reflects the number of neighbours used to build the nearest-neighbour network; a high value creates a dense network which clumps cells together while a low value makes the network more sparse allowing groups of cells to separate from each other. <strong>scater</strong> uses a default perplexity of the total number of cells divided by five (rounded down).</p>
 <p>You can read more about the pitfalls of using tSNE <a href="http://distill.pub/2016/misread-tsne/">here</a>.</p>
-<p><strong>Exercise 2</strong> How do the tSNE plots change when a perplexity of 10 or 200 is used?</p>
+<p><strong>Exercise 2</strong> How do the tSNE plots change when a perplexity of 10 or 200 is used? How does the choice of perplexity affect the interpretation of the results?</p>
 <p><strong>Our answer</strong></p>
 <div class="figure" style="text-align: center"><span id="fig:expr-overview-tsne-after-qc-exercise2-1"></span>
 <img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-exercise2-1-1.png" alt="tSNE map of the blischak data (perplexity = 10)" width="90%" />

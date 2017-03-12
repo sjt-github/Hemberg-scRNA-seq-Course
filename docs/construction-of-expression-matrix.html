@@ -363,7 +363,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="construction-of-expression-matrix" class="section level1">
 <h1><span class="header-section-number">6</span> Construction of expression matrix</h1>
-<p>Many analyses of scRNA-seq data take as their starting point an <strong>expression matrix</strong>. By convention, the each row of the expression matrix represents a gene and each column represents a cell. Each entry represents the expression level of a particular gene in a given cell. The units by which the expression is meassured depends on the protocol and the normalization strategy used.</p>
+<p>Many analyses of scRNA-seq data take as their starting point an <strong>expression matrix</strong>. By convention, the each row of the expression matrix represents a gene and each column represents a cell (although some authors use the transpose). Each entry represents the expression level of a particular gene in a given cell. The units by which the expression is meassured depends on the protocol and the normalization strategy used.</p>
 <div id="reads-qc" class="section level2">
 <h2><span class="header-section-number">6.1</span> Reads QC</h2>
 <p>The output from a scRNA-seq experiment is a large collection of cDNA reads. The first step is to ensure that the reads are of high quality. The quality control can be performed by using standard tools, such as <a href="http://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a> or <a href="http://www.ebi.ac.uk/research/enright/software/kraken">Kraken</a>.</p>
