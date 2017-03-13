@@ -236,7 +236,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="16" data-path="normalization-for-library-size-reads.html"><a href="normalization-for-library-size-reads.html"><i class="fa fa-check"></i><b>16</b> Normalization for library size (Reads)</a></li>
 <li class="chapter" data-level="17" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html"><i class="fa fa-check"></i><b>17</b> Dealing with confounders</a><ul>
-<li class="chapter" data-level="17.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#introduction-6"><i class="fa fa-check"></i><b>17.1</b> Introduction</a></li>
+<li class="chapter" data-level="17.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#introduction-6"><i class="fa fa-check"></i><b>17.1</b> Introduction</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#advantages-and-disadvantages-of-using-spike-ins-to-remove-confounders"><i class="fa fa-check"></i><b>17.1.1</b> Advantages and disadvantages of using spike-ins to remove confounders</a></li>
+<li class="chapter" data-level="17.1.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#how-to-evaluate-and-compare-confounder-removal-strategies"><i class="fa fa-check"></i><b>17.1.2</b> How to evaluate and compare confounder removal strategies</a></li>
+</ul></li>
 <li class="chapter" data-level="17.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#remove-unwanted-variation"><i class="fa fa-check"></i><b>17.2</b> Remove Unwanted Variation</a><ul>
 <li class="chapter" data-level="17.2.1" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#ruvg"><i class="fa fa-check"></i><b>17.2.1</b> RUVg</a></li>
 <li class="chapter" data-level="17.2.2" data-path="dealing-with-confounders.html"><a href="dealing-with-confounders.html#ruvs"><i class="fa fa-check"></i><b>17.2.2</b> RUVs</a></li>
@@ -265,11 +268,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="19" data-path="clustering-introduction.html"><a href="clustering-introduction.html"><i class="fa fa-check"></i><b>19</b> Clustering Introduction</a><ul>
 <li class="chapter" data-level="19.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#introduction-7"><i class="fa fa-check"></i><b>19.1</b> Introduction</a></li>
-<li class="chapter" data-level="19.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#dimensionality-reductions"><i class="fa fa-check"></i><b>19.2</b> Dimensionality reductions</a><ul>
-<li class="chapter" data-level="19.2.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#pca"><i class="fa fa-check"></i><b>19.2.1</b> PCA</a></li>
-<li class="chapter" data-level="19.2.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#spectral"><i class="fa fa-check"></i><b>19.2.2</b> Spectral</a></li>
-<li class="chapter" data-level="19.2.3" data-path="clustering-introduction.html"><a href="clustering-introduction.html#tsne"><i class="fa fa-check"></i><b>19.2.3</b> tSNE</a></li>
-</ul></li>
+<li class="chapter" data-level="19.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#dimensionality-reductions"><i class="fa fa-check"></i><b>19.2</b> Dimensionality reductions</a></li>
 <li class="chapter" data-level="19.3" data-path="clustering-introduction.html"><a href="clustering-introduction.html#clustering-methods"><i class="fa fa-check"></i><b>19.3</b> Clustering methods</a><ul>
 <li class="chapter" data-level="19.3.1" data-path="clustering-introduction.html"><a href="clustering-introduction.html#hierarchical-clustering"><i class="fa fa-check"></i><b>19.3.1</b> Hierarchical clustering</a></li>
 <li class="chapter" data-level="19.3.2" data-path="clustering-introduction.html"><a href="clustering-introduction.html#k-means"><i class="fa fa-check"></i><b>19.3.2</b> k-means</a></li>
@@ -363,31 +362,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="clustering-introduction" class="section level1">
 <h1><span class="header-section-number">19</span> Clustering Introduction</h1>
-<p>Once we have normalized the data and removed confounders we can carry out analyses that will allow us to interpret the data biologically. The exact nature of the analysis depends on the dataset and the biological question at hand. Nevertheless, there are a few operations which are useful in a wide range of contexts and we will be discussing some of them. We will start with the clustering of scRNA-seq data.</p>
+<p>Once we have normalized the data and removed confounders we can carry out analyses that are relevant to the biological questions at hand. The exact nature of the analysis depends on the dataset. Nevertheless, there are a few aspects that are useful in a wide range of contexts and we will be discussing some of them in the next few chapters. We will start with the clustering of scRNA-seq data.</p>
 <div id="introduction-7" class="section level2">
 <h2><span class="header-section-number">19.1</span> Introduction</h2>
-<p>One of the most promising applications of scRNA-seq is the discovery and annotation of cell-types based on the transcription profiles. Computationally, this is a hard problem as it amounts to <strong>unsupervised clustering</strong>. That is, we need to identify groups of cells based on the similarities of the transcriptomes without any prior knowledge of the labels. The problem is made more challenging due to the high level of noise and the large number of dimensions (i.e. genes).</p>
+<p>One of the most promising applications of scRNA-seq is <em>de novo</em> discovery and annotation of cell-types based on transcription profiles. Computationally, this is a hard problem as it amounts to <strong>unsupervised clustering</strong>. That is, we need to identify groups of cells based on the similarities of the transcriptomes without any prior knowledge of the labels. Moreover, in most situations we do not even know the number of clusters <em>a priori</em>. The problem is made even more challenging due to the high level of noise (both technical and biological) and the large number of dimensions (i.e. genes).</p>
 </div>
 <div id="dimensionality-reductions" class="section level2">
 <h2><span class="header-section-number">19.2</span> Dimensionality reductions</h2>
-<p>When working with large datasets, it can often be beneficial to apply some sort of dimensionality reduction method. By projecting the data onto a lower-dimensional sub-space, one is often able to significantly reduce the amount of noise. An additional benefit is that it is typically much easier to visualize the data in a 2 or 3-dimensional subspace. Here we will introduce some of the popular dimensionality reduction methods.</p>
-<div id="pca" class="section level3">
-<h3><span class="header-section-number">19.2.1</span> PCA</h3>
-<p>PCA analysis was introduced in chapter <a href="data-visualization.html#visual-pca">11.2</a>.</p>
-</div>
-<div id="spectral" class="section level3">
-<h3><span class="header-section-number">19.2.2</span> Spectral</h3>
-<p>Spectral decomposition is the factorization of a matrix into a canonical form, whereby the matrix is represented in terms of its eigenvalues and eigenvectors.</p>
-<p>In application to scRNA-seq data, the matrix can be either an input expression matrix, or matrix of distances between the cells. The computed eigenvectors are similar to the projections of the data to PCs (chapter <a href="data-visualization.html#visual-pca">11.2</a>.).</p>
-</div>
-<div id="tsne" class="section level3">
-<h3><span class="header-section-number">19.2.3</span> tSNE</h3>
-<p>tSNE analysis was introduced in chapter <a href="data-visualization.html#visual-tsne">11.3</a>.</p>
-</div>
+<p>When working with large datasets, it can often be beneficial to apply some sort of dimensionality reduction method. By projecting the data onto a lower-dimensional sub-space, one is often able to significantly reduce the amount of noise. An additional benefit is that it is typically much easier to visualize the data in a 2 or 3-dimensional subspace. We have already discussed PCA (chapter <a href="data-visualization.html#visual-pca">11.2</a>) and t-SNE (chapter <a href="data-visualization.html#visual-pca">11.2</a>).</p>
 </div>
 <div id="clustering-methods" class="section level2">
 <h2><span class="header-section-number">19.3</span> Clustering methods</h2>
-<p><strong>Unsupervised clustering</strong> is useful in many different applications and it has been widely studied in machine learning. Some of the most popular approaches are discussed below.</p>
+<p><strong>Unsupervised clustering</strong> is useful in many different applications and it has been widely studied in machine learning. Some of the most popular approaches are <strong>hierarchical clustering</strong>, <strong>k-means clustering</strong> and <strong>graph-based clustering</strong>.</p>
 <div id="hierarchical-clustering" class="section level3">
 <h3><span class="header-section-number">19.3.1</span> Hierarchical clustering</h3>
 <p>In <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering">hierarchical clustering</a>, one can use either a bottom-up or a top-down approach. In the former case, each cell is initially assigned to its own cluster and pairs of clusters are subsequently merged to create a hieararchy:</p>
@@ -425,7 +411,7 @@ Figure 19.3: Schematic representation of the k-means clustering
 Figure 19.4: Schematic representation of the graph network
 </p>
 </div>
-<p>Some of these methods can be applied to scRNA-seq data and one example is the method, which is based on the concept of identifying groups of tightly connected nodes.</p>
+<p>Some of these methods can be applied to scRNA-seq data by building a graph where each node represents a cell. Note that constructing the graph and assigning weights to the edges is not trivial. One advantage of graph-based methods is that some of them are very efficient and can be applied to networks containing millions of nodes.</p>
 </div>
 </div>
 <div id="challenges-in-clustering" class="section level2">
