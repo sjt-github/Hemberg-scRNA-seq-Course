@@ -26,12 +26,12 @@ sub-clones co-existing within the same patient.
 
 ## Patient dataset
 
-Traditionally, clonal heterogeneity has been assessed by genotyping
-sub-clones. Genotyping through Sanger sequencing of two key loci has
-been carried out for this patient and it has revealed the presence of
-3 different sub-clones (WT, WT/Tet2 and Jak2/Tet2). Our goal is to
+Traditionally, clonal heterogeneity is assessed by genotyping
+sub-clones. Genotyping through Sanger sequencing of two key loci (missense mutations of the Jak2 and Tet2 genes) has
+been carried out for this patient and has revealed the presence of
+3 different sub-clones (WT/WT, WT/Tet2 and Jak2/Tet2). Our goal is to
 identify clusters corresponding to the three genotypes from the
-scRNA-seq data.
+scRNA-seq data. Although genotyping allows us to identify the different sub-clones, it does not provide any information about their transcriptome. By characterizing the transcriptomes we could obtain new insights, e.g. identify marker genes that would allow us to sort the cells using FACS or to understand which pathways are affected by the different mutants.
 
 
 ```r
@@ -45,7 +45,7 @@ Now we are ready to cluster the data using the methods described in the previous
 
 ## SC3
 
-`SC3` is a purely clustering tool and it does not provide functions for the sequencing quality control (QC) or normalisation. On the contrary it is expected that these preprocessing steps are performed by a user in advance. To encourage the preprocessing, SC3 is built on top of the [scater](http://bioconductor.org/packages/scater/) package (see previous chapters). To our knowledge the scater is the most comprehensive toolkit for the QC and normalisation analysis of the single-cell RNA-Seq data.
+`SC3` is a clustering tool and it does not provide functions for the sequencing quality control (QC) or normalisation. On the contrary, it is expected that these preprocessing steps are performed by a user in advance. To facilitate the preprocessing, SC3 is integrated with the [scater](http://bioconductor.org/packages/scater/) package (see previous chapters). To the best of our knowledge scater is the most comprehensive toolkit for the QC and normalisation analysis of the single-cell RNA-Seq data.
 
 If you already have an object of `scater` class `SCESet` then you should proceed to the next code chunk. If you have a matrix containing cell/gene expression values then you can create a `scater` object using your matrix:
 
@@ -62,13 +62,13 @@ patient.sceset <- sc3(patient.sceset, ks = 2:5, k_estimator = TRUE, biology = TR
 
 When the clustering is done you will be able to visualise the clustering results in many different ways. See the [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details.
 
-`SC3` also has a useful function for summarising/visualising the results in the interactive `Shiny` session:
+`SC3` also has a useful function for summarising/visualising the results in an interactive `Shiny` session:
 
 ```r
 sc3_interactive(patient.sceset)
 ```
 
-This command will open `SC3` in a web browser. Once it is opened please perform the following exercises:
+This command will open `SC3` in a web browser. Once it has opened please perform the following exercises:
 
 * __Exercise 1__: Explore different clustering solutions for $k$ from 2
 to 5. Also try to change the consensus averaging by checking and
@@ -90,7 +90,7 @@ panel.
 
 ## pcaReduce
 
-`pcaReduce` does not provide QC or normalisation function neither. It operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will used the default `SC3` gene filter
+`pcaReduce` is another clustering tool and it does not provide QC or normalisation. Unlike `SC3` which operates on the distance matrix, `pcaReduce` operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will used the default `SC3` gene filter to remove highly and lowly expressed genes.
 
 
 
@@ -103,7 +103,7 @@ input.log <- log2(input + 1)
 ```
 
 There are several parameters used by `pcaReduce`:
-* `nbt` defines a number of `pcaReduce` runs (it is stochastic and may have different solutions after different runs)
+* `nbt` defines a number of `pcaReduce` runs (the method is stochastic and may have different solutions after different runs)
 * `q` defines number of dimensions to start clustering with. The output will contain partitions for all $k$ from 2 to q+1.
 * `method` defines a method used for clustering. `S` - to perform sampling based merging, `M` - to perform merging based on largest probability.
 
@@ -147,12 +147,11 @@ __Our solutions__:
 </div>
 
 __Exercise 7__: Compare the results between `SC3` and `pcaReduce`. What is
-the main difference between the solutions provided by the two
-different methods?
+the main difference between the solutions?
 
 ## tSNE + kmeans
 
-[tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. We can create a similar plots explicitly:
+[tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) were made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. We can create similar plots explicitly:
 
 ```r
 tsne_out <- Rtsne::Rtsne(t(input.log), perplexity = 10)
@@ -214,6 +213,8 @@ tsne.res <- scRNA.seq.funcs::tsne_mult(input.log, 3, 10)
 res <- unique(do.call(rbind, tsne.res))
 ```
 
+`SC3` is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.
+
 __Exercise 9__: Visualize the different clustering solutions using a
 heatmap. Then run tSNE+kmeans algorithm with $k = 2$ or $k = 4$ and
 see how the clustering looks like in these cases.
@@ -235,7 +236,7 @@ see how the clustering looks like in these cases.
 
 ## SNN-Cliq
 
-Here we run SNN-cliq with te default parameters provided in the author's example:
+Here we run SNN-cliq with the default parameters provided used in the authors' example:
 
 
 ```r
@@ -282,7 +283,7 @@ __Exercise 10__: How can you characterize the solution identified by SNN-Cliq? R
 
 ## SINCERA
 
-As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
+As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. It is important to keep in mind is that `SINCERA` performs a gene-level z-score transformation before clustering:
 
 
 ```r
@@ -330,7 +331,7 @@ __Exercise 12__: Is using the singleton cluster criteria for finding __k__ a goo
 
 Here we follow an [example](http://satijalab.org/seurat/seurat_clustering_tutorial_part1.html) created by the authors of SEURAT. We had to introduce some modifications due to the errors produced by the original code:
 
-__Note__ In the newest versions of SEURAT (v. 1.3-1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. In this tutorial we are still using an old version (v. 1.2) of `SEURAT` (this will be updated by the next time this course is run - approximately Spring 2017):
+__Note__ In the newest versions of SEURAT (v. 1.3-1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. In this tutorial we are still using an old version (v. 1.2) of `SEURAT` (this will be updated by the next time this course is run - approximately Fall 2017):
 
 
 ```r

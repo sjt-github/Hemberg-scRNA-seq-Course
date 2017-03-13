@@ -374,23 +374,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>To illustrate clustering of scRNA-seq data, we consider a dataset of hematopoietic stem cells (HSCs) collected from a patient with <a href="https://en.wikipedia.org/wiki/Myeloproliferative_neoplasm">myeloproliferative neoplasm (MPN)</a>. It is well known that this disease is highly heterogeneous with multiple sub-clones co-existing within the same patient.</p>
 <div id="patient-dataset" class="section level2">
 <h2><span class="header-section-number">20.1</span> Patient dataset</h2>
-<p>Traditionally, clonal heterogeneity has been assessed by genotyping sub-clones. Genotyping through Sanger sequencing of two key loci has been carried out for this patient and it has revealed the presence of 3 different sub-clones (WT, WT/Tet2 and Jak2/Tet2). Our goal is to identify clusters corresponding to the three genotypes from the scRNA-seq data.</p>
+<p>Traditionally, clonal heterogeneity is assessed by genotyping sub-clones. Genotyping through Sanger sequencing of two key loci (missense mutations of the Jak2 and Tet2 genes) has been carried out for this patient and has revealed the presence of 3 different sub-clones (WT/WT, WT/Tet2 and Jak2/Tet2). Our goal is to identify clusters corresponding to the three genotypes from the scRNA-seq data. Although genotyping allows us to identify the different sub-clones, it does not provide any information about their transcriptome. By characterizing the transcriptomes we could obtain new insights, e.g. identify marker genes that would allow us to sort the cells using FACS or to understand which pathways are affected by the different mutants.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient.data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;clustering/patient.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</code></pre></div>
 <p>For convenience we have performed all quality control and normalization steps (SF + RUVg) in advance. The dataset contains 51 cells and 8710 genes.</p>
 <p>Now we are ready to cluster the data using the methods described in the previous chapter.</p>
 </div>
 <div id="sc3-1" class="section level2">
 <h2><span class="header-section-number">20.2</span> SC3</h2>
-<p><code>SC3</code> is a purely clustering tool and it does not provide functions for the sequencing quality control (QC) or normalisation. On the contrary it is expected that these preprocessing steps are performed by a user in advance. To encourage the preprocessing, SC3 is built on top of the <a href="http://bioconductor.org/packages/scater/">scater</a> package (see previous chapters). To our knowledge the scater is the most comprehensive toolkit for the QC and normalisation analysis of the single-cell RNA-Seq data.</p>
+<p><code>SC3</code> is a clustering tool and it does not provide functions for the sequencing quality control (QC) or normalisation. On the contrary, it is expected that these preprocessing steps are performed by a user in advance. To facilitate the preprocessing, SC3 is integrated with the <a href="http://bioconductor.org/packages/scater/">scater</a> package (see previous chapters). To the best of our knowledge scater is the most comprehensive toolkit for the QC and normalisation analysis of the single-cell RNA-Seq data.</p>
 <p>If you already have an object of <code>scater</code> class <code>SCESet</code> then you should proceed to the next code chunk. If you have a matrix containing cell/gene expression values then you can create a <code>scater</code> object using your matrix:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient.sceset &lt;-<span class="st"> </span><span class="kw">newSCESet</span>(<span class="dt">countData =</span> patient.data)
 patient.sceset &lt;-<span class="st"> </span><span class="kw">calculateQCMetrics</span>(patient.sceset)</code></pre></div>
 <p>Now we are ready ro run the <code>SC3</code> clustering:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient.sceset &lt;-<span class="st"> </span><span class="kw">sc3</span>(patient.sceset, <span class="dt">ks =</span> <span class="dv">2</span>:<span class="dv">5</span>, <span class="dt">k_estimator =</span> <span class="ot">TRUE</span>, <span class="dt">biology =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>When the clustering is done you will be able to visualise the clustering results in many different ways. See the <a href="http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html">SC3 vignette</a> for more details.</p>
-<p><code>SC3</code> also has a useful function for summarising/visualising the results in the interactive <code>Shiny</code> session:</p>
+<p><code>SC3</code> also has a useful function for summarising/visualising the results in an interactive <code>Shiny</code> session:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sc3_interactive</span>(patient.sceset)</code></pre></div>
-<p>This command will open <code>SC3</code> in a web browser. Once it is opened please perform the following exercises:</p>
+<p>This command will open <code>SC3</code> in a web browser. Once it has opened please perform the following exercises:</p>
 <ul>
 <li><p><strong>Exercise 1</strong>: Explore different clustering solutions for <span class="math inline">\(k\)</span> from 2 to 5. Also try to change the consensus averaging by checking and unchecking distance and transformation check boxes in the left panel of <strong>SC3</strong>.</p></li>
 <li><p><strong>Exercise 2</strong>: Based on the genotyping and <code>SC3</code> prediction, we strongly believe that <span class="math inline">\(k =3\)</span> provides the best clustering. What evidence do you find for this in the clustering? How can you use the <a href="https://en.wikipedia.org/wiki/Silhouette_%28clustering%29">silhouette plots</a> to motivate choosing the value of <span class="math inline">\(k\)</span> that you think looks best?</p></li>
@@ -401,12 +401,12 @@ patient.sceset &lt;-<span class="st"> </span><span class="kw">calculateQCMetrics
 </div>
 <div id="pcareduce-1" class="section level2">
 <h2><span class="header-section-number">20.3</span> pcaReduce</h2>
-<p><code>pcaReduce</code> does not provide QC or normalisation function neither. It operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running <code>pcaReduce</code>. We will used the default <code>SC3</code> gene filter</p>
+<p><code>pcaReduce</code> is another clustering tool and it does not provide QC or normalisation. Unlike <code>SC3</code> which operates on the distance matrix, <code>pcaReduce</code> operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running <code>pcaReduce</code>. We will used the default <code>SC3</code> gene filter to remove highly and lowly expressed genes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use the same gene filter as in SC3</span>
 input &lt;-<span class="st"> </span>patient.data[<span class="kw">fData</span>(patient.sceset)$sc3_gene_filter, ]
 <span class="co"># log transform before the analysis</span>
 input.log &lt;-<span class="st"> </span><span class="kw">log2</span>(input +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
-<p>There are several parameters used by <code>pcaReduce</code>: * <code>nbt</code> defines a number of <code>pcaReduce</code> runs (it is stochastic and may have different solutions after different runs) * <code>q</code> defines number of dimensions to start clustering with. The output will contain partitions for all <span class="math inline">\(k\)</span> from 2 to q+1. * <code>method</code> defines a method used for clustering. <code>S</code> - to perform sampling based merging, <code>M</code> - to perform merging based on largest probability.</p>
+<p>There are several parameters used by <code>pcaReduce</code>: * <code>nbt</code> defines a number of <code>pcaReduce</code> runs (the method is stochastic and may have different solutions after different runs) * <code>q</code> defines number of dimensions to start clustering with. The output will contain partitions for all <span class="math inline">\(k\)</span> from 2 to q+1. * <code>method</code> defines a method used for clustering. <code>S</code> - to perform sampling based merging, <code>M</code> - to perform merging based on largest probability.</p>
 <p>We will run <code>pcaReduce</code> 10 times:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run pcaReduce 10 times creating hierarchies from 1 to 30 clusters</span>
 pca.red &lt;-<span class="st"> </span><span class="kw">PCAreduce</span>(<span class="kw">t</span>(input.log), <span class="dt">nbt =</span> <span class="dv">10</span>, <span class="dt">q =</span> <span class="dv">30</span>, <span class="dt">method =</span> <span class="st">&#39;S&#39;</span>)</code></pre></div>
@@ -440,11 +440,11 @@ Figure 20.3: Clustering solutions of pcaReduce method after running it for 10 ti
 Figure 20.4: Clustering solutions of pcaReduce method after running it for 10 times and selecting <span class="math inline">\(k=5\)</span>.
 </p>
 </div>
-<p><strong>Exercise 7</strong>: Compare the results between <code>SC3</code> and <code>pcaReduce</code>. What is the main difference between the solutions provided by the two different methods?</p>
+<p><strong>Exercise 7</strong>: Compare the results between <code>SC3</code> and <code>pcaReduce</code>. What is the main difference between the solutions?</p>
 </div>
 <div id="tsne-kmeans" class="section level2">
 <h2><span class="header-section-number">20.4</span> tSNE + kmeans</h2>
-<p><a href="https://lvdmaaten.github.io/tsne/">tSNE</a> plots that we saw before (<a href="data-visualization.html#visual-tsne">11.3</a>) when used the <strong>scater</strong> package are made by using the <a href="https://cran.r-project.org/web/packages/Rtsne/index.html">Rtsne</a> and <a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a> packages. We can create a similar plots explicitly:</p>
+<p><a href="https://lvdmaaten.github.io/tsne/">tSNE</a> plots that we saw before (<a href="data-visualization.html#visual-tsne">11.3</a>) were made by using the <a href="https://cran.r-project.org/web/packages/Rtsne/index.html">Rtsne</a> and <a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a> packages. We can create similar plots explicitly:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tsne_out &lt;-<span class="st"> </span>Rtsne::<span class="kw">Rtsne</span>(<span class="kw">t</span>(input.log), <span class="dt">perplexity =</span> <span class="dv">10</span>)
 df_to_plot &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(tsne_out$Y)
 comps &lt;-<span class="st"> </span><span class="kw">colnames</span>(df_to_plot)[<span class="dv">1</span>:<span class="dv">2</span>]
@@ -486,6 +486,7 @@ Figure 20.6: tSNE map of the patient data with 2 colored clusters, identified by
 <p>As you may have noticed, both <code>pcaReduce</code> and <code>tSNE+kmeans</code> are stochastic and give different results every time they are run. To get a better overview of the solutions, we need to run the methods multiple times. Here we run <strong>tSNE+kmeans</strong> clustering 10 times with <span class="math inline">\(k = 3\)</span> (with perplexity = 10):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tsne.res &lt;-<span class="st"> </span>scRNA.seq.funcs::<span class="kw">tsne_mult</span>(input.log, <span class="dv">3</span>, <span class="dv">10</span>)
 res &lt;-<span class="st"> </span><span class="kw">unique</span>(<span class="kw">do.call</span>(rbind, tsne.res))</code></pre></div>
+<p><code>SC3</code> is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.</p>
 <p><strong>Exercise 9</strong>: Visualize the different clustering solutions using a heatmap. Then run tSNE+kmeans algorithm with <span class="math inline">\(k = 2\)</span> or <span class="math inline">\(k = 4\)</span> and see how the clustering looks like in these cases.</p>
 <div class="figure" style="text-align: center"><span id="fig:clust-tsne-kmeans3"></span>
 <img src="18-clustering_files/figure-html/clust-tsne-kmeans3-1.png" alt="Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=3$" width="672" />
@@ -508,7 +509,7 @@ Figure 20.9: Clustering solutions of tSNE+kmeans method after running it for 10 
 </div>
 <div id="snn-cliq-1" class="section level2">
 <h2><span class="header-section-number">20.5</span> SNN-Cliq</h2>
-<p>Here we run SNN-cliq with te default parameters provided in the author’s example:</p>
+<p>Here we run SNN-cliq with the default parameters provided used in the authors’ example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">distan &lt;-<span class="st"> &quot;euclidean&quot;</span>
 par.k &lt;-<span class="st"> </span><span class="dv">3</span>
 par.r &lt;-<span class="st"> </span><span class="fl">0.7</span>
@@ -544,7 +545,7 @@ snn.res &lt;-<span class="st"> </span>
 </div>
 <div id="sincera-1" class="section level2">
 <h2><span class="header-section-number">20.6</span> SINCERA</h2>
-<p>As mentioned in the previous chapter <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a> is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:</p>
+<p>As mentioned in the previous chapter <a href="https://research.cchmc.org/pbge/sincera.html">SINCERA</a> is based on hierarchical clustering. It is important to keep in mind is that <code>SINCERA</code> performs a gene-level z-score transformation before clustering:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># perform gene-by-gene per-sample z-score transformation</span>
 dat &lt;-<span class="st"> </span><span class="kw">apply</span>(input, <span class="dv">1</span>, function(y) scRNA.seq.funcs::<span class="kw">z.transform.helper</span>(y))
 <span class="co"># hierarchical clustering</span>
@@ -578,7 +579,7 @@ Figure 20.10: Clustering solutions of SINCERA method using <span class="math inl
 <div id="seurat-1" class="section level2">
 <h2><span class="header-section-number">20.7</span> SEURAT</h2>
 <p>Here we follow an <a href="http://satijalab.org/seurat/seurat_clustering_tutorial_part1.html">example</a> created by the authors of SEURAT. We had to introduce some modifications due to the errors produced by the original code:</p>
-<p><strong>Note</strong> In the newest versions of SEURAT (v. 1.3-1.4) the tSNE is now used exclusively for visualization, and clustering is based on a <em>community detection</em> approach similar to one previously proposed for analyzing CyTOF data <span class="citation">(Levine et al. <a href="#ref-Levine2015-fk">2015</a>)</span>. In this tutorial we are still using an old version (v. 1.2) of <code>SEURAT</code> (this will be updated by the next time this course is run - approximately Spring 2017):</p>
+<p><strong>Note</strong> In the newest versions of SEURAT (v. 1.3-1.4) the tSNE is now used exclusively for visualization, and clustering is based on a <em>community detection</em> approach similar to one previously proposed for analyzing CyTOF data <span class="citation">(Levine et al. <a href="#ref-Levine2015-fk">2015</a>)</span>. In this tutorial we are still using an old version (v. 1.2) of <code>SEURAT</code> (this will be updated by the next time this course is run - approximately Fall 2017):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Seurat)
 <span class="co"># Create a SEURAT object</span>
 d &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;seurat&quot;</span>, <span class="dt">raw.data =</span> <span class="kw">as.data.frame</span>(<span class="kw">log</span>(patient.data +<span class="st"> </span><span class="dv">1</span>)))
