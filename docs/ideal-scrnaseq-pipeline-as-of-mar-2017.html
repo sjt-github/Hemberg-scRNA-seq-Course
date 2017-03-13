@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="introduction-to-single-cell-rna-seq.html">
+<link rel="prev" href="de-in-a-real-dataset.html">
+<link rel="next" href="advanced-exercises.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -360,116 +360,110 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="technical-requirements" class="section level1">
-<h1><span class="header-section-number">2</span> Technical requirements</h1>
-<p>This course is based on the popular programming language <a href="https://www.r-project.org/">R</a>. However, one of the methods that we describe (<a href="http://bioinfo.uncc.edu/SNNCliq/">SNN-Cliq</a>) is only partly R-based. It makes a simple <em>python</em> call from R and requires a user to have write permissions to the working directory.</p>
-<p>To be able to run all code chunks of the course one needs to clone or download the <a href="https://github.com/hemberg-lab/scRNA.seq.course">course GitHub repository</a> and start an R session in the cloned folder.</p>
-<p>One also needs to install the following R packages (ordered by purposes):</p>
-<div id="general" class="section level2">
-<h2><span class="header-section-number">2.1</span> General</h2>
-<p><a href="https://cran.r-project.org/web/packages/devtools/index.html">devtools</a> for installing packages from GitHub:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</code></pre></div>
-<p><a href="http://bioconductor.org/packages/BiocInstaller">BiocInstaller</a> for installing packages from BioConductor:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&#39;https://bioconductor.org/biocLite.R&#39;</span>)
-<span class="kw">biocLite</span>(<span class="st">&#39;BiocInstaller&#39;</span>)</code></pre></div>
-<p><a href="https://github.com/hemberg-lab/scRNA.seq.funcs">scRNA.seq.funcs</a> - R package containing some special functions used in this course:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;hemberg-lab/scRNA.seq.funcs&quot;</span>)</code></pre></div>
-</div>
-<div id="plotting" class="section level2">
-<h2><span class="header-section-number">2.2</span> Plotting</h2>
-<p><a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a> for plotting general plots:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)</code></pre></div>
-<p><a href="https://cran.r-project.org/web/packages/pheatmap/index.html">pheatmap</a> for plotting heatmaps:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;pheatmap&quot;</span>)</code></pre></div>
-<p><a href="https://bioconductor.org/packages/limma">limma</a> for plotting Venn diagrams:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;limma&quot;</span>)</code></pre></div>
-</div>
-<div id="qc-and-normalisation" class="section level2">
-<h2><span class="header-section-number">2.3</span> QC and normalisation</h2>
-<p><a href="http://bioconductor.org/packages/scater">scater</a> is a single-cell analysis toolkit for expression:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&#39;https://bioconductor.org/biocLite.R&#39;</span>)
-<span class="kw">biocLite</span>(<span class="st">&#39;scater&#39;</span>)</code></pre></div>
-<p><a href="https://cran.r-project.org/web/packages/mvoutlier/index.html">mvoutlier</a> - for an automatic outlier detection used by the <a href="https://github.com/davismcc/scater">scater</a> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;mvoutlier&quot;</span>)</code></pre></div>
-<p><a href="https://cran.r-project.org/web/packages/statmod/index.html">statmod</a> - a dependency for <a href="https://cran.r-project.org/web/packages/mvoutlier/index.html">mvoutlier</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;statmod&quot;</span>)</code></pre></div>
-<p><a href="https://cran.r-project.org/web/packages/Rtsne/index.html">Rtsne</a> for Rtsne data embedding:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;Rtsne&quot;</span>)</code></pre></div>
-<p><a href="http://bioconductor.org/packages/scran">scran</a> for a new single cell normalisation method (LSF):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&#39;https://bioconductor.org/biocLite.R&#39;</span>)
-<span class="kw">biocLite</span>(<span class="st">&#39;scran&#39;</span>)</code></pre></div>
-<p><a href="https://bioconductor.org/packages/RUVSeq">RUVSeq</a> for normalization using ERCC controls:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;RUVSeq&quot;</span>)</code></pre></div>
-</div>
-<div id="clustering" class="section level2">
-<h2><span class="header-section-number">2.4</span> Clustering</h2>
-<p><a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a> for unsupervised clustering of scRNA-seq data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;JustinaZ/pcaReduce&quot;</span>)</code></pre></div>
-<p><a href="http://bioconductor.org/pcaMethods">pcaMethods</a> is a <a href="https://github.com/JustinaZ/pcaReduce">pcaReduce</a> dependency:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;pcaMethods&quot;</span>)</code></pre></div>
-<p><a href="http://bioconductor.org/packages/SC3">SC3</a> for unsupervised clustering of scRNA-seq data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;SC3&quot;</span>)</code></pre></div>
-<p><a href="https://github.com/satijalab/seurat">SEURAT</a> for density clustering of scRNA-seq data (at the moment we are using an old version of this package - v. 1.3):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&#39;satijalab/seurat&#39;</span>, <span class="dt">ref =</span> <span class="st">&#39;da6cd08&#39;</span>)</code></pre></div>
-</div>
-<div id="dropouts" class="section level2">
-<h2><span class="header-section-number">2.5</span> Dropouts</h2>
-<p><a href="http://bioconductor.org/packages/M3Drop">M3Drop</a> for identification of important and DE genes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;tallulandrews/M3D&quot;</span>)</code></pre></div>
-</div>
-<div id="pseudotime" class="section level2">
-<h2><span class="header-section-number">2.6</span> Pseudotime</h2>
-<p><a href="https://bioconductor.org/packages/TSCAN">TSCAN</a> for pseudotime analysis:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;TSCAN&quot;</span>)</code></pre></div>
-<p><a href="https://bioconductor.org/packages/monocle">monocle</a> for pseudotime analysis:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;monocle&quot;</span>)</code></pre></div>
-<p><a href="https://bioconductor.org/packages/destiny">destiny</a> for pseudotime analysis:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;destiny&quot;</span>)</code></pre></div>
-</div>
-<div id="differential-expression" class="section level2">
-<h2><span class="header-section-number">2.7</span> Differential Expression</h2>
-<p><a href="https://cran.r-project.org/web/packages/ROCR/index.html">ROCR</a> for performance estimations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;ROCR&quot;</span>)</code></pre></div>
-<p><a href="https://bioconductor.org/packages/edgeR">edgeR</a> for identification of differentially expressed genes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;edgeR&quot;</span>)</code></pre></div>
-<p><a href="https://bioconductor.org/packages/DESeq2">DESeq2</a> for identification of differentially expressed genes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;DESeq2&quot;</span>)</code></pre></div>
-<p><a href="http://hms-dbmi.github.io/scde/">scde</a> for identification of differentially expressed genes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;hms-dbmi/scde&quot;</span>, <span class="dt">build_vignettes =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div id="ideal-scrnaseq-pipeline-as-of-mar-2017" class="section level1">
+<h1><span class="header-section-number">25</span> “Ideal” scRNAseq pipeline (as of Mar 2017)</h1>
+<div id="experimental-design" class="section level2">
+<h2><span class="header-section-number">25.1</span> Experimental Design</h2>
 <ul>
-<li><p>Installation on Mac OS X may require <a href="http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/">this additional gfortran library</a>:</p>
-<pre><code>curl -O http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
-sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /</code></pre></li>
-<li><p>See the <a href="http://hms-dbmi.github.io/scde/help.html">help page</a> for additional support.</p></li>
+<li>Avoid confounding biological and batch effects (Figure <a href="ideal-scrnaseq-pipeline-as-of-mar-2017.html#fig:pipeline-batches">25.1</a>)
+<ul>
+<li>Multiple conditions should be captured on the same chip if possible</li>
+<li>Perform multiple replicates of each condition where replicates of different conditions should be performed together if possible</li>
+<li>Statistics cannot correct a completely confounded experiment!</li>
+</ul></li>
+<li>Unique molecular identifiers
+<ul>
+<li>Greatly reduce noise in data</li>
+<li>May reduce gene detection rates (unclear if it is UMIs or other protocol differences)</li>
+<li>Lose splicing information</li>
+<li>Use longer UMIs (~10bp)</li>
+<li>Correct for sequencing errors in UMIs using <a href="https://github.com/CGATOxford/UMI-tools">UMI-tools</a></li>
+</ul></li>
+<li>Spike-ins
+<ul>
+<li>Useful for quality control</li>
+<li>May be useful for normalizing read counts</li>
+<li>Can be used to approximate cell-size/RNA content (if relevant to biological question)</li>
+<li>Often exhibit higher noise than endogenous genes (pipetting errors, mixture quality)</li>
+<li>Requires more sequencing to get enough endogenous reads per cell</li>
+</ul></li>
+<li>Cell number vs Read depth
+<ul>
+<li>Gene detection plateaus starting from 1 million reads per cell</li>
+<li>Transcription factor detection (regulatory networks) require high read depth and most sensitive protocols (i.e. Fluidigm C1)</li>
+<li>Cell clustering &amp; cell-type identification benefits from large number of cells and doesn’t requireas high sequencing depth (~100,000 reads per cell).</li>
+</ul></li>
+</ul>
+<div class="figure" style="text-align: center"><span id="fig:pipeline-batches"></span>
+<img src="figures/Pipeline-batches.png" alt="Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction." width="90%" />
+<p class="caption">
+Figure 25.1: Appropriate approaches to batch effects in scRNASeq. Red arrows indicate batch effects which are (pale) or are not (vibrant) correctable through batch-correction.
+</p>
+</div>
+</div>
+<div id="processing-reads" class="section level2">
+<h2><span class="header-section-number">25.2</span> Processing Reads</h2>
+<ul>
+<li>Read QC &amp; Trimming
+<ul>
+<li><a href="http://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FASTQC</a>, <a href="http://cutadapt.readthedocs.io/en/stable/index.html">cutadapt</a></li>
+</ul></li>
+<li>Mapping
+<ul>
+<li>Small datasets or UMI datasets: align to genome/transcriptome using <a href="https://github.com/alexdobin/STAR">STAR</a></li>
+<li>Large datasets: pseudo-alignment with <a href="http://salmon.readthedocs.io/en/latest/salmon.html">Salmon</a></li>
+</ul></li>
+<li>Quantification
+<ul>
+<li>Small dataset, no UMIs : <a href="http://subread.sourceforge.net/">featureCounts</a></li>
+<li>Large datasets, no UMIs: <a href="http://salmon.readthedocs.io/en/latest/salmon.html">Salmon</a></li>
+<li>UMI dataset : <a href="https://github.com/CGATOxford/UMI-tools">UMI-tools’</a> + <a href="http://subread.sourceforge.net/">featureCounts</a></li>
+</ul></li>
 </ul>
 </div>
-<div id="extra-tools" class="section level2">
-<h2><span class="header-section-number">2.8</span> Extra tools</h2>
-<p><a href="https://bioconductor.org/packages/MultiAssayExperiment">MultiAssayExperiment</a> for working with <a href="http://imlspenticton.uzh.ch:3838/conquer/">conquer</a> datasets:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;MultiAssayExperiment&quot;</span>)</code></pre></div>
-<p><a href="https://bioconductor.org/packages/SummarizedExperiment">SummarizedExperiment</a> for working with <a href="http://imlspenticton.uzh.ch:3838/conquer/">conquer</a> datasets:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## try http:// if https:// URLs are not supported
-<span class="kw">source</span>(<span class="st">&quot;https://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&quot;SummarizedExperiment&quot;</span>)</code></pre></div>
+<div id="preparing-expression-matrix" class="section level2">
+<h2><span class="header-section-number">25.3</span> Preparing Expression Matrix</h2>
+<ul>
+<li>Cell QC
+<ul>
+<li><a href="http://bioconductor.org/packages/scater">scater</a></li>
+<li>consider: mtRNA, rRNA, spike-ins (if available), number of detected genes per cell, total reads/molecules per cell</li>
+</ul></li>
+<li>Library Size Normalization
+<ul>
+<li><a href="http://bioconductor.org/packages/scran">scran</a></li>
+</ul></li>
+<li>Batch correction (if appropriate)
+<ul>
+<li><a href="http://bioconductor.org/packages/RUVSeq">RUVs</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="biological-interpretation" class="section level2">
+<h2><span class="header-section-number">25.4</span> Biological Interpretation</h2>
+<ul>
+<li>Feature Selection
+<ul>
+<li><a href="http://bioconductor.org/packages/M3Drop">M3Drop</a></li>
+</ul></li>
+<li>Clustering and Marker Gene Identification
+<ul>
+<li><a href="http://bioconductor.org/packages/SC3">SC3</a></li>
+</ul></li>
+<li>Pseudotime
+<ul>
+<li>distinct timepoints: <a href="http://bioconductor.org/packages/TSCAN">TSCAN</a></li>
+<li>small dataset/unknown number of branches: <a href="https://bioconductor.org/packages/release/bioc/html/monocle.html">Monocle2</a></li>
+<li>large continuous dataset: <a href="http://bioconductor.org/packages/destiny">destiny</a></li>
+</ul></li>
+<li>Differential Expression
+<ul>
+<li>Small number of cells and few groups : <a href="http://hms-dbmi.github.io/scde/">scde</a></li>
+<li>Replicates with batch effects : mixture/linear models</li>
+<li>Balanced batches: <a href="https://bioconductor.org/packages/release/bioc/html/edgeR.html">edgeR</a> or <a href="https://bioconductor.org/packages/release/bioc/html/MAST.html">MAST</a></li>
+<li>Large datasets: Kruskal-Wallis test (all groups at once), or Wilcox-test (compare 2-groups at a time).</li>
+</ul></li>
+</ul>
 
 </div>
 </div>
@@ -478,8 +472,8 @@ sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /</code></pre></li>
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="introduction-to-single-cell-rna-seq.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="de-in-a-real-dataset.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="advanced-exercises.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -507,7 +501,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/01-reqs.Rmd",
+"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/24-ideal-scrnaseq-pipeline.Rmd",
 "text": "Edit"
 },
 "download": ["scRNA-seq-course.pdf"],
