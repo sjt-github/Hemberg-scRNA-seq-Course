@@ -67,22 +67,14 @@ How to best account for errors in UMIs remains an active area of research. The b
 3. Simple saturation (aka "collision probability") correction proposed by [Grun, Kester and van Oudenaarden (2014)](http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html#methods) to estimate the true number of molecules $M$:
 
 $$M \approx -N*log(1 - \frac{n}{N})$$ 
-where N = total number of unique UMI barcodes and n = number of observations of a specific barcode.
-	+ An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content. 
+where N = total number of unique UMI barcodes and n = number of observed barcodes.
+ 
+An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content. 
 
 <div class="figure" style="text-align: center">
 <img src="figures/UMI-Seq-amp.png" alt="Per gene amplification rate" width="60%" />
 <p class="caption">(\#fig:intro-umi-amp)Per gene amplification rate</p>
 </div>
-
-__Exercise 1__ Blischak et al. used 6bp UMI barcodes for their experiments and you can load this data using the command below.
-
-
-```r
-molecules <- read.table("blischak/molecules.txt", sep = "\t")
-```
-
-Estimate the true number of molecules by correcting for collisions and sequencing errors using the simple saturation approach. Assume a 1% per base-pair sequencing error rate and that the errors follow a binomial distribution.
 
 ## Downstream Analysis
 
@@ -95,13 +87,14 @@ Current UMI platforms (DropSeq, InDrop, ICell8) exhibit low and highly variable 
 
 This variability can introduce strong biases and it needs to be considered in downstream analysis. Recent analyses often pool cells/genes together based on cell-type or biological pathway to increase the power. Robust statistical analyses of this data is still an open research question and it remains to be determined how to best adjust for biases.
 
-__Exercise 2__ Load the read counts from the Blischak data using the command below.
+__Exercise 1__ We have provided you with UMI counts and read counts from induced pluripotent stem cells generated from three different individuals [@Tung2016-an] (see: Chapter @ref(exprs-qc) for details of this dataset).
 
 
 ```r
-reads <- read.table("blischak/reads.txt", sep = "\t")
+umi_counts <- read.table("blischak/molecules.txt", sep = "\t")
+read_counts <- read.table("blischak/reads.txt", sep = "\t")
 ```
-Using this data and the unadjusted molecule counts from above:
+Using this data:
 
 1. Plot the variability in capture efficiency
 

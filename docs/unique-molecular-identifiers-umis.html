@@ -425,16 +425,14 @@ Figure 7.3: Potential Errors in UMIs
 <li><p>Currently an open question. The problem may be mitigated by removing UMIs with few reads to support their association with a particular transcript, or by removing all multi-mapping reads.</p></li>
 <li><p>Simple saturation (aka “collision probability”) correction proposed by <a href="http://www.nature.com/nmeth/journal/v11/n6/full/nmeth.2930.html#methods">Grun, Kester and van Oudenaarden (2014)</a> to estimate the true number of molecules <span class="math inline">\(M\)</span>:</p></li>
 </ol>
-<p><span class="math display">\[M \approx -N*log(1 - \frac{n}{N})\]</span> where N = total number of unique UMI barcodes and n = number of observations of a specific barcode. + An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content.</p>
+<p><span class="math display">\[M \approx -N*log(1 - \frac{n}{N})\]</span> where N = total number of unique UMI barcodes and n = number of observed barcodes.</p>
+<p>An important caveat of this method is that it assumes that all UMIs are equally frequent. In most cases this is incorrect, since there is often a bias related to the GC content.</p>
 <div class="figure" style="text-align: center"><span id="fig:intro-umi-amp"></span>
 <img src="figures/UMI-Seq-amp.png" alt="Per gene amplification rate" width="60%" />
 <p class="caption">
 Figure 7.4: Per gene amplification rate
 </p>
 </div>
-<p><strong>Exercise 1</strong> Blischak et al. used 6bp UMI barcodes for their experiments and you can load this data using the command below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">molecules &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;blischak/molecules.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</code></pre></div>
-<p>Estimate the true number of molecules by correcting for collisions and sequencing errors using the simple saturation approach. Assume a 1% per base-pair sequencing error rate and that the errors follow a binomial distribution.</p>
 </div>
 <div id="downstream-analysis" class="section level2">
 <h2><span class="header-section-number">7.5</span> Downstream Analysis</h2>
@@ -446,14 +444,21 @@ Figure 7.5: Variability in Capture Efficiency
 </p>
 </div>
 <p>This variability can introduce strong biases and it needs to be considered in downstream analysis. Recent analyses often pool cells/genes together based on cell-type or biological pathway to increase the power. Robust statistical analyses of this data is still an open research question and it remains to be determined how to best adjust for biases.</p>
-<p><strong>Exercise 2</strong> Load the read counts from the Blischak data using the command below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reads &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;blischak/reads.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</code></pre></div>
-<p>Using this data and the unadjusted molecule counts from above:</p>
+<p><strong>Exercise 1</strong> We have provided you with UMI counts and read counts from induced pluripotent stem cells generated from three different individuals <span class="citation">(Tung et al. <a href="#ref-Tung2016-an">2016</a>)</span> (see: Chapter <span class="citation">(<span class="citeproc-not-found" data-reference-id="ref"><strong>???</strong></span>)</span>(exprs-qc) for details of this dataset).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi_counts &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;blischak/molecules.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)
+read_counts &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;blischak/reads.txt&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</code></pre></div>
+<p>Using this data:</p>
 <ol style="list-style-type: decimal">
 <li><p>Plot the variability in capture efficiency</p></li>
 <li><p>Determine the amplification rate: average number of reads per UMI.</p></li>
 </ol>
 
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-Tung2016-an">
+<p>Tung, Po-Yuan, John D Blischak, Chiaowen Hsiao, David A Knowles, Jonathan E Burnett, Jonathan K Pritchard, and Yoav Gilad. 2016. “Batch Effects and the Effective Design of Single-Cell Gene Expression Studies.” <em>BioRxiv</em>.</p>
 </div>
 </div>
             </section>

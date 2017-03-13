@@ -393,7 +393,7 @@ norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t<
 <div id="kolmogorov-smirnov-test" class="section level2">
 <h2><span class="header-section-number">24.2</span> Kolmogorov-Smirnov test</h2>
 <p>The types of test that are easiest to work with are non-parametric ones. The most commonly used non-parametric test is the <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test">Kolmogorov-Smirnov test</a> (KS-test) and we can use it to compare the distributions for each gene in the two individuals.</p>
-<p>The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros).</p>
+<p>The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros). Another issue with the KS-test is that it can be very sensitive for large sample sizes and thus it may end up as significant even though the magnitude of the difference is very small.</p>
 <div class="figure" style="text-align: center"><span id="fig:ks-statistic"></span>
 <img src="figures/KS2_Example.png" alt="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))" width="60%" />
 <p class="caption">
@@ -430,7 +430,7 @@ fpr &lt;-<span class="st"> </span>fp/(fp +<span class="st"> </span>tn)
 <span class="kw">cat</span>(<span class="kw">c</span>(tpr, fpr))</code></pre></div>
 <pre><code>## 0.7346939 0.2944706</code></pre>
 <p>Now we can see the TPR is much higher than the FPR indicating the KS test is identifying DE genes.</p>
-<p>So far we’ve only evaluated the performance at a single significance threshold. Often it is informative to vary the threshold and evaluate performance across a range of values. This is then plotted as a reveiver-operating-characteristic curve (ROC) and a general accuracy statistic can be calculated as the area under this curve (AUC). We will use the ROCR package to facilitate this plotting.</p>
+<p>So far we’ve only evaluated the performance at a single significance threshold. Often it is informative to vary the threshold and evaluate performance across a range of values. This is then plotted as a receiver-operating-characteristic curve (ROC) and a general accuracy statistic can be calculated as the area under this curve (AUC). We will use the ROCR package to facilitate this plotting.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Only consider genes for which we know the ground truth</span>
 pVals &lt;-<span class="st"> </span>pVals[<span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$DE |<span class="st"> </span>
 <span class="st">               </span><span class="kw">names</span>(pVals) %in%<span class="st"> </span>GroundTruth$notDE] 
