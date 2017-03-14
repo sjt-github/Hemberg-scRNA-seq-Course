@@ -8,160 +8,249 @@ output: html_document
 
 
 ```r
-library(scRNA.seq.funcs)
 library(pcaMethods)
 library(pcaReduce)
-library(Rtsne)
 library(SC3)
 library(scater)
 library(pheatmap)
-library(ggplot2)
 set.seed(1234567)
 ```
 
-To illustrate clustering of scRNA-seq data, we consider a dataset of
-hematopoietic stem cells (HSCs) collected from a patient with
-[myeloproliferative neoplasm (MPN)](https://en.wikipedia.org/wiki/Myeloproliferative_neoplasm). It is well known that this disease is highly heterogeneous with multiple
-sub-clones co-existing within the same patient. 
+To illustrate clustering of scRNA-seq data, we consider the `Pollen` dataset of cells from 
+different human tissues [@Pollen2014-cu]. We have preprocessed the dataset and created a 
+scater object in advance. We have also annotated the cells with the cell type information 
+(it is the `cell_type1` column in the `phenoData` slot).
 
-## Patient dataset
+## Pollen dataset
 
-Traditionally, clonal heterogeneity is assessed by genotyping
-sub-clones. Genotyping through Sanger sequencing of two key loci (missense mutations of the Jak2 and Tet2 genes) has
-been carried out for this patient and has revealed the presence of
-3 different sub-clones (WT/WT, WT/Tet2 and Jak2/Tet2). Our goal is to
-identify clusters corresponding to the three genotypes from the
-scRNA-seq data. Although genotyping allows us to identify the different sub-clones, it does not provide any information about their transcriptome. By characterizing the transcriptomes we could obtain new insights, e.g. identify marker genes that would allow us to sort the cells using FACS or to understand which pathways are affected by the different mutants.
-
+Let's load the data and look at it:
 
 ```r
-patient.data <- read.table("clustering/patient.txt", sep = "\t")
+pollen <- readRDS("clustering/pollen.rds")
+pollen
 ```
 
-For convenience we have performed all quality control and normalization steps (SF + RUVg) in advance. The
-dataset contains 51 cells and 8710 genes.
+```
+## SCESet (storageMode: lockedEnvironment)
+## assayData: 23730 features, 301 samples 
+##   element names: exprs, is_exprs, tpm 
+## protocolData: none
+## phenoData
+##   rowNames: Hi_2338_1 Hi_2338_2 ... Hi_GW16_26 (301 total)
+##   varLabels: cell_type1 cell_type2 ... is_cell_control (33 total)
+##   varMetadata: labelDescription
+## featureData
+##   featureNames: A1BG A1BG-AS1 ... ZZZ3 (23730 total)
+##   fvarLabels: mean_exprs exprs_rank ... feature_symbol (11 total)
+##   fvarMetadata: labelDescription
+## experimentData: use 'experimentData(object)'
+## Annotation:
+```
 
-Now we are ready to cluster the data using the methods described in the previous chapter.
+Let's look at the cell type annotation:
+
+```r
+table(pData(pollen)$cell_type1)
+```
+
+```
+## 
+##   2338   2339     BJ   GW16   GW21 GW21+3  hiPSC   HL60   K562   Kera 
+##     22     17     37     26      7     17     24     54     42     40 
+##    NPC 
+##     15
+```
+
+A simple PCA analysis already separates some strong cell types and provides some insights in the data structure:
+
+```r
+plotPCA(pollen, colour_by = "cell_type1")
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
 ## SC3
 
-`SC3` is a clustering tool and it does not provide functions for the sequencing quality control (QC) or normalisation. On the contrary, it is expected that these preprocessing steps are performed by a user in advance. To facilitate the preprocessing, SC3 is integrated with the [scater](http://bioconductor.org/packages/scater/) package (see previous chapters). To the best of our knowledge scater is the most comprehensive toolkit for the QC and normalisation analysis of the single-cell RNA-Seq data.
+Let's run `SC3` clustering on the Pollen data. The advantage of the `SC3` is that it can directly take a [scater](http://bioconductor.org/packages/scater/) object (see previous chapters) as an input.
 
-If you already have an object of `scater` class `SCESet` then you should proceed to the next code chunk. If you have a matrix containing cell/gene expression values then you can create a `scater` object using your matrix:
-
-```r
-patient.sceset <- newSCESet(countData = patient.data)
-patient.sceset <- calculateQCMetrics(patient.sceset)
-```
-
-Now we are ready ro run the `SC3` clustering:
+Now let's image we do not know the number of clusters _k_ (cell types). `SC3` can estimate a number of clusters for you:
 
 ```r
-patient.sceset <- sc3(patient.sceset, ks = 2:5, k_estimator = TRUE, biology = TRUE)
+pollen <- sc3_prepare(pollen, ks = 2:5)
 ```
 
-When the clustering is done you will be able to visualise the clustering results in many different ways. See the [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details.
+```
+## Setting SC3 parameters...
+```
 
-`SC3` also has a useful function for summarising/visualising the results in an interactive `Shiny` session:
+```
+## Setting a range of k...
+```
 
 ```r
-sc3_interactive(patient.sceset)
+pollen <- sc3_estimate_k(pollen)
 ```
 
-This command will open `SC3` in a web browser. Once it has opened please perform the following exercises:
+```
+## Estimating k...
+```
 
-* __Exercise 1__: Explore different clustering solutions for $k$ from 2
-to 5. Also try to change the consensus averaging by checking and
-unchecking distance and transformation check boxes in the left panel
-of __SC3__.
+```r
+pollen@sc3$k_estimation
+```
 
-* __Exercise 2__: Based on the genotyping and `SC3` prediction, we strongly believe that $k
-=3$ provides the best clustering. What evidence do you find for this
-in the clustering? How can you use the [silhouette plots](https://en.wikipedia.org/wiki/Silhouette_%28clustering%29) to
-motivate choosing the value of $k$ that you think looks best?
+```
+## [1] 11
+```
 
-* __Exercise 3__: Which clusters are the most stable? You can find out how
-different cells migrate between clusters using the "Cell Labels"/"Stability" tabs
-panel.
+Interestingly, the number of cell types predicted by `SC3` is the same as the number of cell types in the Pollen data annotation.
 
-* __Exercise 4__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=3$.
+Now we are ready to run `SC3` (we also ask it to calculate biological properties of the clusters): 
 
-* __Exercise 5__: Change the marker genes threshold (the default is 0.85). Does __SC3__ find more marker genes?
+```r
+pollen <- sc3(pollen, ks = 11, biology = TRUE)
+```
+
+```
+## Setting SC3 parameters...
+```
+
+```
+## Setting a range of k...
+```
+
+```
+## Calculating distances between the cells...
+```
+
+```
+## Performing transformations and calculating eigenvectors...
+```
+
+```
+## Performing k-means clustering...
+```
+
+```
+## Calculating consensus matrix...
+```
+
+```
+## Calculating biology...
+```
+
+`SC3` result consists of several different outputs (please look in [@Kiselev2016-bq] and [SC3 vignette](http://bioconductor.org/packages/release/bioc/vignettes/SC3/inst/doc/my-vignette.html) for more details). Here we show some of them:
+
+Consensus matrix:
+
+```r
+sc3_plot_consensus(pollen, k = 11, show_pdata = "cell_type1")
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
+
+Silhouette plot:
+
+```r
+sc3_plot_silhouette(pollen, k = 11)
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" />
+
+Heatmap of the expression matrix:
+
+```r
+sc3_plot_expression(pollen, k = 11, show_pdata = "cell_type1")
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" />
+
+Identified marker genes:
+
+```r
+sc3_plot_markers(pollen, k = 11, show_pdata = "cell_type1")
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
+
+PCA plot with highlighted `SC3` clusters:
+
+```r
+plotPCA(pollen, colour_by = "sc3_11_clusters")
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
+
+Note, that one can also run `SC3` in an interactive `Shiny` session:
+
+```r
+sc3_interactive(pollen)
+```
+
+This command will open `SC3` in a web browser.
+
+* __Exercise 1__: Run `SC3` for $k$ from 9 to 13 and explore different clustering solutions in your web browser.
+
+* __Exercise 2__: Which clusters are the most stable when $k$ is changed from 9 to 13? (Look at the "Stability" tab)
+
+* __Exercise 3__: Check out differentially expressed genes and marker genes for the obtained clusterings. Please use $k=11$.
+
+* __Exercise 4__: Change the marker genes threshold (the default is 0.85). Does __SC3__ find more marker genes?
 
 ## pcaReduce
 
-`pcaReduce` is another clustering tool and it does not provide QC or normalisation. Unlike `SC3` which operates on the distance matrix, `pcaReduce` operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will used the default `SC3` gene filter to remove highly and lowly expressed genes.
-
-
+`pcaReduce` operates directly on the expression matrix. It is recommended to use a gene filter and log transformation before running `pcaReduce`. We will use the default `SC3` gene filter (note that the `exprs` slot of a `scater` object is log-transformed by default).
 
 
 ```r
 # use the same gene filter as in SC3
-input <- patient.data[fData(patient.sceset)$sc3_gene_filter, ]
-# log transform before the analysis
-input.log <- log2(input + 1)
+input <- exprs(pollen[fData(pollen)$sc3_gene_filter, ])
 ```
 
 There are several parameters used by `pcaReduce`:
-* `nbt` defines a number of `pcaReduce` runs (the method is stochastic and may have different solutions after different runs)
+* `nbt` defines a number of `pcaReduce` runs (it is stochastic and may have different solutions after different runs)
 * `q` defines number of dimensions to start clustering with. The output will contain partitions for all $k$ from 2 to q+1.
 * `method` defines a method used for clustering. `S` - to perform sampling based merging, `M` - to perform merging based on largest probability.
 
-We will run `pcaReduce` 10 times:
+We will run `pcaReduce` 1 time:
 
 ```r
-# run pcaReduce 10 times creating hierarchies from 1 to 30 clusters
-pca.red <- PCAreduce(t(input.log), nbt = 10, q = 30, method = 'S')
+# run pcaReduce 1 time creating hierarchies from 1 to 30 clusters
+pca.red <- PCAreduce(t(input), nbt = 1, q = 30, method = 'S')[[1]]
 ```
 
-Let's compare the clusterings (with $k$ = 3) provided after running `pcaReduce` 10 times:
 
 ```r
-res <- unique(scRNA.seq.funcs::merge_pcaReduce_results(pca.red, 3))
-pheatmap(res, legend = FALSE, show_rownames = FALSE, main = "Columns - cells, Rows - clusterings, Colors - clusters")
+pData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
+plotPCA(pollen, colour_by = "pcaReduce")
 ```
 
+<img src="18-clustering_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" />
+
+__Exercise 5__: Run pcaReduce for $k=2$ and plot a similar PCA plot. Does it look good?
+
+__Hint__: When running pcaReduce for different $k$s you do not need to rerun PCAreduce function, just use already calculated `pca.red` object.
+
+__Our solution__:
 <div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce3-1.png" alt="Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$" width="672" />
-<p class="caption">(\#fig:clust-pca-reduce3)Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=3$</p>
+<img src="18-clustering_files/figure-html/clust-pca-reduce2-1.png" alt="Clustering solutions of pcaReduce method for $k=2$." width="672" />
+<p class="caption">(\#fig:clust-pca-reduce2)Clustering solutions of pcaReduce method for $k=2$.</p>
 </div>
 
-__Exercise 6__: Run pcaReduce for $k=2$, $k=4$ and $k=5$. Is it easy to choose the optimal $k$?
+__Exercise 6__: Compare the results between `SC3` and `pcaReduce` for $k=11$. What is
+the main difference between the solutions provided by the two
+different methods?
 
-__Hint__: When running pcaReduce for different $k$s you do not need to rerun pcaReduce::PCAreduce function, just use already calculated `pca.red` object.
+__Our solution__:
+<img src="18-clustering_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" />
 
-__Our solutions__:
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce2-1.png" alt="Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=2$." width="672" />
-<p class="caption">(\#fig:clust-pca-reduce2)Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=2$.</p>
-</div>
-
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce4-1.png" alt="Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=4$." width="672" />
-<p class="caption">(\#fig:clust-pca-reduce4)Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=4$.</p>
-</div>
-
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce5-1.png" alt="Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=5$." width="672" />
-<p class="caption">(\#fig:clust-pca-reduce5)Clustering solutions of pcaReduce method after running it for 10 times and selecting $k=5$.</p>
-</div>
-
-__Exercise 7__: Compare the results between `SC3` and `pcaReduce`. What is
-the main difference between the solutions?
 
 ## tSNE + kmeans
 
-[tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) were made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. We can create similar plots explicitly:
+[tSNE](https://lvdmaaten.github.io/tsne/) plots that we saw before (\@ref(visual-tsne)) when used the __scater__ package are made by using the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) and [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) packages. Here we will do the same:
 
 ```r
-tsne_out <- Rtsne::Rtsne(t(input.log), perplexity = 10)
-df_to_plot <- as.data.frame(tsne_out$Y)
-comps <- colnames(df_to_plot)[1:2]
-ggplot2::ggplot(df_to_plot, aes_string(x = comps[1], y = comps[2])) +
-    geom_point() +
-    xlab("Dimension 1") +
-    ylab("Dimension 2") +
-    theme_bw()
+pollen <- plotTSNE(pollen, rand_seed = 1, return_SCESet = TRUE)
 ```
 
 <div class="figure" style="text-align: center">
@@ -171,72 +260,35 @@ ggplot2::ggplot(df_to_plot, aes_string(x = comps[1], y = comps[2])) +
 
 Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.
 
-Now we are going to apply _k_-means clustering algorithm to the cloud of points on the tSNE map. Do you see 2/3/4/5 groups in the cloud?
+Now we are going to apply _k_-means clustering algorithm to the cloud of points on the tSNE map. How many groups do you see in the cloud?
 
-We will start with $k=2$:
+We will start with $k=8$:
 
 ```r
-clusts <- kmeans(
-    tsne_out$Y,
-    centers = 2,
-    iter.max = 1e+09,
-    nstart = 1000)$clust
-df_to_plot$clusts <- factor(clusts, levels = unique(clusts))
-comps <- colnames(df_to_plot)[1:3]
-ggplot2::ggplot(df_to_plot,
-                aes_string(x = comps[1], y = comps[2], color = comps[3])) +
-    geom_point() +
-    xlab("Dimension 1") +
-    ylab("Dimension 2") +
-    theme_bw()
+pData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDimension, centers = 8)$clust)
+plotTSNE(pollen, rand_seed = 1, colour_by = "tSNE_kmeans")
 ```
 
 <div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans2-1.png" alt="tSNE map of the patient data with 2 colored clusters, identified by the k-means clustering algorithm" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans2)tSNE map of the patient data with 2 colored clusters, identified by the k-means clustering algorithm</p>
+<img src="18-clustering_files/figure-html/clust-tsne-kmeans2-1.png" alt="tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm" width="672" />
+<p class="caption">(\#fig:clust-tsne-kmeans2)tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm</p>
 </div>
 
-__Exercise 7__: Make the same plots for $k=3$, $k=4$ and $k=5$.
+__Exercise 7__: Make the same plot for $k=11$.
 
 __Exercise 8__: Compare the results between `SC3` and `tSNE+kmeans`. Can the
-results be improved by changing the perplexity parameter?
+results be improved by changing the `perplexity` parameter?
+
+__Our solution__:
+<img src="18-clustering_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" />
 
 As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
 and give different results every time they are run. To get a better
-overview of the solutions, we need to run the methods multiple times. Here
-we run __tSNE+kmeans__ clustering 10 times with $k = 3$ (with perplexity =
-10):
-
-
-```r
-tsne.res <- scRNA.seq.funcs::tsne_mult(input.log, 3, 10)
-res <- unique(do.call(rbind, tsne.res))
-```
-
-`SC3` is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.
-
-__Exercise 9__: Visualize the different clustering solutions using a
-heatmap. Then run tSNE+kmeans algorithm with $k = 2$ or $k = 4$ and
-see how the clustering looks like in these cases.
-
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans3-1.png" alt="Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=3$" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans3)Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=3$</p>
-</div>
-
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans2-mult-1.png" alt="Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=2$" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans2-mult)Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=2$</p>
-</div>
-
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans4-1.png" alt="Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=4$" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans4)Clustering solutions of tSNE+kmeans method after running it for 10 times and using $k=4$</p>
-</div>
+overview of the solutions, we need to run the methods multiple times. `SC3` is also stochastic, but thanks to the consensus step, it is more robust and less likely to produce different outcomes.
 
 ## SNN-Cliq
 
-Here we run SNN-cliq with the default parameters provided used in the authors' example:
+Here we run SNN-cliq with te default parameters provided in the author's example:
 
 
 ```r
@@ -246,7 +298,7 @@ par.r <- 0.7
 par.m <- 0.5
 # construct a graph
 scRNA.seq.funcs::SNN(
-    data = t(input.log),
+    data = t(input),
     outfile = "snn-cliq.txt",
     k = par.k,
     distance = distan
@@ -268,8 +320,8 @@ cat(paste(snn.res, collapse = "\n"))
 
 ```
 ## input file snn-cliq.txt
-## find 7 quasi-cliques
-## merged into 2 clusters
+## find 65 quasi-cliques
+## merged into 15 clusters
 ## unique assign done
 ```
 
@@ -277,13 +329,21 @@ cat(paste(snn.res, collapse = "\n"))
 snn.res <- read.table("res-snn-cliq.txt")
 # remove files that were created during the analysis
 system("rm snn-cliq.txt res-snn-cliq.txt")
+
+pData(pollen)$SNNCliq <- as.character(snn.res[,1])
+plotPCA(pollen, colour_by = "SNNCliq")
 ```
 
-__Exercise 10__: How can you characterize the solution identified by SNN-Cliq? Run SNN-Cliq algorithm with different values of _k_, _r_, _m_ and _distance_, and see how the clustering looks like in these cases.
+<img src="18-clustering_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" />
+
+__Exercise 9__: Compare the results between `SC3` and `SNN-Cliq`.
+
+__Our solution__:
+<img src="18-clustering_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" />
 
 ## SINCERA
 
-As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. It is important to keep in mind is that `SINCERA` performs a gene-level z-score transformation before clustering:
+As mentioned in the previous chapter [SINCERA](https://research.cchmc.org/pbge/sincera.html) is based on hierarchical clustering. One important thing to keep in mind is that it performs a gene-level z-score transformation before doing clustering:
 
 
 ```r
@@ -313,131 +373,168 @@ cat(kk)
 ```
 
 ```
-## 1
+## 14
 ```
 
-__Exercise 11__: Visualize the SINCERA results as a heatmap. How do the
-results compare to the other methods? What happens if you choose $k = 3$?
+Let's now visualize the SINCERA results as a heatmap:
 
-__Our answer:__
+```r
+pheatmap(
+    t(dat),
+    cluster_cols = hc,
+    cutree_cols = 14,
+    kmeans_k = 100,
+    show_rownames = FALSE
+)
+```
+
 <div class="figure" style="text-align: center">
 <img src="18-clustering_files/figure-html/clust-sincera-1.png" alt="Clustering solutions of SINCERA method using $k=3$" width="672" />
 <p class="caption">(\#fig:clust-sincera)Clustering solutions of SINCERA method using $k=3$</p>
 </div>
 
-__Exercise 12__: Is using the singleton cluster criteria for finding __k__ a good idea?
+__Exercise 10__: Compare the results between `SC3` and `SNN-Cliq`.
+
+__Our solution__:
+<img src="18-clustering_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" />
+
+__Exercise 11__: Is using the singleton cluster criteria for finding __k__ a good idea?
 
 ## SEURAT
 
-Here we follow an [example](http://satijalab.org/seurat/seurat_clustering_tutorial_part1.html) created by the authors of SEURAT. We had to introduce some modifications due to the errors produced by the original code:
-
-__Note__ In the newest versions of SEURAT (v. 1.3-1.4) the tSNE is now used exclusively for visualization, and clustering is based on a _community detection_ approach similar to one previously proposed for analyzing CyTOF data [@Levine2015-fk]. In this tutorial we are still using an old version (v. 1.2) of `SEURAT` (this will be updated by the next time this course is run - approximately Fall 2017):
+Here we follow an [example](http://satijalab.org/seurat/get_started.html) created by the authors of `SEURAT` (8,500 Pancreas cells). We mostly use default values in various function calls, for more details please consult the documentation and the authors:
 
 
 ```r
 library(Seurat)
-# Create a SEURAT object
-d <- new("seurat", raw.data = as.data.frame(log(patient.data + 1)))
-
-# Setup a SEURAT object
-d <- setup(
-    d,
-    project = "NBT",
-    min.cells = 3,
-    names.field = 2,
-    names.delim = "_",
-    min.genes = 10,
-    is.expr = 1
-) 
-
-# Genes placed into 20 bins based on X-axis (average expression).
-# Y-axis is within-bin z-score of log(Variance/mean). 
-d <- mean.var.plot(
-    d,
-    y.cutoff = 2,
-    x.low.cutoff = 2,
-    fxn.x = expMean,
-    fxn.y = logVarDivMean
-)
+library(Matrix)
+pollen_seurat <- new("seurat", raw.data = get_exprs(pollen, exprs_values = "tpm"))
+pollen_seurat <- Setup(pollen_seurat, project = "Pollen")
+pollen_seurat <- MeanVarPlot(pollen_seurat)
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" />
+<img src="18-clustering_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
-# Run a PCA using the variable genes as input
-d <- pca(d, do.print = FALSE, pcs.store = 25)
-
-# Do 200 random samplings to find significant genes, 
-# each time randomly permute 1% of genes.
-# This returns a 'p-value' for each gene in each PC, 
-# based on how likely the gene/PC score would have been observed by chance
-d <- jackStraw(
-    d,
-    num.replicate = 200,
-    do.print = FALSE,
-    num.pc = 25
-)
-
-# Compare the distribution of P-values for each PC with a uniform distribution.
-# 'Significant' PCs will have a strong enrichment of genes with low p-values
-pAll <- d@jackStraw.empP
-pAll$Contig <- rownames(pAll)
-pAll.l <- melt(pAll, id.vars = "Contig")
-colnames(pAll.l) <- c("Contig", "PC", "Value")
-
-score.df <- NULL
-score.thresh=1e-5
-for (i in unique(pAll.l$PC)){
-	q <- qqplot(pAll[, i], runif(1000), plot.it = FALSE)
-	pc.score <- prop.test(
-	    c(
-	        length(which(pAll[, i] <= score.thresh)), 
-	        floor(nrow(pAll) * score.thresh)
-	    ), 
-	    c(nrow(pAll), nrow(pAll))
-	)$p.val
-	if (length(which(pAll[, i] <= score.thresh)) == 0) pc.score <- 1
-
-	if(is.null(score.df))
-	  score.df <- data.frame(PC = i, Score = pc.score)
-	else
-	  score.df <- rbind(score.df, data.frame(PC = i, Score = pc.score))
-}
-
-# There are no significant PCs:
-head(score.df)
+pollen_seurat <- RegressOut(pollen_seurat, latent.vars = c("nUMI"), 
+                            genes.regress = pollen_seurat@var.genes)
 ```
 
 ```
-##    PC Score
-## 1 PC1     1
-## 2 PC2     1
-## 3 PC3     1
-## 4 PC4     1
-## 5 PC5     1
-## 6 PC6     1
+## [1] "Regressing out nUMI"
 ```
 
 ```r
-ndim <- 2
-
-# Project data on a 2D using tSNE
-d <- run_tsne(d, dims.use = 1:ndim, max_iter = 2000)
-
-# Find clusters in the tSNE map
-d <- DBclust_dimension(
-    d, 
-    1, 
-    2, 
-    reduction.use = "tsne", 
-    G.use = 8, 
-    set.ident = TRUE
-)
-tsne.plot(d, pt.size = 1)
+pollen_seurat <- PCAFast(pollen_seurat)
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" />
+```
+## [1] "PC1"
+##  [1] "MAP1B"     "TUBA1A"    "SOX11"     "DPYSL2"    "DCX"      
+##  [6] "STMN2"     "RTN1"      "GPM6A"     "DPYSL3"    "MLLT11"   
+## [11] "SOX4"      "MAP2"      "CRMP1"     "LOC150568" "NREP"     
+## [16] "CALM1"     "FAM110B"   "NFIB"      "MAPT"      "TUBB2B"   
+## [21] "RUFY3"     "NNAT"      "CXADR"     "FXYD6"     "MIR100HG" 
+## [26] "FOXG1"     "POU3F2"    "KIF5C"     "MN1"       "NCAM1"    
+## [1] ""
+##  [1] "MYL12A"    "ARHGDIB"   "S100A11"   "IFITM1"    "CKS2"     
+##  [6] "SRGN"      "IFITM3"    "ANXA1"     "IFI30"     "GTSF1"    
+## [11] "MT2A"      "ISG15"     "KRT8"      "CD53"      "ANXA2"    
+## [16] "HIST1H1C"  "HIST1H2BK" "LAPTM5"    "LGALS1"    "NOB1"     
+## [21] "MPO"       "PRG2"      "KRT18"     "AIF1"      "NUCB2"    
+## [26] "PRAME"     "PSMB9"     "SFXN4"     "TRAP1"     "RNF114"   
+## [31] "CD52"     
+## [1] ""
+## [1] ""
+## [1] "PC2"
+##  [1] "S100A6"   "CD44"     "TPM1"     "ANXA2"    "IFITM3"   "ANXA1"   
+##  [7] "S100A11"  "RND3"     "LGALS1"   "IGFBP3"   "DKK1"     "MT2A"    
+## [13] "THBS1"    "TGFBI"    "PLS3"     "TMSB10"   "SERPINE1" "KRT7"    
+## [19] "FN1"      "S100A10"  "TIMP1"    "CTGF"     "SAT1"     "PLAUR"   
+## [25] "CAV1"     "DDAH1"    "TPM2"     "MYL6"     "EMP1"     "CCND1"   
+## [1] ""
+##  [1] "MPO"          "SRGN"         "PRG2"         "AIF1"        
+##  [5] "MS4A3"        "GTSF1"        "CTSG"         "TESC"        
+##  [9] "MZB1"         "LOC100190986" "CD53"         "LAPTM5"      
+## [13] "ARHGDIB"      "TRAP1"        "SPNS3"        "RNASE2"      
+## [17] "PRTN3"        "BTK"          "APOC2"        "CD33"        
+## [21] "LOC100272216" "HSH2D"        "CLEC5A"       "SLC43A1"     
+## [25] "PRAME"        "DOK3"         "SERPINB10"    "PLEK"        
+## [29] "DOCK2"        "CD52"         "NDUFV1"      
+## [1] ""
+## [1] ""
+## [1] "PC3"
+##  [1] "KRT81"    "STEAP4"   "LCN2"     "S100A9"   "KRT15"    "ELF3"    
+##  [7] "CEACAM6"  "CLDN4"    "RARRES1"  "SLPI"     "KLK5"     "GRB7"    
+## [13] "DHRS3"    "CXorf61"  "RARRES3"  "KLK6"     "IFI27"    "AZGP1"   
+## [19] "S100A8"   "MYEOV"    "CXCL17"   "KLK8"     "PDZK1IP1" "BMP3"    
+## [25] "MUC1"     "FOLR1"    "TNFSF10"  "MIEN1"    "KRT23"    "VGLL1"   
+## [1] ""
+##  [1] "COL1A2"    "LUM"       "DCN"       "GREM1"     "PSG5"     
+##  [6] "TNFRSF11B" "SERPINE1"  "TPM2"      "COL1A1"    "LOX"      
+## [11] "TIMP3"     "VIM"       "TAGLN"     "CRYAB"     "S100A4"   
+## [16] "SULF1"     "GLIPR1"    "DKK1"      "COX7A1"    "RGS4"     
+## [21] "CCDC80"    "SERPINE2"  "FN1"       "THBS1"     "KRT34"    
+## [26] "ALDH1A1"   "KIAA1199"  "FGF7"      "TIMP1"     "WBP5"     
+## [31] "MT1E"     
+## [1] ""
+## [1] ""
+## [1] "PC4"
+##  [1] "PPME1"    "S100A11"  "KIAA1598" "NUCB2"    "SEMA3C"   "MRPS10"  
+##  [7] "MAPT"     "STMN2"    "GTSF1"    "TRIM16"   "DLX6-AS1" "MYT1L"   
+## [13] "KRT18"    "PQBP1"    "MT2A"     "ANXA1"    "CXADR"    "POLR2C"  
+## [19] "CDK5R1"   "MPO"      "DLX5"     "INA"      "BCL11B"   "PRG2"    
+## [25] "KRT8"     "ATAT1"    "PRAME"    "CBWD3"    "S100A10"  "TAF11"   
+## [1] ""
+##  [1] "CD74"     "HLA-DPA1" "HLA-DRA"  "MS4A1"    "HLA-DQA1" "HLA-DRB5"
+##  [7] "HLA-DQB1" "HLA-DQA2" "BLNK"     "HLA-DMA"  "HLA-DRB1" "IRF4"    
+## [13] "HLA-DPB1" "HLA-DMB"  "ELK2AP"   "MIR155HG" "CHI3L2"   "TCL1A"   
+## [19] "CD48"     "LRMP"     "SLAMF1"   "BCL2A1"   "LY86"     "CLECL1"  
+## [25] "HLA-A"    "CRIP1"    "CD27"     "CCL3"     "CYTIP"    "JUN"     
+## [31] "PTN"     
+## [1] ""
+## [1] ""
+## [1] "PC5"
+##  [1] "GLI3"    "PTN"     "SLC1A3"  "PTPRZ1"  "MDK"     "GPX3"    "CDO1"   
+##  [8] "CLU"     "ITGB8"   "JUN"     "AIF1L"   "FAM107A" "ATP1B2"  "FOS"    
+## [15] "TSPAN6"  "HEPN1"   "PAX6"    "HOPX"    "FABP7"   "ID4"     "PON2"   
+## [22] "SHISA2"  "GPM6B"   "PELI2"   "PMP2"    "ABAT"    "FBXO32"  "NFIA"   
+## [29] "C1orf61" "CNN3"   
+## [1] ""
+##  [1] "HLA-DPA1" "CD74"     "HLA-DRA"  "HLA-DQA1" "MS4A1"    "HLA-DRB5"
+##  [7] "HLA-DQB1" "HLA-DQA2" "BLNK"     "HLA-DMA"  "HLA-DRB1" "IRF4"    
+## [13] "LPXN"     "MIR155HG" "ELK2AP"   "HLA-DPB1" "HLA-DMB"  "LRMP"    
+## [19] "CHI3L2"   "CD48"     "BCL2A1"   "TCL1A"    "CLECL1"   "SLAMF1"  
+## [25] "LY86"     "IFI30"    "CRIP1"    "CD27"     "CCL3"     "IGJ"     
+## [31] "LAPTM5"  
+## [1] ""
+## [1] ""
+```
 
-__Exercise 13__: As you can see DBSCAN could find only one cluster. It is known that DBSCAN cannot cluster data sets well with large differences in densities, since the _G.use_ parameter cannot then be chosen appropriately for all clusters. Try to change _G.use_ to be able to find more than one cluster in the data.
+```r
+pollen_seurat <- RunTSNE(pollen_seurat)
+pollen_seurat <- FindClusters(pollen_seurat)
+TSNEPlot(pollen_seurat, do.label = T)
+```
 
-__Note__ We found that in general SEURAT does not work well for small datasets (_N_ < 200 cells). For a comprehensive comparisons of the methods please look at the SC3 paper [@Kiselev2016-bq].
+<img src="18-clustering_files/figure-html/unnamed-chunk-24-2.png" width="672" style="display: block; margin: auto;" />
+
+__Exercise 12__: Compare the results between `SC3` and `SEURAT`.
+
+__Our solution__:
+<img src="18-clustering_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" />
+
+
+Seurat can also find marker genes, e.g. marker genes for cluster 2:
+
+```r
+markers <- FindMarkers(pollen_seurat, 2)
+FeaturePlot(pollen_seurat, 
+            head(rownames(markers)), 
+            cols.use = c("lightgrey", "blue"), 
+            nCol = 3)
+```
+
+<img src="18-clustering_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" />
+
+__Exercise 13__: Compare marker genes provided by `SEURAT` and `SC3`.

@@ -4,21 +4,35 @@ output: html_document
 
 # Technical requirements
 
+## R-based
+
 This course is based on the popular programming language [R](https://www.r-project.org/). However, one of the methods that we describe ([SNN-Cliq](http://bioinfo.uncc.edu/SNNCliq/)) is only partly R-based. It makes a simple _python_ call from R and requires a user to have write permissions to the working directory.
 
-To be able to run all code chunks of the course one needs to clone or download the [course GitHub repository](https://github.com/hemberg-lab/scRNA.seq.course) and start an R session in the cloned folder. 
+## Docker image
 
-One also needs to install the following R packages (ordered by purposes):
+If you do not want to install all the packages required for the course manually, you can run a course docker image which contains all the required packages.
 
-## General
+Make sure Docker is installed on your system. If not, please follow [these instructions](https://docs.docker.com/engine/installation/). To run the course docker image:
 
-[devtools](https://cran.r-project.org/web/packages/devtools/index.html) for installing packages from GitHub:
+```
+docker run -it hemberglab/scrna.seq.course:latest R
+```
+
+It will download the course docker image (may take some time) and start a new R session in a docker container with all packages installed and all data files available.
+
+## Manual installation
+
+If you are not using a docker image of the course, then to be able to run all code chunks of the course you need to clone or download the [course GitHub repository](https://github.com/hemberg-lab/scRNA.seq.course) and start an R session in the cloned folder. You will also need to install the following R packages (ordered by purposes):
+
+### General
+
+[devtools](https://cran.r-project.org/web/packages/devtools/index.html)
 
 ```r
 install.packages("devtools")
 ```
 
-[BiocInstaller](http://bioconductor.org/packages/BiocInstaller) for installing packages from BioConductor:
+[BiocInstaller](http://bioconductor.org/packages/BiocInstaller)
 
 ```r
 source('https://bioconductor.org/biocLite.R')
@@ -31,21 +45,15 @@ biocLite('BiocInstaller')
 devtools::install_github("hemberg-lab/scRNA.seq.funcs")
 ```
 
-## Plotting
+### Plotting
 
-[ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) for plotting general plots:
-
-```r
-install.packages("ggplot2")
-```
-
-[pheatmap](https://cran.r-project.org/web/packages/pheatmap/index.html) for plotting heatmaps:
+[pheatmap](https://cran.r-project.org/web/packages/pheatmap/index.html)
 
 ```r
 install.packages("pheatmap")
 ```
 
-[limma](https://bioconductor.org/packages/limma) for plotting Venn diagrams:
+[limma](https://bioconductor.org/packages/limma)
 
 ```r
 ## try http:// if https:// URLs are not supported
@@ -53,9 +61,9 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("limma")
 ```
 
-## QC and normalisation
+### QC and normalisation
 
-[scater](http://bioconductor.org/packages/scater) is a single-cell analysis toolkit for expression:
+[scater](http://bioconductor.org/packages/scater)
 
 ```r
 source('https://bioconductor.org/biocLite.R')
@@ -74,20 +82,14 @@ install.packages("mvoutlier")
 install.packages("statmod")
 ```
 
-[Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) for Rtsne data embedding:
-
-```r
-install.packages("Rtsne")
-```
-
-[scran](http://bioconductor.org/packages/scran) for a new single cell normalisation method (LSF):
+[scran](http://bioconductor.org/packages/scran)
 
 ```r
 source('https://bioconductor.org/biocLite.R')
 biocLite('scran')
 ```
 
-[RUVSeq](https://bioconductor.org/packages/RUVSeq) for normalization using ERCC controls:
+[RUVSeq](https://bioconductor.org/packages/RUVSeq)
 
 ```r
 ## try http:// if https:// URLs are not supported
@@ -95,9 +97,9 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("RUVSeq")
 ```
 
-## Clustering
+### Clustering
 
-[pcaReduce](https://github.com/JustinaZ/pcaReduce) for unsupervised clustering of scRNA-seq data:
+[pcaReduce](https://github.com/JustinaZ/pcaReduce)
 
 ```r
 devtools::install_github("JustinaZ/pcaReduce")
@@ -111,30 +113,31 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("pcaMethods")
 ```
 
-[SC3](http://bioconductor.org/packages/SC3) for unsupervised clustering of scRNA-seq data:
+[SC3](http://bioconductor.org/packages/SC3)
 
 ```r
 source("https://bioconductor.org/biocLite.R")
 biocLite("SC3")
 ```
 
-[SEURAT](https://github.com/satijalab/seurat) for density clustering of scRNA-seq data (at the moment we are using an old version of this package - v. 1.3):
+[SEURAT](https://github.com/satijalab/seurat)
 
 ```r
-devtools::install_github('satijalab/seurat', ref = 'da6cd08')
+devtools::install_github('satijalab/seurat')
 ```
 
-## Dropouts
+### Dropouts
 
-[M3Drop](http://bioconductor.org/packages/M3Drop) for identification of important and DE genes:
+[M3Drop](http://bioconductor.org/packages/M3Drop)
 
 ```r
-devtools::install_github("tallulandrews/M3D")
+source("https://bioconductor.org/biocLite.R")
+biocLite("M3Drop")
 ```
 
-## Pseudotime
+### Pseudotime
 
-[TSCAN](https://bioconductor.org/packages/TSCAN) for pseudotime analysis:
+[TSCAN](https://bioconductor.org/packages/TSCAN)
 
 ```r
 ## try http:// if https:// URLs are not supported
@@ -142,7 +145,7 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("TSCAN")
 ```
 
-[monocle](https://bioconductor.org/packages/monocle) for pseudotime analysis:
+[monocle](https://bioconductor.org/packages/monocle)
 
 ```r
 ## try http:// if https:// URLs are not supported
@@ -150,7 +153,7 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("monocle")
 ```
 
-[destiny](https://bioconductor.org/packages/destiny) for pseudotime analysis:
+[destiny](https://bioconductor.org/packages/destiny)
 
 ```r
 ## try http:// if https:// URLs are not supported
@@ -158,16 +161,21 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("destiny")
 ```
 
+[SLICER](https://github.com/jw156605/SLICER)
 
-## Differential Expression
+```r
+devtools::install_github('jw156605/SLICER')
+```
 
-[ROCR](https://cran.r-project.org/web/packages/ROCR/index.html) for performance estimations:
+### Differential Expression
+
+[ROCR](https://cran.r-project.org/web/packages/ROCR/index.html)
 
 ```r
 install.packages("ROCR")
 ```
 
-[edgeR](https://bioconductor.org/packages/edgeR) for identification of differentially expressed genes:
+[edgeR](https://bioconductor.org/packages/edgeR)
 
 ```r
 ## try http:// if https:// URLs are not supported
@@ -175,7 +183,7 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("edgeR")
 ```
 
-[DESeq2](https://bioconductor.org/packages/DESeq2) for identification of differentially expressed genes:
+[DESeq2](https://bioconductor.org/packages/DESeq2)
 
 ```r
 ## try http:// if https:// URLs are not supported
@@ -183,7 +191,15 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("DESeq2")
 ```
 
-[scde](http://hms-dbmi.github.io/scde/) for identification of differentially expressed genes:
+[MAST](https://bioconductor.org/packages/MAST)
+
+```r
+## try http:// if https:// URLs are not supported
+source("https://bioconductor.org/biocLite.R")
+biocLite("MAST")
+```
+
+[scde](http://hms-dbmi.github.io/scde/) (optional)
 
 ```r
 devtools::install_github("hms-dbmi/scde", build_vignettes = FALSE)

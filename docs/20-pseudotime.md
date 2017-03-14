@@ -64,20 +64,10 @@ gold standard of open-source software hosted in a reputable repository.
 The following figures from the paper summarise some of the features of
 the various tools.
 
-
-```r
-knitr::include_graphics("figures/cannoodt_pseudotime_properties.png")
-```
-
 <div class="figure" style="text-align: center">
 <img src="figures/cannoodt_pseudotime_properties.png" alt="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016)." width="90%" />
 <p class="caption">(\#fig:pseudotime-methods-description)Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).</p>
 </div>
-
-
-```r
-knitr::include_graphics("figures/cannoodt_pseudotime_methods.png")
-```
 
 <div class="figure" style="text-align: center">
 <img src="figures/cannoodt_pseudotime_methods.png" alt="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016)." width="90%" />
@@ -301,66 +291,18 @@ k <- select_k(t(deng[slicer_genes,]), kmin = 5)
 ## finding neighbours
 ## calculating weights
 ## computing coordinates
-```
-
-```
-## Warning in if (posigual%/%2 == posigual/2) {: the condition has length > 1
-## and only the first element will be used
-```
-
-```
-## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
-## only the first used
-
-## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
-## only the first used
-
-## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
-## only the first used
-
-## Warning in posigual:(posigual - 1): numerical expression has 3 elements:
-## only the first used
-```
-
-```
-## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)
-```
-
-```
-## finding neighbours
-## calculating weights
-## computing coordinates
-```
-
-```
-## Warning in min(compl[ind[compl[ind, "r"] > 0], "r"]): no non-missing
-## arguments to min; returning Inf
-```
-
-```
 ## finding neighbours
 ## calculating weights
 ## computing coordinates
 ## finding neighbours
 ## calculating weights
 ## computing coordinates
-```
-
-```
-## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)
-```
-
-```
 ## finding neighbours
 ## calculating weights
 ## computing coordinates
-```
-
-```
-## Warning in areaahull(alpha_hull): Problem in area computation (Returns NA)
-```
-
-```
+## finding neighbours
+## calculating weights
+## computing coordinates
 ## finding neighbours
 ## calculating weights
 ## computing coordinates
