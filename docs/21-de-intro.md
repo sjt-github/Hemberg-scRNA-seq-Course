@@ -50,10 +50,14 @@ set.seed(1)
 hist(rnbinom(1000, mu=10, size=100), col="grey50", xlab="Read Counts", main="Negative Binomial")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="21-de-intro_files/figure-html/nb-plot-1.png" alt="Negative Binomial distribution of read counts for a single gene across 1000 cells" width="672" />
-<p class="caption">(\#fig:nb-plot)Negative Binomial distribution of read counts for a single gene across 1000 cells</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{21-de-intro_files/figure-latex/nb-plot-1} 
+
+}
+
+\caption{Negative Binomial distribution of read counts for a single gene across 1000 cells}(\#fig:nb-plot)
+\end{figure}
 Mean:
 $\mu = mu$
 
@@ -72,10 +76,14 @@ counts[runif(1000) < d] = 0;
 hist(counts, col="grey50", xlab="Read Counts", main="Zero-inflated NB");
 ```
 
-<div class="figure" style="text-align: center">
-<img src="21-de-intro_files/figure-html/zero-inflation-plot-1.png" alt="Zero-inflated Negative Binomial distribution" width="672" />
-<p class="caption">(\#fig:zero-inflation-plot)Zero-inflated Negative Binomial distribution</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{21-de-intro_files/figure-latex/zero-inflation-plot-1} 
+
+}
+
+\caption{Zero-inflated Negative Binomial distribution}(\#fig:zero-inflation-plot)
+\end{figure}
 Mean:
 $\mu = mu \cdot (1 - d)$
 
@@ -96,7 +104,9 @@ counts = sapply(lambdas, function(l) {rpois(1, lambda=l)})
 hist(counts, col="grey50", xlab="Read Counts", main="Poisson-Beta")
 ```
 
-<img src="21-de-intro_files/figure-html/pois-beta-plot-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{21-de-intro_files/figure-latex/pois-beta-plot-1} \end{center}
 Mean:
 $\mu = g \cdot a / (a + b)$
 

@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="unique-molecular-identifiers-umis.html">
-<link rel="next" href="exprs-qc.html">
+<link rel="prev" href="introduction-to-single-cell-rna-seq.html">
+<link rel="next" href="construction-of-expression-matrix.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -367,59 +367,66 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="scater-package" class="section level1">
-<h1><span class="header-section-number">7</span> scater package</h1>
-<div id="introduction-1" class="section level2">
-<h2><span class="header-section-number">7.1</span> Introduction</h2>
-<p><a href="http://bioconductor.org/packages/scater/">scater</a> is a R package single-cell RNA-seq analysis <span class="citation">(McCarthy et al. <a href="#ref-McCarthy2017-kb">2017</a>)</span>. The package contains several useful methods for quality control, visualisation and pre-processing of data prior to further downstream analysis.</p>
-<p><a href="http://bioconductor.org/packages/scater/">scater</a> features the following functionality:</p>
-<ul>
-<li>Automated computation of QC metrics</li>
-<li>Transcript quantification from read data with pseudo-alignment</li>
-<li>Data format standardisation</li>
-<li>Rich visualizations for exploratory analysis</li>
-<li>Seamless integration into the Bioconductor universe</li>
-<li>Simple normalisation methods</li>
-</ul>
-<p>We highly recommend to use <a href="http://bioconductor.org/packages/scater/">scater</a> for all single-cell RNA-seq analyses and <a href="http://bioconductor.org/packages/scater/">scater</a> is the basis of the first part of the course.</p>
+<div id="experimental-methods" class="section level1">
+<h1><span class="header-section-number">4</span> Experimental methods</h1>
+<div id="overview-of-experimental-methods-for-generating-scrna-seq-data" class="section level2">
+<h2><span class="header-section-number">4.1</span> Overview of experimental methods for generating scRNA-seq data</h2>
+<p>Development of new methods and protocols for scRNA-seq is currently a very active area of research, and several protocols have been published over the last few years. The methods can be categorized in different ways, but the two most important aspects are <strong>quantification</strong> and <strong>capture</strong>.</p>
+<p>For quantification, there are two types, <strong>full-length</strong> and <strong>tag-based</strong>. The former tries to achieve a uniform read coverage of each transcript. By contrast, tag-based protocols only capture either the 5’- or 3’-end of each RNA. The choice of quantification method has important implications for what types of analyses the data can be used for. In theory, full-length protocols should provide an even coverage of transcripts, but as we shall see, there are often biases in the coverage. The main advantage of tag-based protocol is that they can be combined with unique molecular identifiers (UMIs) which can help improve the quantification (see chapter 6). On the other hand, being restricted to one end of the transcript may reduce the mappability and it also makes it harder to distinguish different isoforms <span class="citation">(Archer et al. <a href="#ref-Archer2016-zq">2016</a>)</span>.</p>
+<p>The strategy used for capture determines throughput, how the cells can be selected as well as what kind of additional information besides the sequencing that can be obtained. The three most widely used options are <strong>microwell-</strong>, <strong>microfluidic-</strong> and <strong>droplet-</strong> based (or something closely related to one of these).</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
+<img src="figures/300px-Microplates.jpg" alt="Image of microwell plates" width="70%" />
+<p class="caption">
+Figure 4.1: Image of microwell plates
+</p>
 </div>
-<div id="scater-workflow" class="section level2">
-<h2><span class="header-section-number">7.2</span> scater workflow</h2>
-<p>As illustrated in the figure below, <a href="http://bioconductor.org/packages/scater/">scater</a> will help you with quality control, filtering and normalization of your expression matrix following mapping and alignment.</p>
-<div class="figure">
-<img src="figures/scater_qc_workflow.png" />
-
+<p>For well-based platforms, cells are isolated using for example pipette or laser capture and placed in microfluidic wells. One advantage of well-based methods can be combined with fluorescent activated cell sorting (FACS), making it possible to select cells based on surface markers. This strategy is thus very useful for situations when one wants to isolate a specific subset of cells for sequencing. Another advantage is that one can take pictures of the cells. The image provides an additional modality and a particularly useful application is to identify wells containg damaged cells or doublets. The main drawback of these methods is that they are low-throughput and the amount of work required per cell may be considerable.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-3"></span>
+<img src="figures/fluidigmC1.jpg" alt="Image of a 96-well Fluidigm C1 chip " width="70%" />
+<p class="caption">
+Figure 4.2: Image of a 96-well Fluidigm C1 chip
+</p>
 </div>
+<p>Microfluidic platforms, such as Fluidigm’s C1, provide a more integrated system for capturing cells and for carrying out the reactions necessary for the library preparations. Thus, they provide a higher throughput than microwell based platforms. Typically, only around 10% of cells are captured in a microfluidic platform and thus they are not appropriate if one is dealing with rare cell-types or very small amounts of input. Moreover, the chip is relatively expensive, but since reactions can be carried out in a smaller volume money can be saved on reagents.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
+<img src="figures/drop-seq.png" alt="Schematic overview of the drop-seq method (Image taken from Macosko et al)" width="60%" />
+<p class="caption">
+Figure 4.3: Schematic overview of the drop-seq method (Image taken from Macosko et al)
+</p>
 </div>
-<div id="terminology" class="section level2">
-<h2><span class="header-section-number">7.3</span> Terminology</h2>
-<p>(this chapter is taken from the <a href="http://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/vignette.html">scater vignette</a>)</p>
-<ul>
-<li>The capabilities of scater are built on top of Bioconductor’s Biobase.</li>
-<li>In Bioconductor terminology we assay numerous <strong>“features”</strong> for a number of <strong>“samples”</strong>.</li>
-<li>Features, in the context of <a href="http://bioconductor.org/packages/scater/">scater</a>, correspond most commonly to genes or transcripts, but could be any general genomic or transcriptomic regions (e.g. exon) of interest for which we take measurements.</li>
-<li>In the following chapters it may be more intuitive to mentally replace <strong>“feature”</strong> with <strong>“gene”</strong> or <strong>“transcript”</strong> (depending on the context of the study) wherever <strong>“feature”</strong> appears.</li>
-<li>In the scater context, <strong>“samples”</strong> refer to individual cells that we have assayed.</li>
-</ul>
+<p>The idea behind droplet based methods is to encapsulate each individual cell inside a nanoliter droplet together with a bead. The bead is loaded with the enzymes required to construct the library. In particular, each bead contains a unique barcode which is attached to all of the reads originating from that cell. Thus, all of the droplets can be pooled, sequenced together and the reads can subsequently be assigned to the cell of origin based on the barcodes. Droplet platforms typically have the highest throughput since the library preparation costs are on the order of .05 USD/cell. Instead, sequencing costs often become the limiting factor and a typical experiment the coverage is low with only a few thousand different transcripts detected <span class="citation">(Ziegenhain et al. <a href="#ref-Ziegenhain2017-cu">2017</a>)</span>.</p>
 </div>
-<div id="sceset-class" class="section level2">
-<h2><span class="header-section-number">7.4</span> SCESet class</h2>
-<p>(this chapter is taken from the <a href="http://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/vignette.html">scater vignette</a>)</p>
-<p>In scater we organise single-cell expression data in objects of the <strong>SCESet</strong> class. The class inherits the Bioconductor ExpressionSet class, which provides a common interface familiar to those who have analyzed microarray experiments with Bioconductor. The class requires three input files:</p>
-<ul>
-<li><strong>exprs</strong>, a numeric matrix of expression values, where rows are features, and columns are cells</li>
-<li><strong>phenoData</strong>, an <em>AnnotatedDataFrame</em> object, where rows are cells, and columns are cell attributes (such as cell type, culture condition, day captured, etc.)</li>
-<li><strong>featureData</strong>, an <em>AnnotatedDataFrame</em> object, where rows are features (e.g. genes), and columns are feature attributes, such as biotype, gc content, etc.</li>
-</ul>
-<p>For more details about other features inherited from Bioconductor’s <strong>ExpressionSet</strong> class, type <code>?ExpressionSet</code> at the R prompt.</p>
-<p>When the data are encapsulated in the <strong>SCESet</strong> class, <a href="http://bioconductor.org/packages/scater/">scater</a> will automatically calculate several different properties. This will be demonstrated in the subsequent chapters.</p>
+<div id="what-platform-to-use-for-my-experiment" class="section level2">
+<h2><span class="header-section-number">4.2</span> What platform to use for my experiment?</h2>
+<p>The most suitable platform depends on the biological question at hand. For example, if one is interested in characterizing the composition of a tissue, then a droplet-based method which will allow a very large number of cells to be captured is likely to be the most appropriate. On the other hand, if one is interesting in characterizing a rare cell-population for which there is a known surface marker, then it is probably best to enrich using FACS and then sequence a smaller number of cells.</p>
+<p>Clearly, full-length transcript quantification will be more appropriate if one is interested in studying different isoforms since tagged protocols are much more limited. By contrast, UMIs can only be used with tagged protocols and they can facilitate gene-level quantification.</p>
+<p>Two recent studies from the Enard group <span class="citation">(Ziegenhain et al. <a href="#ref-Ziegenhain2017-cu">2017</a>)</span> and the Teichmann group <span class="citation">(Svensson et al. <a href="#ref-Svensson2017-op">2017</a>)</span> have compared several different protocols. In their study, Ziegenhain et al compared five different protocols on the same sample of mouse embryonic stem cells (mESCs). By controlling for the number of cells as well as the sequencing depth, the authors were able to directly compare the sensitivity, noise-levels and costs of the different protocols. One example of their conclusions is illustrated in the figure below which shows the number of genes detected (for a given detection threshold) for the different methods. As you can see, there is almost a two-fold difference between drop-seq and Smart-seq2, suggesting that the choice of protocol can have a major impact on the study</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-5"></span>
+<img src="figures/ziegenhainEnardFig1.png" alt="Enard group study" width="60%" />
+<p class="caption">
+Figure 4.4: Enard group study
+</p>
+</div>
+<p>Svensson et al take a different approach by using synthetic transcripts (spike-ins, more about these later) with known concentrations to measure the accuracy and sensitivity of different protocols. Comparing a wide range of studies, they also reported substantial differences between the protocols.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-6"></span>
+<img src="figures/svenssonTeichmannFig2.png" alt="Teichmann group study" width="100%" />
+<p class="caption">
+Figure 4.5: Teichmann group study
+</p>
+</div>
 
 </div>
 </div>
 <h3> References</h3>
 <div id="refs" class="references">
-<div id="ref-McCarthy2017-kb">
-<p>McCarthy, Davis J, Kieran R Campbell, Aaron T L Lun, and Quin F Wills. 2017. “Scater: Pre-Processing, Quality Control, Normalization and Visualization of Single-Cell RNA-seq Data in R.” <em>Bioinformatics</em>, 14~jan.</p>
+<div id="ref-Archer2016-zq">
+<p>Archer, Nathan, Mark D Walsh, Vahid Shahrezaei, and Daniel Hebenstreit. 2016. “Modeling Enzyme Processivity Reveals That RNA-Seq Libraries Are Biased in Characteristic and Correctable Ways.” <em>Cell Syst</em> 3 (5): 467–479.e12.</p>
+</div>
+<div id="ref-Ziegenhain2017-cu">
+<p>Ziegenhain, Christoph, Beate Vieth, Swati Parekh, Björn Reinius, Amy Guillaumet-Adkins, Martha Smets, Heinrich Leonhardt, Holger Heyn, Ines Hellmann, and Wolfgang Enard. 2017. “Comparative Analysis of Single-Cell RNA Sequencing Methods.” <em>Mol. Cell</em> 65 (4): 631–643.e4.</p>
+</div>
+<div id="ref-Svensson2017-op">
+<p>Svensson, Valentine, Kedar Nath Natarajan, Lam-Ha Ly, Ricardo J Miragaia, Charlotte Labalette, Iain C Macaulay, Ana Cvejic, and Sarah A Teichmann. 2017. “Power Analysis of Single-Cell RNA-sequencing Experiments.” <em>Nat. Methods</em>, 6~mar.</p>
 </div>
 </div>
             </section>
@@ -427,8 +434,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="unique-molecular-identifiers-umis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="exprs-qc.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="introduction-to-single-cell-rna-seq.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="construction-of-expression-matrix.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -456,7 +463,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/06-scater.Rmd",
+"link": "https://github.com/hemberg-lab/scRNA.seq.course/edit/master/03-exp-methods.Rmd",
 "text": "Edit"
 },
 "download": ["scRNA-seq-course.pdf"],

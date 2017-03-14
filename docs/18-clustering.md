@@ -26,7 +26,7 @@ scater object in advance. We have also annotated the cells with the cell type in
 Let's load the data and look at it:
 
 ```r
-pollen <- readRDS("clustering/pollen.rds")
+pollen <- readRDS("pollen/pollen.rds")
 pollen
 ```
 
@@ -67,7 +67,9 @@ A simple PCA analysis already separates some strong cell types and provides some
 plotPCA(pollen, colour_by = "cell_type1")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-5-1} \end{center}
 
 ## SC3
 
@@ -147,7 +149,9 @@ Consensus matrix:
 sc3_plot_consensus(pollen, k = 11, show_pdata = "cell_type1")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-8-1} \end{center}
 
 Silhouette plot:
 
@@ -155,7 +159,9 @@ Silhouette plot:
 sc3_plot_silhouette(pollen, k = 11)
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-9-1} \end{center}
 
 Heatmap of the expression matrix:
 
@@ -163,7 +169,9 @@ Heatmap of the expression matrix:
 sc3_plot_expression(pollen, k = 11, show_pdata = "cell_type1")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-10-1} \end{center}
 
 Identified marker genes:
 
@@ -171,7 +179,9 @@ Identified marker genes:
 sc3_plot_markers(pollen, k = 11, show_pdata = "cell_type1")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-11-1} \end{center}
 
 PCA plot with highlighted `SC3` clusters:
 
@@ -179,7 +189,9 @@ PCA plot with highlighted `SC3` clusters:
 plotPCA(pollen, colour_by = "sc3_11_clusters")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-12-1} \end{center}
 
 Note, that one can also run `SC3` in an interactive `Shiny` session:
 
@@ -225,24 +237,31 @@ pData(pollen)$pcaReduce <- as.character(pca.red[,32 - 11])
 plotPCA(pollen, colour_by = "pcaReduce")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-16-1} \end{center}
 
 __Exercise 5__: Run pcaReduce for $k=2$ and plot a similar PCA plot. Does it look good?
 
 __Hint__: When running pcaReduce for different $k$s you do not need to rerun PCAreduce function, just use already calculated `pca.red` object.
 
 __Our solution__:
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-pca-reduce2-1.png" alt="Clustering solutions of pcaReduce method for $k=2$." width="672" />
-<p class="caption">(\#fig:clust-pca-reduce2)Clustering solutions of pcaReduce method for $k=2$.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{18-clustering_files/figure-latex/clust-pca-reduce2-1} 
+
+}
+
+\caption{Clustering solutions of pcaReduce method for $k=2$.}(\#fig:clust-pca-reduce2)
+\end{figure}
 
 __Exercise 6__: Compare the results between `SC3` and `pcaReduce` for $k=11$. What is
 the main difference between the solutions provided by the two
 different methods?
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-17-1} \end{center}
 
 
 ## tSNE + kmeans
@@ -253,10 +272,14 @@ __Our solution__:
 pollen <- plotTSNE(pollen, rand_seed = 1, return_SCESet = TRUE)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-1.png" alt="tSNE map of the patient data" width="672" />
-<p class="caption">(\#fig:clust-tsne)tSNE map of the patient data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{18-clustering_files/figure-latex/clust-tsne-1} 
+
+}
+
+\caption{tSNE map of the patient data}(\#fig:clust-tsne)
+\end{figure}
 
 Note that all points on the plot above are black. This is different from what we saw before, when the cells were coloured based on the annotation. Here we do not have any annotation and all cells come from the same batch, therefore all dots are black.
 
@@ -269,10 +292,14 @@ pData(pollen)$tSNE_kmeans <- as.character(kmeans(pollen@reducedDimension, center
 plotTSNE(pollen, rand_seed = 1, colour_by = "tSNE_kmeans")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-tsne-kmeans2-1.png" alt="tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm" width="672" />
-<p class="caption">(\#fig:clust-tsne-kmeans2)tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{18-clustering_files/figure-latex/clust-tsne-kmeans2-1} 
+
+}
+
+\caption{tSNE map of the patient data with 8 colored clusters, identified by the k-means clustering algorithm}(\#fig:clust-tsne-kmeans2)
+\end{figure}
 
 __Exercise 7__: Make the same plot for $k=11$.
 
@@ -280,7 +307,8 @@ __Exercise 8__: Compare the results between `SC3` and `tSNE+kmeans`. Can the
 results be improved by changing the `perplexity` parameter?
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-18-1} \end{center}
 
 As you may have noticed, both `pcaReduce` and `tSNE+kmeans` are stochastic
 and give different results every time they are run. To get a better
@@ -334,12 +362,15 @@ pData(pollen)$SNNCliq <- as.character(snn.res[,1])
 plotPCA(pollen, colour_by = "SNNCliq")
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-19-1} \end{center}
 
 __Exercise 9__: Compare the results between `SC3` and `SNN-Cliq`.
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-20-1} \end{center}
 
 ## SINCERA
 
@@ -388,15 +419,20 @@ pheatmap(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="18-clustering_files/figure-html/clust-sincera-1.png" alt="Clustering solutions of SINCERA method using $k=3$" width="672" />
-<p class="caption">(\#fig:clust-sincera)Clustering solutions of SINCERA method using $k=3$</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{18-clustering_files/figure-latex/clust-sincera-1} 
+
+}
+
+\caption{Clustering solutions of SINCERA method using $k=3$}(\#fig:clust-sincera)
+\end{figure}
 
 __Exercise 10__: Compare the results between `SC3` and `SNN-Cliq`.
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-23-1} \end{center}
 
 __Exercise 11__: Is using the singleton cluster criteria for finding __k__ a good idea?
 
@@ -413,7 +449,9 @@ pollen_seurat <- Setup(pollen_seurat, project = "Pollen")
 pollen_seurat <- MeanVarPlot(pollen_seurat)
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-24-1} \end{center}
 
 ```r
 pollen_seurat <- RegressOut(pollen_seurat, latent.vars = c("nUMI"), 
@@ -517,12 +555,15 @@ pollen_seurat <- FindClusters(pollen_seurat)
 TSNEPlot(pollen_seurat, do.label = T)
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-24-2.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-24-2} \end{center}
 
 __Exercise 12__: Compare the results between `SC3` and `SEURAT`.
 
 __Our solution__:
-<img src="18-clustering_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-25-1} \end{center}
 
 
 Seurat can also find marker genes, e.g. marker genes for cluster 2:
@@ -535,6 +576,8 @@ FeaturePlot(pollen_seurat,
             nCol = 3)
 ```
 
-<img src="18-clustering_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{18-clustering_files/figure-latex/unnamed-chunk-26-1} \end{center}
 
 __Exercise 13__: Compare marker genes provided by `SEURAT` and `SC3`.

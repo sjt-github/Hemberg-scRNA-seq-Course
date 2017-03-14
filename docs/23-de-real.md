@@ -25,8 +25,8 @@ accuracy of each single-cell method. To save time we have pre-computed these for
 
 
 ```r
-DE <- read.table("blischak/TPs.txt")
-notDE <- read.table("blischak/TNs.txt")
+DE <- read.table("tung/TPs.txt")
+notDE <- read.table("tung/TNs.txt")
 GroundTruth <- list(DE=as.character(unlist(DE)), notDE=as.character(unlist(notDE)))
 ```
 
@@ -34,8 +34,8 @@ This ground truth has been produce for the comparison of individual NA19101 to N
 
 
 ```r
-molecules <- read.table("blischak/molecules.txt", sep = "\t")
-anno <- read.table("blischak/annotation.txt", sep = "\t", header = TRUE)
+molecules <- read.table("tung/molecules.txt", sep = "\t")
+anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
 keep <- anno[,1] == "NA19101" | anno[,1] == "NA19239"
 data <- molecules[,keep]
 group <- anno[keep,1]
@@ -59,10 +59,14 @@ ones. The most commonly used non-parametric test is the
 
 The KS-test quantifies the distance between the empirical cummulative distributions of the expression of each gene in each of the two populations. It is sensitive to changes in mean experession and changes in variability. However it assumes data is continuous and may perform poorly when data contains a large number of identical values (eg. zeros). Another issue with the KS-test is that it can be very sensitive for large sample sizes and thus it may end up as significant even though the magnitude of the difference is very small.
 
-<div class="figure" style="text-align: center">
-<img src="figures/KS2_Example.png" alt="Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))" width="60%" />
-<p class="caption">(\#fig:ks-statistic)Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\linewidth]{figures/KS2_Example} 
+
+}
+
+\caption{Illustration of the two-sample Kolmogorov–Smirnov statistic. Red and blue lines each correspond to an empirical distribution function, and the black arrow is the two-sample KS statistic. (taken from [here](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test))}(\#fig:ks-statistic)
+\end{figure}
 
 Now run the test:
 
@@ -142,10 +146,14 @@ perf <- ROCR::performance(pred, "tpr", "fpr")
 ROCR::plot(perf)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/ks-roc-plot-1.png" alt="ROC curve for KS-test." width="672" />
-<p class="caption">(\#fig:ks-roc-plot)ROC curve for KS-test.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/ks-roc-plot-1} 
+
+}
+
+\caption{ROC curve for KS-test.}(\#fig:ks-roc-plot)
+\end{figure}
 
 ```r
 aucObj <- ROCR::performance(pred, "auc")
@@ -186,10 +194,14 @@ pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/wilcox-plot-1.png" alt="ROC curve for Wilcox test." width="672" />
-<p class="caption">(\#fig:wilcox-plot)ROC curve for Wilcox test.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/wilcox-plot-1} 
+
+}
+
+\caption{ROC curve for Wilcox test.}(\#fig:wilcox-plot)
+\end{figure}
 
 ```
 ## [1] 0.8320326
@@ -213,10 +225,14 @@ pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/edger-plot-1.png" alt="ROC curve for edgeR." width="672" />
-<p class="caption">(\#fig:edger-plot)ROC curve for edgeR.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/edger-plot-1} 
+
+}
+
+\caption{ROC curve for edgeR.}(\#fig:edger-plot)
+\end{figure}
 
 ```
 ## [1] 0.8477189
@@ -242,10 +258,14 @@ pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/Monocle-plot-1.png" alt="ROC curve for Monocle." width="672" />
-<p class="caption">(\#fig:Monocle-plot)ROC curve for Monocle.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/Monocle-plot-1} 
+
+}
+
+\caption{ROC curve for Monocle.}(\#fig:Monocle-plot)
+\end{figure}
 
 ```
 ## [1] 0.8252662
@@ -253,10 +273,14 @@ DE_Quality_AUC(pVals)
 __Exercise__: Compare the results using the negative binomial model on counts and those from using the normal/gaussian model (gaussianff()) on log-transformed normalized counts.
 
 __Answer__:
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/Monocle-plot2-1.png" alt="ROC curve for Monocle-gaussian." width="672" />
-<p class="caption">(\#fig:Monocle-plot2)ROC curve for Monocle-gaussian.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/Monocle-plot2-1} 
+
+}
+
+\caption{ROC curve for Monocle-gaussian.}(\#fig:Monocle-plot2)
+\end{figure}
 
 ```
 ## [1] 0.7357829
@@ -296,10 +320,14 @@ pVals <- p.adjust(pVals, method = "fdr")
 DE_Quality_AUC(pVals)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="23-de-real_files/figure-html/MAST-plot-1.png" alt="ROC curve for MAST." width="672" />
-<p class="caption">(\#fig:MAST-plot)ROC curve for MAST.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{23-de-real_files/figure-latex/MAST-plot-1} 
+
+}
+
+\caption{ROC curve for MAST.}(\#fig:MAST-plot)
+\end{figure}
 
 ```
 ## [1] 0.8284046

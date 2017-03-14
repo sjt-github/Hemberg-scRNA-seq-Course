@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-# Expression QC (UMI)
+# Expression QC (UMI) {#exprs-qc}
 
 ## Introduction
 
@@ -13,15 +13,14 @@ the biological signals of interest in the downstream analysis.
 Since there is currently no standard method for performing scRNASeq the expected values for the various QC measures that will be presented here can vary substantially from experiment to experiment. Thus, to perform QC we will be looking for cells which are outliers with respect to the rest of the dataset rather than comparing to independent quality standards. Consequently, care should be taken when comparing quality metrics across datasets collected using different protocols.
 
 
-## Blischak dataset
+## Tung dataset
 
 To illustrate cell QC, we consider a
 [dataset](http://jdblischak.github.io/singleCellSeq/analysis/) of
- induced pluripotent stem cells generated from three different individuals [@Tung2016-an] by John
-Blischak in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
+ induced pluripotent stem cells generated from three different individuals [@Tung2017-ba] in [Yoav Gilad](http://giladlab.uchicago.edu/)'s lab at the
 University of Chicago. The experiments were carried out on the
 Fluidigm C1 platform and to facilitate the quantification both unique
-molecular identifiers (UMIs) and ERCC _spike-ins_ were used. The data files are located in the `blischak` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
+molecular identifiers (UMIs) and ERCC _spike-ins_ were used. The data files are located in the `tung` folder in your working directory. These files are the copies of the original files made on the 15/03/16. We will use these copies for reproducibility purposes.
 
 
 
@@ -35,8 +34,8 @@ options(stringsAsFactors = FALSE)
 Load the data and annotations:
 
 ```r
-molecules <- read.table("blischak/molecules.txt", sep = "\t")
-anno <- read.table("blischak/annotation.txt", sep = "\t", header = TRUE)
+molecules <- read.table("tung/molecules.txt", sep = "\t")
+anno <- read.table("tung/annotation.txt", sep = "\t", header = TRUE)
 ```
 
 Inspect a small portion of the expression matrix
@@ -48,18 +47,23 @@ knitr::kable(
 )
 ```
 
+\begin{table}
 
-
-Table: (\#tab:unnamed-chunk-4)A table of the first 6 rows and 3 columns of the molecules table.
-
-                   NA19098.r1.A01   NA19098.r1.A02   NA19098.r1.A03
-----------------  ---------------  ---------------  ---------------
-ENSG00000237683                 0                0                0
-ENSG00000187634                 0                0                0
-ENSG00000188976                 3                6                1
-ENSG00000187961                 0                0                0
-ENSG00000187583                 0                0                0
-ENSG00000187642                 0                0                0
+\caption{(\#tab:unnamed-chunk-4)A table of the first 6 rows and 3 columns of the molecules table.}
+\centering
+\begin{tabular}[t]{lrrr}
+\toprule
+  & NA19098.r1.A01 & NA19098.r1.A02 & NA19098.r1.A03\\
+\midrule
+ENSG00000237683 & 0 & 0 & 0\\
+ENSG00000187634 & 0 & 0 & 0\\
+ENSG00000188976 & 3 & 6 & 1\\
+ENSG00000187961 & 0 & 0 & 0\\
+ENSG00000187583 & 0 & 0 & 0\\
+ENSG00000187642 & 0 & 0 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 ```r
 knitr::kable(
@@ -68,18 +72,23 @@ knitr::kable(
 )
 ```
 
+\begin{table}
 
-
-Table: (\#tab:unnamed-chunk-4)A table of the first 6 rows of the anno table.
-
-individual   replicate   well   batch        sample_id      
------------  ----------  -----  -----------  ---------------
-NA19098      r1          A01    NA19098.r1   NA19098.r1.A01 
-NA19098      r1          A02    NA19098.r1   NA19098.r1.A02 
-NA19098      r1          A03    NA19098.r1   NA19098.r1.A03 
-NA19098      r1          A04    NA19098.r1   NA19098.r1.A04 
-NA19098      r1          A05    NA19098.r1   NA19098.r1.A05 
-NA19098      r1          A06    NA19098.r1   NA19098.r1.A06 
+\caption{(\#tab:unnamed-chunk-4)A table of the first 6 rows of the anno table.}
+\centering
+\begin{tabular}[t]{lllll}
+\toprule
+individual & replicate & well & batch & sample\_id\\
+\midrule
+NA19098 & r1 & A01 & NA19098.r1 & NA19098.r1.A01\\
+NA19098 & r1 & A02 & NA19098.r1 & NA19098.r1.A02\\
+NA19098 & r1 & A03 & NA19098.r1 & NA19098.r1.A03\\
+NA19098 & r1 & A04 & NA19098.r1 & NA19098.r1.A04\\
+NA19098 & r1 & A05 & NA19098.r1 & NA19098.r1.A05\\
+NA19098 & r1 & A06 & NA19098.r1 & NA19098.r1.A06\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 The data consists of 3 individuals and 3 replicates and therefore has 9 batches in total.
 
@@ -140,10 +149,14 @@ hist(
 abline(v = 25000, col = "red")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="07-exprs-qc_files/figure-html/total-counts-hist-1.png" alt="Histogram of library sizes for all cells" width="90%" />
-<p class="caption">(\#fig:total-counts-hist)Histogram of library sizes for all cells</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{07-exprs-qc_files/figure-latex/total-counts-hist-1} 
+
+}
+
+\caption{Histogram of library sizes for all cells}(\#fig:total-counts-hist)
+\end{figure}
 
 __Exercise 1__
 
@@ -154,13 +167,19 @@ total number of molecules for each cell should follow?
 
 __Our answer__
 
+\begin{table}
 
-Table: (\#tab:unnamed-chunk-9)The number of cells removed by total counts filter (FALSE)
-
-filter_by_total_counts    Freq
------------------------  -----
-FALSE                       46
-TRUE                       818
+\caption{(\#tab:unnamed-chunk-9)The number of cells removed by total counts filter (FALSE)}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+filter\_by\_total\_counts & Freq\\
+\midrule
+FALSE & 46\\
+TRUE & 818\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 ### Detected genes (1)
 
@@ -175,10 +194,14 @@ hist(
 abline(v = 7000, col = "red")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="07-exprs-qc_files/figure-html/total-features-hist-1.png" alt="Histogram of the number of detected genes in all cells" width="90%" />
-<p class="caption">(\#fig:total-features-hist)Histogram of the number of detected genes in all cells</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{07-exprs-qc_files/figure-latex/total-features-hist-1} 
+
+}
+
+\caption{Histogram of the number of detected genes in all cells}(\#fig:total-features-hist)
+\end{figure}
 
 From the plot we conclude that most cells have between 7,000-10,000 detected genes,
 which is normal for high-depth scRNA-seq. However, this varies by
@@ -194,13 +217,19 @@ How many cells does our filter remove?
 
 __Our answer__
 
+\begin{table}
 
-Table: (\#tab:unnamed-chunk-10)The number of cells removed by total features filter (FALSE)
-
-filter_by_expr_features    Freq
-------------------------  -----
-FALSE                       120
-TRUE                        744
+\caption{(\#tab:unnamed-chunk-10)The number of cells removed by total features filter (FALSE)}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+filter\_by\_expr\_features & Freq\\
+\midrule
+FALSE & 120\\
+TRUE & 744\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 ### ERCCs and MTs
 
@@ -220,10 +249,14 @@ scater::plotPhenoData(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="07-exprs-qc_files/figure-html/mt-vs-counts-1.png" alt="Percentage of counts in MT genes" width="90%" />
-<p class="caption">(\#fig:mt-vs-counts)Percentage of counts in MT genes</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{07-exprs-qc_files/figure-latex/mt-vs-counts-1} 
+
+}
+
+\caption{Percentage of counts in MT genes}(\#fig:mt-vs-counts)
+\end{figure}
 
 
 ```r
@@ -235,10 +268,14 @@ scater::plotPhenoData(
 )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="07-exprs-qc_files/figure-html/ercc-vs-counts-1.png" alt="Percentage of counts in ERCCs" width="90%" />
-<p class="caption">(\#fig:ercc-vs-counts)Percentage of counts in ERCCs</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{07-exprs-qc_files/figure-latex/ercc-vs-counts-1} 
+
+}
+
+\caption{Percentage of counts in ERCCs}(\#fig:ercc-vs-counts)
+\end{figure}
 
 The above analysis shows that majority of the cells from NA19098.r2 batch have a very high ERCC/Endo ratio. Indeed, it has been shown by the authors that this batch contains cells of smaller size. 
 
@@ -248,22 +285,33 @@ Create filters for removing batch NA19098.r2 and cells with high expression of m
 
 __Our answer__
 
+\begin{table}
 
-Table: (\#tab:unnamed-chunk-11)The number of cells removed by ERCC filter (FALSE)
+\caption{(\#tab:unnamed-chunk-11)The number of cells removed by ERCC filter (FALSE)}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+filter\_by\_ERCC & Freq\\
+\midrule
+FALSE & 96\\
+TRUE & 768\\
+\bottomrule
+\end{tabular}
+\end{table}
 
-filter_by_ERCC    Freq
----------------  -----
-FALSE               96
-TRUE               768
+\begin{table}
 
-
-
-Table: (\#tab:unnamed-chunk-11)The number of cells removed by MT filter (FALSE)
-
-filter_by_MT    Freq
--------------  -----
-FALSE             31
-TRUE             833
+\caption{(\#tab:unnamed-chunk-11)The number of cells removed by MT filter (FALSE)}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+filter\_by\_MT & Freq\\
+\midrule
+FALSE & 31\\
+TRUE & 833\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 __Exercise 4__
 
@@ -303,14 +351,19 @@ knitr::kable(
 )
 ```
 
+\begin{table}
 
-
-Table: (\#tab:unnamed-chunk-13)The number of cells removed by manual filter (FALSE)
-
-Var1     Freq
-------  -----
-FALSE     210
-TRUE      654
+\caption{(\#tab:unnamed-chunk-13)The number of cells removed by manual filter (FALSE)}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+Var1 & Freq\\
+\midrule
+FALSE & 210\\
+TRUE & 654\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 ### Default Thresholds
 
@@ -342,14 +395,19 @@ knitr::kable(
 )
 ```
 
+\begin{table}
 
-
-Table: (\#tab:unnamed-chunk-15)The number of cells removed by default filter (FALSE)
-
-Var1     Freq
-------  -----
-FALSE       6
-TRUE      858
+\caption{(\#tab:unnamed-chunk-15)The number of cells removed by default filter (FALSE)}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+Var1 & Freq\\
+\midrule
+FALSE & 6\\
+TRUE & 858\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 ### Automatic
 
@@ -453,21 +511,33 @@ scater::plotPCA(umi,
 ## NA19101.r3.D01
 ## NA19101.r3.E08
 ## Variables with highest loadings for PC1 and PC2:
-## 
-##                                            PC1         PC2
-## ---------------------------------  -----------  ----------
-## pct_counts_top_100_features          0.4771343   0.3009332
-## pct_counts_feature_controls          0.4735839   0.3309562
-## n_detected_feature_controls          0.1332811   0.5367629
-## log10_counts_feature_controls       -0.1427373   0.5911762
-## total_features                      -0.5016681   0.2936705
-## log10_counts_endogenous_features    -0.5081855   0.2757918
+## \begin{tabular}{l|r|r}
+## \hline
+##   & PC1 & PC2\\
+## \hline
+## pct\_counts\_top\_100\_features & 0.4771343 & 0.3009332\\
+## \hline
+## pct\_counts\_feature\_controls & 0.4735839 & 0.3309562\\
+## \hline
+## n\_detected\_feature\_controls & 0.1332811 & 0.5367629\\
+## \hline
+## log10\_counts\_feature\_controls & -0.1427373 & 0.5911762\\
+## \hline
+## total\_features & -0.5016681 & 0.2936705\\
+## \hline
+## log10\_counts\_endogenous\_features & -0.5081855 & 0.2757918\\
+## \hline
+## \end{tabular}
 ```
 
-<div class="figure" style="text-align: center">
-<img src="07-exprs-qc_files/figure-html/auto-cell-filt-1.png" alt="PCA plot used for automatic detection of cell outliers" width="90%" />
-<p class="caption">(\#fig:auto-cell-filt)PCA plot used for automatic detection of cell outliers</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{07-exprs-qc_files/figure-latex/auto-cell-filt-1} 
+
+}
+
+\caption{PCA plot used for automatic detection of cell outliers}(\#fig:auto-cell-filt)
+\end{figure}
 
 
 ```r
@@ -479,14 +549,19 @@ knitr::kable(
 )
 ```
 
+\begin{table}
 
-
-Table: (\#tab:unnamed-chunk-16)The number of cells removed by automatic filter (FALSE)
-
-Var1     Freq
-------  -----
-FALSE     791
-TRUE       73
+\caption{(\#tab:unnamed-chunk-16)The number of cells removed by automatic filter (FALSE)}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+Var1 & Freq\\
+\midrule
+FALSE & 791\\
+TRUE & 73\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 ## Compare filterings
 
@@ -498,10 +573,14 @@ __Hint__: Use `limma::vennCounts` and `limma::vennDiagram` functions from the [l
 
 __Answer__
 
-<div class="figure" style="text-align: center">
-<img src="07-exprs-qc_files/figure-html/cell-filt-comp-1.png" alt="Comparison of the default, automatic and manual cell filters" width="90%" />
-<p class="caption">(\#fig:cell-filt-comp)Comparison of the default, automatic and manual cell filters</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{07-exprs-qc_files/figure-latex/cell-filt-comp-1} 
+
+}
+
+\caption{Comparison of the default, automatic and manual cell filters}(\#fig:cell-filt-comp)
+\end{figure}
 
 ## Gene analysis
 
@@ -516,10 +595,14 @@ It is often instructive to consider the number of reads consumed by the top 50 e
 scater::plotQC(umi, type = "highest-expression")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="07-exprs-qc_files/figure-html/top50-gene-expr-1.png" alt="Number of total counts consumed by the top 50 expressed genes" width="90%" />
-<p class="caption">(\#fig:top50-gene-expr)Number of total counts consumed by the top 50 expressed genes</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{07-exprs-qc_files/figure-latex/top50-gene-expr-1} 
+
+}
+
+\caption{Number of total counts consumed by the top 50 expressed genes}(\#fig:top50-gene-expr)
+\end{figure}
 
 The distributions are relatively flat indicating (but not guaranteeing!) good coverage of the full transcriptome of these cells. However, there are several spike-ins in the top 15 genes which suggests a greater dilution of the spike-ins may be preferrable if the experiment is to be repeated.
 
@@ -545,14 +628,19 @@ knitr::kable(
 )
 ```
 
+\begin{table}
 
-
-Table: (\#tab:unnamed-chunk-18)The number of genes removed by gene filter (FALSE)
-
-filter_genes     Freq
--------------  ------
-FALSE            4663
-TRUE            14063
+\caption{(\#tab:unnamed-chunk-18)The number of genes removed by gene filter (FALSE)}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+filter\_genes & Freq\\
+\midrule
+FALSE & 4663\\
+TRUE & 14063\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Depending on the cell-type, protocol and sequencing depth, other cut-offs may be appropriate.
 
@@ -573,11 +661,9 @@ dim(umi[fData(umi)$use, pData(umi)$use])
 Save the data:
 
 ```r
-saveRDS(umi, file = "blischak/umi.rds")
+saveRDS(umi, file = "tung/umi.rds")
 ```
-
-If you want to further check yourself you can download our [`umi`](http://hemberg-lab.github.io/scRNA.seq.course/blischak/umi.rds) object. If you followed the steps above it should be exactly the same as yours.
 
 ## Big Exercise
 
-Perform exactly the same QC analysis with read counts of the same Blischak data. Use `blischak/reads.txt` file to load the reads. Once you have finished please compare your results to ours (next chapter).
+Perform exactly the same QC analysis with read counts of the same Blischak data. Use `tung/reads.txt` file to load the reads. Once you have finished please compare your results to ours (next chapter).
