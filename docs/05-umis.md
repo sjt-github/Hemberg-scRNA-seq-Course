@@ -87,7 +87,7 @@ Current UMI platforms (DropSeq, InDrop, ICell8) exhibit low and highly variable 
 
 This variability can introduce strong biases and it needs to be considered in downstream analysis. Recent analyses often pool cells/genes together based on cell-type or biological pathway to increase the power. Robust statistical analyses of this data is still an open research question and it remains to be determined how to best adjust for biases.
 
-__Exercise 1__ We have provided you with UMI counts and read counts from induced pluripotent stem cells generated from three different individuals [@Tung2016-an] (see: Chapter \@ref(exprs-qc) for details of this dataset).
+__Exercise 1__ We have provided you with UMI counts and read counts from induced pluripotent stem cells generated from three different individuals [@Tung2017-ba] (see: Chapter \@ref(exprs-qc) for details of this dataset).
 
 
 ```r
