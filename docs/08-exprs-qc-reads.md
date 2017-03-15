@@ -631,6 +631,11 @@ dim(reads[fData(reads)$use, pData(reads)$use])
 
 
 ```r
+set_exprs(reads, "log2_counts") <- log2(counts(reads) + 1)
+```
+
+
+```r
 saveRDS(reads, file = "tung/reads.rds")
 ```
 

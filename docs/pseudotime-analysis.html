@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-03-14">
+<meta name="date" content="2017-03-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -529,19 +529,10 @@ tmp &lt;-<span class="st"> </span><span class="kw">factor</span>(
 <div id="slicer" class="section level2">
 <h2><span class="header-section-number">21.4</span> SLICER</h2>
 <p>The SLICER method is an algorithm for constructing trajectories that describe gene expression changes during a sequential biological process, just as Monocle and TSCAN are. SLICER is designed to capture highly nonlinear gene expression changes, automatically select genes related to the process, and detect multiple branch and loop features in the trajectory <span class="citation">(Welch, Hartemink, and Prins <a href="#ref-Welch2016-jr">2016</a>)</span>. The SLICER R package is available from its <a href="https://github.com/jw156605/SLICER">GitHub repository</a> and can be installed from there using the <code>devtools</code> package.</p>
-<p>We use the <code>select_genes</code> function in SLICER to automatically select the genes to use in builing the cell trajectory. The function uses “neighbourhood variance” to identify genes that vary smoothly, rather than fluctuating randomly, across the set of cells. Following this, we determine which value of “k” (dimensions) yields an embedding that most resembles a trajectory. Then we estimate the <a href="https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction">locally linear embedding</a> of the cells.</p>
+<p>We use the <code>select_genes</code> function in SLICER to automatically select the genes to use in builing the cell trajectory. The function uses “neighbourhood variance” to identify genes that vary smoothly, rather than fluctuating randomly, across the set of cells. Following this, we determine which value of “k” (number of nearest neighbours) yields an embedding that most resembles a trajectory. Then we estimate the <a href="https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction">locally linear embedding</a> of the cells.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slicer_genes &lt;-<span class="st"> </span><span class="kw">select_genes</span>(<span class="kw">t</span>(deng))
-k &lt;-<span class="st"> </span><span class="kw">select_k</span>(<span class="kw">t</span>(deng[slicer_genes,]), <span class="dt">kmin =</span> <span class="dv">5</span>)</code></pre></div>
+k &lt;-<span class="st"> </span><span class="kw">select_k</span>(<span class="kw">t</span>(deng[slicer_genes,]), <span class="dt">kmin =</span> <span class="dv">30</span>, <span class="dt">kmax=</span><span class="dv">60</span>)</code></pre></div>
 <pre><code>## finding neighbours
-## calculating weights
-## computing coordinates
-## finding neighbours
-## calculating weights
-## computing coordinates
-## finding neighbours
-## calculating weights
-## computing coordinates
-## finding neighbours
 ## calculating weights
 ## computing coordinates
 ## finding neighbours
@@ -567,10 +558,11 @@ k &lt;-<span class="st"> </span><span class="kw">select_k</span>(<span class="kw
 ## calculating weights
 ## computing coordinates</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(slicer_traj_lle, <span class="dt">xlab =</span> <span class="st">&quot;LLE Comp 1&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;LLE Comp 2&quot;</span>,
-     <span class="dt">main =</span> <span class="st">&quot;Locally linear embedding of cells from SLICER&quot;</span>)</code></pre></div>
+     <span class="dt">main =</span> <span class="st">&quot;Locally linear embedding of cells from SLICER&quot;</span>, 
+     <span class="dt">col=</span>colours[tmp], <span class="dt">pch=</span><span class="dv">16</span>)</code></pre></div>
 <p><img src="20-pseudotime_files/figure-html/slicer-analyis-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>With the locally linear embedding computed we can construct a k-nearest neighbour graph that is fully connected.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slicer_traj_graph &lt;-<span class="st"> </span><span class="kw">conn_knn_graph</span>(slicer_traj_lle, <span class="dv">5</span>)
+<p>With the locally linear embedding computed we can construct a k-nearest neighbour graph that is fully connected. This plot displays a (yellow) circle for each cell, with the cell ID number overlaid in blue. Here we show the graph computed using 10 nearest neighbours. Here, SLICER appears to detect one major trajectory with one branch.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slicer_traj_graph &lt;-<span class="st"> </span><span class="kw">conn_knn_graph</span>(slicer_traj_lle, <span class="dv">10</span>)
 <span class="kw">plot</span>(slicer_traj_graph, <span class="dt">main =</span> <span class="st">&quot;Fully connected kNN graph from SLICER&quot;</span>)</code></pre></div>
 <p><img src="20-pseudotime_files/figure-html/slicer-build-graph-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>From this graph we can identify “extreme” cells that are candidates for start/end cells in the trajectory.</p>
@@ -578,7 +570,7 @@ k &lt;-<span class="st"> </span><span class="kw">select_k</span>(<span class="kw
 <p><img src="20-pseudotime_files/figure-html/slicer-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">start &lt;-<span class="st"> </span>ends[<span class="dv">1</span>]</code></pre></div>
 <p>Having defined a start cell we can order the cells in the estimated pseudotime.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pseudotime_order_slicer&lt;-<span class="st"> </span><span class="kw">cell_order</span>(slicer_traj_graph, start)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pseudotime_order_slicer &lt;-<span class="st"> </span><span class="kw">cell_order</span>(slicer_traj_graph, start)
 branches &lt;-<span class="st"> </span><span class="kw">assign_branches</span>(slicer_traj_graph, start)
 
 pseudotime_slicer &lt;-
@@ -606,7 +598,7 @@ pseudotime_slicer$pseudotime[pseudotime_order_slicer] &lt;-
 )</code></pre></div>
 <p><img src="20-pseudotime_files/figure-html/slicer-vs-truth-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Like the previous method, SLICER here provides a good ordering for the early time points and struggles for later time points.</p>
-<p><strong>Exercise 4</strong> Do you get a better results if you use different “start” cells?</p>
+<p><strong>Exercise 4</strong> How do the results change for different k? (e.g. k = 5) What about changing the number of nearest neighbours in the call to <code>conn_knn_graph</code>?</p>
 <p><strong>Exercise 5</strong> How does the ordering change if you use a different set of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?</p>
 </div>
 <div id="comparison-of-the-methods" class="section level2">

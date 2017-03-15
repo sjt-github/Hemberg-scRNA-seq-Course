@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-03-14">
+<meta name="date" content="2017-03-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -394,6 +394,9 @@ Figure 5.1: Example of FastQC output
 <p><strong>Note</strong>, if the <em>spike-ins</em> are used, the reference sequence should be augmented with the DNA sequence of the <em>spike-in</em> molecules prior to mapping.</p>
 <p><strong>Note</strong>, when UMIs are used, their barcodes should be removed from the read sequence. A common practice is to add the barcode to the read name.</p>
 <p>Once the reads for each cell have been mapped to the reference genome, we need to make sure that a sufficient number of reads from each cell could be mapped to the reference genome. In our experience, the fraction of mappable reads for mouse or human cells is 60-70%. However, this result may vary depending on protocol, read length and settings for the read alignment. As a general rule, we expect all cells to have a similar fraction of mapped reads, so any outliers should be inspected and possibly removed. A low proportion of mappable reads usually indicates contamination.</p>
+<p>An example of how to quantify expression using Salmon is</p>
+<pre><code>$&lt;path_to_Salmon&gt;/salmon quant -i salmon_transcript_index -1 reads1.fq.gz -2 reads2.fq.gz -p #threads -l A -g genome.gtf --seqBias --gcBias --posBias</code></pre>
+<p><strong>Note</strong> Salmon produces estimated read counts and estimated transcripts per million (tpm) in our experience the latter over corrects the expression of long genes for scRNASeq, thus we recommend using read counts.</p>
 </div>
 <div id="alignment-example" class="section level2">
 <h2><span class="header-section-number">5.3</span> Alignment example</h2>

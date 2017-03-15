@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-03-14">
+<meta name="date" content="2017-03-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -454,14 +454,14 @@ endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(umi.qc)
                 <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
                 <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
                 <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;counts&quot;</span>)</code></pre></div>
+                <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-raw"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-raw-1.png" alt="PCA plot of the tung data" width="90%" />
 <p class="caption">
 Figure 14.1: PCA plot of the tung data
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">counts</span>(umi.qc[endog_genes, ])),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">get_exprs</span>(umi.qc[endog_genes, ], <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>)),
         <span class="dt">col =</span> <span class="st">&quot;grey50&quot;</span>,
         <span class="dt">ylab =</span> <span class="st">&quot;RLE&quot;</span>,
         <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylim=</span><span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
@@ -627,7 +627,7 @@ function (expr_mat)
     <span class="kw">return</span>(down_sampled_mat)
 }</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">norm_counts</span>(umi.qc) &lt;-<span class="st"> </span>
-<span class="st">    </span>scRNA.seq.funcs::<span class="kw">Down_Sample_Matrix</span>(<span class="kw">counts</span>(umi.qc))
+<span class="st">    </span><span class="kw">log2</span>(scRNA.seq.funcs::<span class="kw">Down_Sample_Matrix</span>(<span class="kw">counts</span>(umi.qc)) +<span class="st"> </span><span class="dv">1</span>)
 scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
                 <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
                 <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
@@ -706,16 +706,8 @@ Figure 14.15: Gene length vs Mean Expression for the raw data
 </div>
 <p>There is no relationship between gene length and mean expression so FPKMs &amp; TPMs are inappropriate for this dataset. But we will demonstrate them anyway.</p>
 <p>Now we are ready to perform the normalisations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tpm</span>(umi.qc.ann) &lt;-
-<span class="st">    </span><span class="kw">calculateTPM</span>(
-        umi.qc.ann,
-        eff_length
-    )
-<span class="kw">fpkm</span>(umi.qc.ann) &lt;-
-<span class="st">    </span><span class="kw">calculateFPKM</span>(
-        umi.qc.ann,
-        eff_length
-    )</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tpm</span>(umi.qc.ann) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateTPM</span>(umi.qc.ann, eff_length) +<span class="st"> </span><span class="dv">1</span>)
+<span class="kw">fpkm</span>(umi.qc.ann) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateFPKM</span>(umi.qc.ann, eff_length) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
 <p>Plot the results as a PCA plot:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPCA</span>(umi.qc.ann,
                 <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,

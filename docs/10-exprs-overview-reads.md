@@ -27,11 +27,30 @@ scater::plotPCA(reads[endog_genes, ],
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-pca-before-qc-reads-1} 
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-pca-before-qc-reads1-1} 
 
 }
 
-\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc-reads)
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc-reads1)
+\end{figure}
+
+
+```r
+scater::plotPCA(reads[endog_genes, ],
+                ntop = 500,
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "log2_counts")
+```
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-pca-before-qc-reads2-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc-reads2)
 \end{figure}
 
 
@@ -41,7 +60,7 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
-                exprs_values = "counts")
+                exprs_values = "log2_counts")
 ```
 
 \begin{figure}
@@ -61,7 +80,7 @@ scater::plotTSNE(reads[endog_genes, ],
                  colour_by = "batch",
                  size_by = "total_features",
                  shape_by = "individual",
-                 exprs_values = "counts",
+                 exprs_values = "log2_counts",
                  rand_seed = 123456)
 ```
 
@@ -82,7 +101,7 @@ scater::plotTSNE(reads.qc[endog_genes, ],
                  colour_by = "batch",
                  size_by = "total_features",
                  shape_by = "individual",
-                 exprs_values = "counts",
+                 exprs_values = "log2_counts",
                  rand_seed = 123456)
 ```
 

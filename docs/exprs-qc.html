@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-03-14">
+<meta name="date" content="2017-03-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -963,6 +963,8 @@ Figure 8.7: Number of total counts consumed by the top 50 expressed genes
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(umi[<span class="kw">fData</span>(umi)$use, <span class="kw">pData</span>(umi)$use])</code></pre></div>
 <pre><code>## Features  Samples 
 ##    14063      654</code></pre>
+<p>Let’s create an additional slot with log-transformed counts (we will need it in the next chapters):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set_exprs</span>(umi, <span class="st">&quot;log2_counts&quot;</span>) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">counts</span>(umi) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
 <p>Save the data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveRDS</span>(umi, <span class="dt">file =</span> <span class="st">&quot;tung/umi.rds&quot;</span>)</code></pre></div>
 </div>

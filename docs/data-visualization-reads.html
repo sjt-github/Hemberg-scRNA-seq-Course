@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-03-14">
+<meta name="date" content="2017-03-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -380,10 +380,22 @@ endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(reads.q
                 <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
                 <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
                 <span class="dt">exprs_values =</span> <span class="st">&quot;counts&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:expr-overview-pca-before-qc-reads"></span>
-<img src="10-exprs-overview-reads_files/figure-html/expr-overview-pca-before-qc-reads-1.png" alt="PCA plot of the tung data" width="90%" />
+<div class="figure" style="text-align: center"><span id="fig:expr-overview-pca-before-qc-reads1"></span>
+<img src="10-exprs-overview-reads_files/figure-html/expr-overview-pca-before-qc-reads1-1.png" alt="PCA plot of the tung data" width="90%" />
 <p class="caption">
 Figure 11.1: PCA plot of the tung data
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPCA</span>(reads[endog_genes, ],
+                <span class="dt">ntop =</span> <span class="dv">500</span>,
+                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+                <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:expr-overview-pca-before-qc-reads2"></span>
+<img src="10-exprs-overview-reads_files/figure-html/expr-overview-pca-before-qc-reads2-1.png" alt="PCA plot of the tung data" width="90%" />
+<p class="caption">
+Figure 11.2: PCA plot of the tung data
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPCA</span>(reads.qc[endog_genes, ],
@@ -391,11 +403,11 @@ Figure 11.1: PCA plot of the tung data
                 <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
                 <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
                 <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;counts&quot;</span>)</code></pre></div>
+                <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:expr-overview-pca-after-qc-reads"></span>
 <img src="10-exprs-overview-reads_files/figure-html/expr-overview-pca-after-qc-reads-1.png" alt="PCA plot of the tung data" width="90%" />
 <p class="caption">
-Figure 11.2: PCA plot of the tung data
+Figure 11.3: PCA plot of the tung data
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotTSNE</span>(reads[endog_genes, ],
@@ -404,12 +416,12 @@ Figure 11.2: PCA plot of the tung data
                  <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
                  <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
                  <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                 <span class="dt">exprs_values =</span> <span class="st">&quot;counts&quot;</span>,
+                 <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
                  <span class="dt">rand_seed =</span> <span class="dv">123456</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:expr-overview-tsne-before-qc-reads"></span>
 <img src="10-exprs-overview-reads_files/figure-html/expr-overview-tsne-before-qc-reads-1.png" alt="tSNE map of the tung data" width="90%" />
 <p class="caption">
-Figure 11.3: tSNE map of the tung data
+Figure 11.4: tSNE map of the tung data
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotTSNE</span>(reads.qc[endog_genes, ],
@@ -418,24 +430,24 @@ Figure 11.3: tSNE map of the tung data
                  <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
                  <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
                  <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                 <span class="dt">exprs_values =</span> <span class="st">&quot;counts&quot;</span>,
+                 <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>,
                  <span class="dt">rand_seed =</span> <span class="dv">123456</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:expr-overview-tsne-after-qc-reads"></span>
 <img src="10-exprs-overview-reads_files/figure-html/expr-overview-tsne-after-qc-reads-1.png" alt="tSNE map of the tung data" width="90%" />
 <p class="caption">
-Figure 11.4: tSNE map of the tung data
+Figure 11.5: tSNE map of the tung data
 </p>
 </div>
 <div class="figure" style="text-align: center"><span id="fig:expr-overview-tsne-after-qc-exercise2-1"></span>
 <img src="10-exprs-overview-reads_files/figure-html/expr-overview-tsne-after-qc-exercise2-1-1.png" alt="tSNE map of the tung data (perplexity = 10)" width="90%" />
 <p class="caption">
-Figure 10.8: tSNE map of the tung data (perplexity = 10)
+Figure 10.9: tSNE map of the tung data (perplexity = 10)
 </p>
 </div>
 <div class="figure" style="text-align: center"><span id="fig:expr-overview-tsne-after-qc-exercise2-2"></span>
 <img src="10-exprs-overview-reads_files/figure-html/expr-overview-tsne-after-qc-exercise2-2-1.png" alt="tSNE map of the tung data (perplexity = 200)" width="90%" />
 <p class="caption">
-Figure 10.9: tSNE map of the tung data (perplexity = 200)
+Figure 10.10: tSNE map of the tung data (perplexity = 200)
 </p>
 </div>
 

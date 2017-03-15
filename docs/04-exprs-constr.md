@@ -1,5 +1,5 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
 # Construction of expression matrix
@@ -57,6 +57,12 @@ this result may vary depending on protocol, read length and settings for
 the read alignment. As a general rule, we expect all cells to have a similar
 fraction of mapped reads, so any outliers should be inspected and
 possibly removed. A low proportion of mappable reads usually indicates contamination.
+
+An example of how to quantify expression using Salmon is
+```
+$<path_to_Salmon>/salmon quant -i salmon_transcript_index -1 reads1.fq.gz -2 reads2.fq.gz -p #threads -l A -g genome.gtf --seqBias --gcBias --posBias
+```
+__Note__ Salmon produces estimated read counts and estimated transcripts per million (tpm) in our experience the latter over corrects the expression of long genes for scRNASeq, thus we recommend using read counts. 
 
 ## Alignment example
 

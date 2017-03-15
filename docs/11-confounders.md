@@ -29,7 +29,7 @@ Let's first look again at the PCA plot of the QCed dataset:
 scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
-                exprs_values = "counts")
+                exprs_values = "log2_counts")
 ```
 
 \begin{figure}
@@ -52,7 +52,7 @@ Let's test whether some of the variables correlate with any of the PCs.
 scater::plotQC(umi.qc[endog_genes, ],
                type = "find-pcs",
                variable = "total_features",
-               exprs_values = "counts")
+               exprs_values = "log2_counts")
 ```
 
 \begin{figure}
@@ -74,7 +74,7 @@ scater can also compute the marginal $R^2$ for each variable when fitting a line
 ```r
 scater::plotQC(umi.qc[endog_genes, ],
                type = "expl",
-               exprs_values = "counts",
+               exprs_values = "log2_counts",
                variables = c("total_features",
                              "total_counts",
                              "batch",

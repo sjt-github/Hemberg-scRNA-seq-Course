@@ -134,7 +134,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
-                exprs_values = "counts")
+                exprs_values = "log2_counts")
 ```
 
 \begin{figure}
@@ -148,7 +148,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
 
 
 ```r
-boxplot(calc_cell_RLE(counts(umi.qc[endog_genes, ])),
+boxplot(calc_cell_RLE(get_exprs(umi.qc[endog_genes, ], exprs_values = "log2_counts")),
         col = "grey50",
         ylab = "RLE",
         main = "", ylim=c(-1,1))
@@ -380,7 +380,7 @@ function (expr_mat)
 
 ```r
 norm_counts(umi.qc) <- 
-    scRNA.seq.funcs::Down_Sample_Matrix(counts(umi.qc))
+    log2(scRNA.seq.funcs::Down_Sample_Matrix(counts(umi.qc)) + 1)
 scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
@@ -498,16 +498,8 @@ But we will demonstrate them anyway.
 Now we are ready to perform the normalisations:
 
 ```r
-tpm(umi.qc.ann) <-
-    calculateTPM(
-        umi.qc.ann,
-        eff_length
-    )
-fpkm(umi.qc.ann) <-
-    calculateFPKM(
-        umi.qc.ann,
-        eff_length
-    )
+tpm(umi.qc.ann) <- log2(calculateTPM(umi.qc.ann, eff_length) + 1)
+fpkm(umi.qc.ann) <- log2(calculateFPKM(umi.qc.ann, eff_length) + 1)
 ```
 
 Plot the results as a PCA plot:

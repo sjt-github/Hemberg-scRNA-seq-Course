@@ -658,6 +658,12 @@ dim(umi[fData(umi)$use, pData(umi)$use])
 ##    14063      654
 ```
 
+Let's create an additional slot with log-transformed counts (we will need it in the next chapters):
+
+```r
+set_exprs(umi, "log2_counts") <- log2(counts(umi) + 1)
+```
+
 Save the data:
 
 ```r

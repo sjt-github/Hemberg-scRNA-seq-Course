@@ -40,6 +40,7 @@ Mathematically, the PCs correspond to the eigenvectors of the covariance matrix.
 
 ### Before QC
 
+Without log-transformation:
 
 ```r
 scater::plotPCA(umi[endog_genes, ],
@@ -52,12 +53,34 @@ scater::plotPCA(umi[endog_genes, ],
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc-1} 
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc1-1} 
 
 }
 
-\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc)
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc1)
 \end{figure}
+
+With log-transformation:
+
+```r
+scater::plotPCA(umi[endog_genes, ],
+                ntop = 500,
+                colour_by = "batch",
+                size_by = "total_features",
+                shape_by = "individual",
+                exprs_values = "log2_counts")
+```
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc2-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc2)
+\end{figure}
+
+Clearly log-transformation is benefitial for our data - it reduces the variance on the first principal component and already separates some biological effects. Moreover, it makes the distribution of the expression values more normal. In the following analysis and chapters we will be using log-transformed raw counts by default.
 
 ### After QC
 
@@ -68,7 +91,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 colour_by = "batch",
                 size_by = "total_features",
                 shape_by = "individual",
-                exprs_values = "counts")
+                exprs_values = "log2_counts")
 ```
 
 \begin{figure}
@@ -80,7 +103,7 @@ scater::plotPCA(umi.qc[endog_genes, ],
 \caption{PCA plot of the tung data}(\#fig:expr-overview-pca-after-qc)
 \end{figure}
 
-Comparing Figure \@ref(fig:expr-overview-pca-before-qc) and Figure \@ref(fig:expr-overview-pca-after-qc), it is clear that after quality control the NA19098.r2 cells no longer form a group of outliers.
+Comparing Figure \@ref(fig:expr-overview-pca-before-qc2) and Figure \@ref(fig:expr-overview-pca-after-qc), it is clear that after quality control the NA19098.r2 cells no longer form a group of outliers.
 
 By default only the top 500 most variable genes are used by scater to calculate the PCA. This can be adjusted by changing the `ntop` argument. 
 
@@ -124,7 +147,7 @@ scater::plotTSNE(umi[endog_genes, ],
                  colour_by = "batch",
                  size_by = "total_features",
                  shape_by = "individual",
-                 exprs_values = "counts",
+                 exprs_values = "log2_counts",
                  rand_seed = 123456)
 ```
 
@@ -147,7 +170,7 @@ scater::plotTSNE(umi.qc[endog_genes, ],
                  colour_by = "batch",
                  size_by = "total_features",
                  shape_by = "individual",
-                 exprs_values = "counts",
+                 exprs_values = "log2_counts",
                  rand_seed = 123456)
 ```
 

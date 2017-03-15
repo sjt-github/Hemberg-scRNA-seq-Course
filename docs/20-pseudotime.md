@@ -291,26 +291,17 @@ We use the `select_genes` function in SLICER to automatically select
 the genes to use in builing the cell trajectory. The function uses
 "neighbourhood variance" to identify genes that vary smoothly, rather
 than fluctuating randomly, across the set of cells. Following this, we
-determine which value of "k" (dimensions) yields an embedding that
+determine which value of "k" (number of nearest neighbours) yields an embedding that
 most resembles a trajectory. Then we estimate the [locally linear
 embedding](https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction) of the cells.
 
 
 ```r
 slicer_genes <- select_genes(t(deng))
-k <- select_k(t(deng[slicer_genes,]), kmin = 5)
+k <- select_k(t(deng[slicer_genes,]), kmin = 30, kmax=60)
 ```
 
 ```
-## finding neighbours
-## calculating weights
-## computing coordinates
-## finding neighbours
-## calculating weights
-## computing coordinates
-## finding neighbours
-## calculating weights
-## computing coordinates
 ## finding neighbours
 ## calculating weights
 ## computing coordinates
@@ -346,7 +337,8 @@ slicer_traj_lle <- lle(t(deng[slicer_genes,]), m = 2, k)$Y
 
 ```r
 plot(slicer_traj_lle, xlab = "LLE Comp 1", ylab = "LLE Comp 2",
-     main = "Locally linear embedding of cells from SLICER")
+     main = "Locally linear embedding of cells from SLICER", 
+     col=colours[tmp], pch=16)
 ```
 
 
@@ -354,11 +346,15 @@ plot(slicer_traj_lle, xlab = "LLE Comp 1", ylab = "LLE Comp 2",
 \begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-analyis-1} \end{center}
 
 With the locally linear embedding computed we can construct a
-k-nearest neighbour graph that is fully connected.
+k-nearest neighbour graph that is fully connected. This plot displays
+a (yellow) circle for each cell, with the cell ID number overlaid in
+blue. Here we show the graph computed using 10 nearest
+neighbours. Here, SLICER appears to detect one major trajectory with
+one branch.
 
 
 ```r
-slicer_traj_graph <- conn_knn_graph(slicer_traj_lle, 5)
+slicer_traj_graph <- conn_knn_graph(slicer_traj_lle, 10)
 plot(slicer_traj_graph, main = "Fully connected kNN graph from SLICER")
 ```
 
@@ -386,7 +382,7 @@ Having defined a start cell we can order the cells in the estimated pseudotime.
 
 
 ```r
-pseudotime_order_slicer<- cell_order(slicer_traj_graph, start)
+pseudotime_order_slicer <- cell_order(slicer_traj_graph, start)
 branches <- assign_branches(slicer_traj_graph, start)
 
 pseudotime_slicer <-
@@ -428,8 +424,8 @@ plot(
 Like the previous method, SLICER here provides a good ordering for the
 early time points and struggles for later time points.
 
-__Exercise 4__ Do you get a better results if you use different
-"start" cells?
+__Exercise 4__ How do the results change for different k? (e.g. k = 5) What about changing the number of nearest neighbours in
+the call to `conn_knn_graph`?
 
 __Exercise 5__ How does the ordering change if you use a different set
 of genes from those chosen by SLICER (e.g. the genes identified by M3Drop)?
