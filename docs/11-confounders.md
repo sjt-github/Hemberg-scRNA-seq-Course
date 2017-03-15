@@ -32,14 +32,10 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "log2_counts")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{11-confounders_files/figure-latex/confound-pca-1} 
-
-}
-
-\caption{PCA plot of the tung data}(\#fig:confound-pca)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="11-confounders_files/figure-html/confound-pca-1.png" alt="PCA plot of the tung data" width="90%" />
+<p class="caption">(\#fig:confound-pca)PCA plot of the tung data</p>
+</div>
 
 scater allows one to identify principal components that correlate with experimental and QC variables of interest (it ranks principle components by $R^2$ from a linear model regressing PC value against the variable of interest).
 
@@ -55,14 +51,10 @@ scater::plotQC(umi.qc[endog_genes, ],
                exprs_values = "log2_counts")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{11-confounders_files/figure-latex/confound-find-pcs-total-features-1} 
-
-}
-
-\caption{PC correlation with the number of detected genes}(\#fig:confound-find-pcs-total-features)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="11-confounders_files/figure-html/confound-find-pcs-total-features-1.png" alt="PC correlation with the number of detected genes" width="90%" />
+<p class="caption">(\#fig:confound-find-pcs-total-features)PC correlation with the number of detected genes</p>
+</div>
 
 Indeed, we can see that PC1 can be almost completely explained by the number of the detected genes. In fact, it was also visible on the PCA plot above. This is a well-known issue in scRNA-seq and was described [here](http://biorxiv.org/content/early/2015/12/27/025528).
 
@@ -83,14 +75,10 @@ scater::plotQC(umi.qc[endog_genes, ],
                              "pct_counts_feature_controls_MT"))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{11-confounders_files/figure-latex/confound-find-expl-vars-1} 
-
-}
-
-\caption{Explanatory variables}(\#fig:confound-find-expl-vars)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="11-confounders_files/figure-html/confound-find-expl-vars-1.png" alt="Explanatory variables" width="90%" />
+<p class="caption">(\#fig:confound-find-expl-vars)Explanatory variables</p>
+</div>
 
 This analysis indicates that the number of detected genes (again) and also the sequencing depth (number of counts) have substantial explanatory power for many genes, so these variables are good candidates for conditioning out in a normalisation step, or including in downstream statistical models. Expression of ERCCs also appears to be an important explanatory variable. One notable feature of the above plot is that batch explains more than individual, what does that tell us about the technical and biological variability of the data?
 
