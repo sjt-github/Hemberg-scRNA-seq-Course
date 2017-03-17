@@ -417,7 +417,7 @@ Figure 22.2: Zero-inflated Negative Binomial distribution
 b =<span class="st"> </span><span class="fl">0.1</span>
 g =<span class="st"> </span><span class="dv">100</span>
 lambdas =<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, a, b)
-counts =<span class="st"> </span><span class="kw">sapply</span>(lambdas, function(l) {<span class="kw">rpois</span>(<span class="dv">1</span>, <span class="dt">lambda=</span>l)})
+counts =<span class="st"> </span><span class="kw">sapply</span>(g*lambdas, function(l) {<span class="kw">rpois</span>(<span class="dv">1</span>, <span class="dt">lambda=</span>l)})
 <span class="kw">hist</span>(counts, <span class="dt">col=</span><span class="st">&quot;grey50&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Read Counts&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Poisson-Beta&quot;</span>)</code></pre></div>
 <p><img src="21-de-intro_files/figure-html/pois-beta-plot-1.png" width="672" style="display: block; margin: auto;" /> Mean: <span class="math inline">\(\mu = g \cdot a / (a + b)\)</span></p>
 <p>Variance: <span class="math inline">\(\sigma^2 = g^2 \cdot a \cdot b/((a + b + 1) \cdot (a + b)^2)\)</span></p>
