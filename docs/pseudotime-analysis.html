@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-03-21">
+<meta name="date" content="2017-03-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -462,7 +462,7 @@ fd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class=
 fd &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;AnnotatedDataFrame&quot;</span>, <span class="dt">data=</span>fd)
 
 dCellData &lt;-<span class="st"> </span>monocle::<span class="kw">newCellDataSet</span>(d, <span class="dt">phenoData =</span> pd, <span class="dt">featureData =</span> fd)
-dCellData &lt;-<span class="st"> </span>monocle::<span class="kw">setOrderingFilter</span>(dCellData, <span class="dv">1</span>:<span class="kw">length</span>(m3dGenes))
+dCellData &lt;-<span class="st"> </span>monocle::<span class="kw">setOrderingFilter</span>(dCellData, <span class="kw">which</span>(geneNames %in%<span class="st"> </span>m3dGenes))
 dCellDataSet &lt;-<span class="st"> </span>monocle::<span class="kw">reduceDimension</span>(dCellData, <span class="dt">pseudo_expr =</span> <span class="dv">1</span>)
 dCellDataSet &lt;-<span class="st"> </span>monocle::<span class="kw">orderCells</span>(dCellDataSet, <span class="dt">reverse =</span> <span class="ot">TRUE</span>)
 monocle::<span class="kw">plot_cell_trajectory</span>(dCellDataSet)</code></pre></div>
