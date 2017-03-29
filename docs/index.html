@@ -392,9 +392,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="docker-image" class="section level2">
 <h2><span class="header-section-number">1.4</span> Docker image</h2>
+<p><a href="https://quay.io/repository/hemberg-group/scrna-seq-course"><img src="https://quay.io/repository/hemberg-group/scrna-seq-course/status" title="Docker Repository on Quay" alt="Docker Repository on Quay" /></a></p>
 <p>The course can be reproduced without any package installation by running the course docker image which contains all the required packages.</p>
 <p>Make sure Docker is installed on your system. If not, please follow <a href="https://docs.docker.com/engine/installation/">these instructions</a>. To run the course docker image:</p>
-<pre><code>docker run -it hemberglab/scrna.seq.course:latest R</code></pre>
+<pre><code>docker run -it quay.io/hemberg-group/scrna-seq-course:latest R</code></pre>
 <p>It will download the course docker image (may take some time) and start a new R session in a docker container with all packages installed and all data files available.</p>
 </div>
 <div id="license" class="section level2">
