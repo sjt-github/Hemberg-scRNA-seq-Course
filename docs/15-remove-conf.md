@@ -110,7 +110,9 @@ plotPCA(
     ggtitle("PCA - RUVg normalisation: k = 1")
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-1} \end{center}
 
 ```r
 plotPCA(
@@ -122,7 +124,9 @@ plotPCA(
     ggtitle("PCA - RUVg normalisation: k = 2")
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-2} \end{center}
 
 ```r
 plotPCA(
@@ -134,7 +138,9 @@ plotPCA(
     ggtitle("PCA - RUVs normalisation: k = 1")
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-3} \end{center}
 
 ```r
 plotPCA(
@@ -146,7 +152,9 @@ plotPCA(
     ggtitle("PCA - RUVs normalisation: k = 2")
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-5-4.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-4} \end{center}
 
 ```r
 plotPCA(
@@ -158,7 +166,9 @@ plotPCA(
     ggtitle("PCA - RUVs normalisation log2-cpm: k = 2")
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-5-5.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-5-5} \end{center}
 
 Plotting log2-normalized CPM from RUVs with k = 2 looks to give the best separation of cells by individual.
 
@@ -179,7 +189,9 @@ boxplot(
 )
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 ## Effectiveness 3
 
@@ -212,7 +224,9 @@ dge1 <- estimateDisp(dge1, design = design, trend.method = "none")
 plotBCV(dge1)
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-8-1} \end{center}
 
 ```r
 fit1 <- glmFit(dge1, design)
@@ -253,7 +267,9 @@ plotSmear(
 )
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-8-2} \end{center}
 
 ### DE (RUVg, k = 2)
 
@@ -284,7 +300,9 @@ dge_ruvg <- estimateDisp(dge1, design = design_ruvg, trend.method = "none")
 plotBCV(dge_ruvg)
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-9-1} \end{center}
 
 ```r
 fit2 <- glmFit(dge_ruvg, design_ruvg)
@@ -325,7 +343,9 @@ plotSmear(
 )
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-9-2} \end{center}
 
 ### DE (RUVs, k = 2)
 
@@ -356,7 +376,9 @@ dge_ruvs <- estimateDisp(dge1, design = design_ruvs, trend.method = "none")
 plotBCV(dge_ruvs)
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-10-1} \end{center}
 
 ```r
 fit3 <- glmFit(dge_ruvs, design_ruvs)
@@ -397,7 +419,9 @@ plotSmear(
 )
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-10-2} \end{center}
 
 In the above analyses, we have ignored size factors between cells. A typical edgeR analysis would always include these.
 
@@ -409,7 +433,9 @@ dge_ruvs_sf <- estimateDisp(dge_ruvs, design = design_ruvs, trend.method = "none
 plotBCV(dge_ruvs_sf)
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-11-1} \end{center}
 
 ```r
 fit4 <- glmFit(dge_ruvs_sf, design_ruvs)
@@ -450,7 +476,9 @@ plotSmear(
 )
 ```
 
-<img src="15-remove-conf_files/figure-html/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{15-remove-conf_files/figure-latex/unnamed-chunk-11-2} \end{center}
 
 
 ## Exercise

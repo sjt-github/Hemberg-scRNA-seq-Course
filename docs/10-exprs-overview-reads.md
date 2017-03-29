@@ -25,10 +25,14 @@ scater::plotPCA(reads[endog_genes, ],
                 exprs_values = "counts")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="10-exprs-overview-reads_files/figure-html/expr-overview-pca-before-qc-reads1-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-before-qc-reads1)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-pca-before-qc-reads1-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc-reads1)
+\end{figure}
 
 
 ```r
@@ -40,10 +44,14 @@ scater::plotPCA(reads[endog_genes, ],
                 exprs_values = "log2_counts")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="10-exprs-overview-reads_files/figure-html/expr-overview-pca-before-qc-reads2-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-before-qc-reads2)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-pca-before-qc-reads2-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc-reads2)
+\end{figure}
 
 
 ```r
@@ -55,10 +63,14 @@ scater::plotPCA(reads.qc[endog_genes, ],
                 exprs_values = "log2_counts")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="10-exprs-overview-reads_files/figure-html/expr-overview-pca-after-qc-reads-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-after-qc-reads)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-pca-after-qc-reads-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-after-qc-reads)
+\end{figure}
 
 
 ```r
@@ -72,10 +84,14 @@ scater::plotTSNE(reads[endog_genes, ],
                  rand_seed = 123456)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="10-exprs-overview-reads_files/figure-html/expr-overview-tsne-before-qc-reads-1.png" alt="tSNE map of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-before-qc-reads)tSNE map of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-tsne-before-qc-reads-1} 
+
+}
+
+\caption{tSNE map of the tung data}(\#fig:expr-overview-tsne-before-qc-reads)
+\end{figure}
 
 
 ```r
@@ -89,17 +105,29 @@ scater::plotTSNE(reads.qc[endog_genes, ],
                  rand_seed = 123456)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="10-exprs-overview-reads_files/figure-html/expr-overview-tsne-after-qc-reads-1.png" alt="tSNE map of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc-reads)tSNE map of the tung data</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="10-exprs-overview-reads_files/figure-html/expr-overview-tsne-after-qc-exercise2-1-1.png" alt="tSNE map of the tung data (perplexity = 10)" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-1)tSNE map of the tung data (perplexity = 10)</p>
-</div>
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-tsne-after-qc-reads-1} 
 
-<div class="figure" style="text-align: center">
-<img src="10-exprs-overview-reads_files/figure-html/expr-overview-tsne-after-qc-exercise2-2-1.png" alt="tSNE map of the tung data (perplexity = 200)" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-2)tSNE map of the tung data (perplexity = 200)</p>
-</div>
+}
+
+\caption{tSNE map of the tung data}(\#fig:expr-overview-tsne-after-qc-reads)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-tsne-after-qc-exercise2-1-1} 
+
+}
+
+\caption{tSNE map of the tung data (perplexity = 10)}(\#fig:expr-overview-tsne-after-qc-exercise2-1)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{10-exprs-overview-reads_files/figure-latex/expr-overview-tsne-after-qc-exercise2-2-1} 
+
+}
+
+\caption{tSNE map of the tung data (perplexity = 200)}(\#fig:expr-overview-tsne-after-qc-exercise2-2)
+\end{figure}
