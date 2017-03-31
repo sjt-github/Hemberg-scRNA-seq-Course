@@ -1,7 +1,7 @@
 --- 
 title: "Analysis of single cell RNA-seq data"
 author: "Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg"
-date: "2017-03-30"
+date: "2017-03-31"
 knit: "bookdown::render_book"
 documentclass: book
 bibliography: [book.bib]
@@ -31,8 +31,6 @@ Please follow this link and register for the __"Analysis of single cell RNA-seq 
 <a href="https://github.com/hemberg-lab/scRNA.seq.course" target="blank">https://github.com/hemberg-lab/scRNA.seq.course</a>
 
 ## Docker image
-
-[![Docker Repository on Quay](https://quay.io/repository/hemberg-group/scrna-seq-course/status "Docker Repository on Quay")](https://quay.io/repository/hemberg-group/scrna-seq-course)
 
 The course can be reproduced without any package installation by running the course docker image which contains all the required packages.
 
