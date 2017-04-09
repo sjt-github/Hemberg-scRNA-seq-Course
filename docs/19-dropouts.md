@@ -98,9 +98,7 @@ models <- M3Drop::M3DropDropoutModels(uso_list$data)
 title(main = "Usoskin")
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-5-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-5-1.png" width="816" style="display: block; margin: auto;" />
 
 ## Right outliers
 
@@ -110,8 +108,7 @@ will be shifted to the right of the curve. This happens because the MM
 curve is a convex function, whereas averaging dropout rate and
 expression is a linear function.
 
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-6-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-6-1.png" width="816" style="display: block; margin: auto;" />
 __Note__: add `log="x"` to the `plot` call above to see how this looks on the log scale, which is used in M3Drop figures. 
 
 __Exercise 2__: Produce the same plot as above with different expression levels (S1 & S2) and/or mixtures (mix).
@@ -129,9 +126,7 @@ DE_genes <- M3Drop::M3DropDifferentialExpression(
 title(main = "Usoskin")
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-7-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" />
 
 Check which of the known neuron markers are identified as DE:
 
@@ -164,9 +159,7 @@ M3Drop::M3DropExpressionHeatmap(
 )
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-9-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" />
 
 ## Comparing M3Drop to other methods
 
@@ -209,9 +202,7 @@ Brennecke_HVG <- M3Drop::BrenneckeGetVariableGenes(
 )
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-11-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 length(Brennecke_HVG)
@@ -250,6 +241,4 @@ limma::vennDiagram(
 )
 ```
 
-
-
-\begin{center}\includegraphics{19-dropouts_files/figure-latex/unnamed-chunk-12-1} \end{center}
+<img src="19-dropouts_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" />

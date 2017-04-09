@@ -137,14 +137,10 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "log2_counts")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-raw-1} 
-
-}
-
-\caption{PCA plot of the tung data}(\#fig:norm-pca-raw)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-raw-1.png" alt="PCA plot of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-pca-raw)PCA plot of the tung data</p>
+</div>
 
 
 ```r
@@ -154,14 +150,10 @@ boxplot(calc_cell_RLE(get_exprs(umi.qc[endog_genes, ], exprs_values = "log2_coun
         main = "", ylim=c(-1,1))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-raw-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-raw)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-ours-rle-raw-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-raw)Cell-wise RLE of the tung data</p>
+</div>
 
 ### CPM
 scater performs this normalisation by default, you can control it by changing `exprs_values` parameter to `"exprs"`.
@@ -174,14 +166,10 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "exprs")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-cpm-1} 
-
-}
-
-\caption{PCA plot of the tung data after CPM normalisation}(\#fig:norm-pca-cpm)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-cpm-1.png" alt="PCA plot of the tung data after CPM normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-cpm)PCA plot of the tung data after CPM normalisation</p>
+</div>
 
 ```r
 boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
@@ -190,14 +178,10 @@ boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
         main = "", ylim = c(-1,1))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-cpm-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-cpm)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-ours-rle-cpm-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-cpm)Cell-wise RLE of the tung data</p>
+</div>
 
 
 ### TMM
@@ -214,14 +198,10 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-tmm-1} 
-
-}
-
-\caption{PCA plot of the tung data after TMM normalisation}(\#fig:norm-pca-tmm)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-tmm-1.png" alt="PCA plot of the tung data after TMM normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-tmm)PCA plot of the tung data after TMM normalisation</p>
+</div>
 
 ```r
 boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
@@ -230,14 +210,10 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         main = "", ylim=c(-1,1))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-tmm-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-tmm)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-ours-rle-tmm-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-tmm)Cell-wise RLE of the tung data</p>
+</div>
 
 ### scran
 
@@ -252,14 +228,10 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "exprs")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-lsf-1} 
-
-}
-
-\caption{PCA plot of the tung data after LSF normalisation}(\#fig:norm-pca-lsf)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-lsf-1.png" alt="PCA plot of the tung data after LSF normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-lsf)PCA plot of the tung data after LSF normalisation</p>
+</div>
 
 ```r
 boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
@@ -268,14 +240,10 @@ boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
         main = "", ylim=c(-1,1))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-scran-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-scran)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-ours-rle-scran-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-scran)Cell-wise RLE of the tung data</p>
+</div>
 
 ### Size-factor (RLE)
 
@@ -291,14 +259,10 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-rle-1} 
-
-}
-
-\caption{PCA plot of the tung data after RLE normalisation}(\#fig:norm-pca-rle)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-rle-1.png" alt="PCA plot of the tung data after RLE normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-rle)PCA plot of the tung data after RLE normalisation</p>
+</div>
 
 ```r
 boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
@@ -307,14 +271,10 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         main = "", ylim=c(-1,1))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-rle-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-rle)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-ours-rle-rle-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-rle)Cell-wise RLE of the tung data</p>
+</div>
 
 
 ### Upperquantile
@@ -332,14 +292,10 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-uq-1} 
-
-}
-
-\caption{PCA plot of the tung data after UQ normalisation}(\#fig:norm-pca-uq)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-uq-1.png" alt="PCA plot of the tung data after UQ normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-uq)PCA plot of the tung data after UQ normalisation</p>
+</div>
 
 ```r
 boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
@@ -348,14 +304,10 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
         main = "", ylim = c(-1, 1))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-uq-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-uq)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-ours-rle-uq-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-uq)Cell-wise RLE of the tung data</p>
+</div>
 ## Downsampling 
 
 A final way to correct for library size is to downsample the expression matrix so that each cell has approximately the same total number of molecules. The benefit of this method is that zero values will be introduced by the down sampling thus eliminating any biases due to differing numbers of detected genes. However, the major drawback is that the process is not deterministic so each time the downsampling is run the resulting expression matrix is slightly different. Thus, often analyses must be run on multiple downsamplings to ensure results are robust.
@@ -388,14 +340,10 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "norm_counts")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-downsample-1} 
-
-}
-
-\caption{PCA plot of the tung data after downsampling}(\#fig:norm-pca-downsample)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-downsample-1.png" alt="PCA plot of the tung data after downsampling" width="90%" />
+<p class="caption">(\#fig:norm-pca-downsample)PCA plot of the tung data after downsampling</p>
+</div>
 
 ```r
 tmp <- norm_counts(umi.qc[endog_genes, ])
@@ -406,14 +354,10 @@ boxplot(calc_cell_RLE(tmp[rowMeans(tmp) > 0, ]),
         main = "", ylim = c(-1, 1))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-downsample-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-downsample)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-ours-rle-downsample-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
+<p class="caption">(\#fig:norm-ours-rle-downsample)Cell-wise RLE of the tung data</p>
+</div>
 
 ## Normalizing for gene/transcript length
 
@@ -484,14 +428,10 @@ eff_length <- abs(fData(umi.qc.ann)$end_position -
 plot(eff_length, rowMeans(counts(umi.qc.ann)))
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/length-vs-mean-1} 
-
-}
-
-\caption{Gene length vs Mean Expression for the raw data}(\#fig:length-vs-mean)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/length-vs-mean-1.png" alt="Gene length vs Mean Expression for the raw data" width="90%" />
+<p class="caption">(\#fig:length-vs-mean)Gene length vs Mean Expression for the raw data</p>
+</div>
 There is no relationship between gene length and mean expression so FPKMs & TPMs are inappropriate for this dataset. 
 But we will demonstrate them anyway.
 
@@ -512,14 +452,10 @@ scater::plotPCA(umi.qc.ann,
                 exprs_values = "fpkm")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-fpkm-1} 
-
-}
-
-\caption{PCA plot of the tung data after FPKM normalisation}(\#fig:norm-pca-fpkm)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-fpkm-1.png" alt="PCA plot of the tung data after FPKM normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-fpkm)PCA plot of the tung data after FPKM normalisation</p>
+</div>
 
 
 ```r
@@ -530,14 +466,10 @@ scater::plotPCA(umi.qc.ann,
                 exprs_values = "tpm")
 ```
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-pca-tpm-1} 
-
-}
-
-\caption{PCA plot of the tung data after TPM normalisation}(\#fig:norm-pca-tpm)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="13-exprs-norm_files/figure-html/norm-pca-tpm-1.png" alt="PCA plot of the tung data after TPM normalisation" width="90%" />
+<p class="caption">(\#fig:norm-pca-tpm)PCA plot of the tung data after TPM normalisation</p>
+</div>
 
 __Note:__ The PCA looks for differences between cells. Gene length is the same across cells for each gene thus FPKM is almost identical to the CPM plot (it is just rotated) since it performs CPM first then normalizes gene length. Whereas, TPM is different because it weights genes by their length before performing CPM. 
 

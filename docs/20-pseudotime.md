@@ -64,23 +64,15 @@ gold standard of open-source software hosted in a reputable repository.
 The following figures from the paper summarise some of the features of
 the various tools.
 
-\begin{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/cannoodt_pseudotime_properties.png" alt="Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016)." width="90%" />
+<p class="caption">(\#fig:pseudotime-methods-description)Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).</p>
+</div>
 
-{\centering \includegraphics[width=0.9\linewidth]{figures/cannoodt_pseudotime_properties} 
-
-}
-
-\caption{Descriptions of trajectory inference methods for single-cell transcriptomics data (Fig. 2 from Cannoodt et al, 2016).}(\#fig:pseudotime-methods-description)
-\end{figure}
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{figures/cannoodt_pseudotime_methods} 
-
-}
-
-\caption{Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).}(\#fig:pseudotime-methods)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="figures/cannoodt_pseudotime_methods.png" alt="Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016)." width="90%" />
+<p class="caption">(\#fig:pseudotime-methods)Characterization of trajectory inference methods for single-cell transcriptomics data (Fig. 3 from Cannoodt et al, 2016).</p>
+</div>
 
 
 ## TSCAN
@@ -99,9 +91,7 @@ dengclust <- TSCAN::exprmclust(procdeng, clusternum = 10)
 TSCAN::plotmclust(dengclust)
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/tscan-all-genes-1} \end{center}
+<img src="20-pseudotime_files/figure-html/tscan-all-genes-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 dengorderTSCAN <- TSCAN::TSCANorder(dengclust, orderonly = F)
@@ -140,9 +130,7 @@ plot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/tscan-vs-truth-1} \end{center}
+<img src="20-pseudotime_files/figure-html/tscan-vs-truth-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 1__ Compare results for different numbers of clusters (`clusternum`).
 
@@ -165,9 +153,7 @@ m3dGenes <- as.character(
 )
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/m3d-select-genes-1} \end{center}
+<img src="20-pseudotime_files/figure-html/m3d-select-genes-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 d <- deng[which(rownames(deng) %in% m3dGenes), ]
@@ -192,9 +178,7 @@ dCellDataSet <- monocle::orderCells(dCellDataSet, reverse = TRUE)
 monocle::plot_cell_trajectory(dCellDataSet)
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/monocle-all-genes-1} \end{center}
+<img src="20-pseudotime_files/figure-html/monocle-all-genes-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 # Store the ordering
@@ -228,9 +212,7 @@ plot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/monocle-vs-truth-1} \end{center}
+<img src="20-pseudotime_files/figure-html/monocle-vs-truth-1.png" width="672" style="display: block; margin: auto;" />
 
 ## Diffusion maps
 
@@ -265,9 +247,7 @@ plot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/destiny-deng-1} \end{center}
+<img src="20-pseudotime_files/figure-html/destiny-deng-1.png" width="672" style="display: block; margin: auto;" />
 
 Like the other methods, destiny does a good job at ordering the early time-points, but it is unable to distinguish the later ones.
 
@@ -341,9 +321,7 @@ plot(slicer_traj_lle, xlab = "LLE Comp 1", ylab = "LLE Comp 2",
      col=colours[tmp], pch=16)
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-analyis-1} \end{center}
+<img src="20-pseudotime_files/figure-html/slicer-analyis-1.png" width="672" style="display: block; margin: auto;" />
 
 With the locally linear embedding computed we can construct a
 k-nearest neighbour graph that is fully connected. This plot displays
@@ -358,9 +336,7 @@ slicer_traj_graph <- conn_knn_graph(slicer_traj_lle, 10)
 plot(slicer_traj_graph, main = "Fully connected kNN graph from SLICER")
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-build-graph-1} \end{center}
+<img src="20-pseudotime_files/figure-html/slicer-build-graph-1.png" width="672" style="display: block; margin: auto;" />
 
 From this graph we can identify "extreme" cells that are candidates
 for start/end cells in the trajectory.
@@ -370,9 +346,7 @@ for start/end cells in the trajectory.
 ends <- find_extreme_cells(slicer_traj_graph, slicer_traj_lle)
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-1} \end{center}
+<img src="20-pseudotime_files/figure-html/slicer-1.png" width="672" style="display: block; margin: auto;" />
 
 ```r
 start <- ends[1]
@@ -417,9 +391,7 @@ plot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/slicer-vs-truth-1} \end{center}
+<img src="20-pseudotime_files/figure-html/slicer-vs-truth-1.png" width="672" style="display: block; margin: auto;" />
 
 Like the previous method, SLICER here provides a good ordering for the
 early time points and struggles for later time points.
@@ -453,9 +425,7 @@ plot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/tscan-monocle-compare-1} \end{center}
+<img src="20-pseudotime_files/figure-html/tscan-monocle-compare-1.png" width="672" style="display: block; margin: auto;" />
 
 __Exercise 6__: Compare destiny and SLICER to TSCAN and Monocle.
 
@@ -473,9 +443,7 @@ TSCAN::singlegeneplot(
 )
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/Obox6-tscan-1} \end{center}
+<img src="20-pseudotime_files/figure-html/Obox6-tscan-1.png" width="672" style="display: block; margin: auto;" />
 
 __Monocle__
 
@@ -486,9 +454,7 @@ monocle::plot_genes_in_pseudotime(
 )
 ```
 
-
-
-\begin{center}\includegraphics{20-pseudotime_files/figure-latex/Obox6-monocle-1} \end{center}
+<img src="20-pseudotime_files/figure-html/Obox6-monocle-1.png" width="672" style="display: block; margin: auto;" />
 
 Of course, pseudotime values computed with any method can be added to
 the `pData` slot of an `SCESet` object. Having done that, the full
