@@ -29,10 +29,14 @@ The easiest way to overview the data is by transforming it using the principal c
 
 Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. The eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from [here](http://www.nlpca.org/pca_principal_component_analysis.html)).
 
-<div class="figure" style="text-align: center">
-<img src="figures/pca.png" alt="Schematic representation of PCA dimensionality reduction" width="100%" />
-<p class="caption">(\#fig:clust-pca)Schematic representation of PCA dimensionality reduction</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/pca} 
+
+}
+
+\caption{Schematic representation of PCA dimensionality reduction}(\#fig:clust-pca)
+\end{figure}
 
 ### Before QC
 
@@ -47,10 +51,14 @@ scater::plotPCA(umi[endog_genes, ],
                 exprs_values = "counts")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-before-qc1-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-before-qc1)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc1-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc1)
+\end{figure}
 
 With log-transformation:
 
@@ -63,10 +71,14 @@ scater::plotPCA(umi[endog_genes, ],
                 exprs_values = "log2_counts")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-before-qc2-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-before-qc2)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-before-qc2-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-before-qc2)
+\end{figure}
 
 Clearly log-transformation is benefitial for our data - it reduces the variance on the first principal component and already separates some biological effects. Moreover, it makes the distribution of the expression values more normal. In the following analysis and chapters we will be using log-transformed raw counts by default.
 
@@ -84,10 +96,14 @@ scater::plotPCA(umi.qc[endog_genes, ],
                 exprs_values = "log2_counts")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-1.png" alt="PCA plot of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-after-qc)PCA plot of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-1} 
+
+}
+
+\caption{PCA plot of the tung data}(\#fig:expr-overview-pca-after-qc)
+\end{figure}
 
 Comparing Figure \@ref(fig:expr-overview-pca-before-qc2) and Figure \@ref(fig:expr-overview-pca-after-qc), it is clear that after quality control the NA19098.r2 cells no longer form a group of outliers.
 
@@ -98,15 +114,23 @@ How do the PCA plots change if when all 14,214 genes are used? Or when only top 
 
 __Our answer__
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-exercise1-1-1.png" alt="PCA plot of the tung data (14214 genes)" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-after-qc-exercise1-1)PCA plot of the tung data (14214 genes)</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-pca-after-qc-exercise1-2-1.png" alt="PCA plot of the tung data (50 genes)" width="90%" />
-<p class="caption">(\#fig:expr-overview-pca-after-qc-exercise1-2)PCA plot of the tung data (50 genes)</p>
-</div>
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-exercise1-1-1} 
+
+}
+
+\caption{PCA plot of the tung data (14214 genes)}(\#fig:expr-overview-pca-after-qc-exercise1-1)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-pca-after-qc-exercise1-2-1} 
+
+}
+
+\caption{PCA plot of the tung data (50 genes)}(\#fig:expr-overview-pca-after-qc-exercise1-2)
+\end{figure}
 
 If your answers are different please compare your code with [ours](https://github.com/hemberg-lab/scRNA.seq.course/blob/master/07-exprs-overview.Rmd) (you need to search for this exercise in the opened file).
 
@@ -129,10 +153,14 @@ scater::plotTSNE(umi[endog_genes, ],
                  rand_seed = 123456)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-before-qc-1.png" alt="tSNE map of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-before-qc)tSNE map of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-before-qc-1} 
+
+}
+
+\caption{tSNE map of the tung data}(\#fig:expr-overview-tsne-before-qc)
+\end{figure}
 
 ### After QC
 
@@ -148,10 +176,14 @@ scater::plotTSNE(umi.qc[endog_genes, ],
                  rand_seed = 123456)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-1.png" alt="tSNE map of the tung data" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc)tSNE map of the tung data</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-1} 
+
+}
+
+\caption{tSNE map of the tung data}(\#fig:expr-overview-tsne-after-qc)
+\end{figure}
 
 Interpreting PCA and tSNE plots is often challenging and due to their stochastic and non-linear nature, they are less intuitive. However, in this case it is clear that they provide a similar picture of the data. Comparing Figure \@ref(fig:expr-overview-tsne-before-qc) and \@ref(fig:expr-overview-tsne-after-qc), it is again clear that the samples from NA19098.r2 are no longer outliers after the QC filtering.
 
@@ -164,15 +196,23 @@ How do the tSNE plots change when a perplexity of 10 or 200 is used? How does th
 
 __Our answer__
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-exercise2-1-1.png" alt="tSNE map of the tung data (perplexity = 10)" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-1)tSNE map of the tung data (perplexity = 10)</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="09-exprs-overview_files/figure-html/expr-overview-tsne-after-qc-exercise2-2-1.png" alt="tSNE map of the tung data (perplexity = 200)" width="90%" />
-<p class="caption">(\#fig:expr-overview-tsne-after-qc-exercise2-2)tSNE map of the tung data (perplexity = 200)</p>
-</div>
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-exercise2-1-1} 
+
+}
+
+\caption{tSNE map of the tung data (perplexity = 10)}(\#fig:expr-overview-tsne-after-qc-exercise2-1)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{09-exprs-overview_files/figure-latex/expr-overview-tsne-after-qc-exercise2-2-1} 
+
+}
+
+\caption{tSNE map of the tung data (perplexity = 200)}(\#fig:expr-overview-tsne-after-qc-exercise2-2)
+\end{figure}
 
 ## Big Exercise
 
