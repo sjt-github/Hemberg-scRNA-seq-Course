@@ -305,6 +305,12 @@ zlmCond <- zlm.SingleCellAssay(~cond + cngeneson, obj)
 ```
 
 ```
+## Warning: 'zlm.SingleCellAssay' is deprecated.
+## Use 'zlm' instead.
+## See help("Deprecated")
+```
+
+```
 ## Warning in .nextMethod(object = object, value = value): Coefficients
 ## condNA19239 are never estimible and will be dropped.
 ```

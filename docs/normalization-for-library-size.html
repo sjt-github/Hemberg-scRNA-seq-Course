@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-04-24">
+<meta name="date" content="2017-05-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -442,7 +442,8 @@ function (expr_mat, <span class="dt">spikes =</span> <span class="ot">NULL</span
 <p><strong>Note:</strong> edgeR makes extra adjustments to some of the normalization methods which may result in somewhat different results than if the original methods are followed exactly, e.g. edgeR’s and scater’s “RLE” method which is based on the “size factor” used by <a href="http://bioconductor.org/packages/release/bioc/html/DESeq.html">DESeq</a> may give different results to the <code>estimateSizeFactorsForMatrix</code> method in the DESeq/DESeq2 packages. In addition, some versions of edgeR will not calculate the normalization factors correctly unless <code>lib.size</code> is set at 1 for all cells.</p>
 <p>We will continue to work with the <code>tung</code> data that was used in the previous chapter.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scRNA.seq.funcs)
-<span class="kw">library</span>(scater, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+<span class="kw">library</span>(scater)
+<span class="kw">library</span>(scran)
 <span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 <span class="kw">set.seed</span>(<span class="dv">1234567</span>)
 umi &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;tung/umi.rds&quot;</span>)
@@ -450,162 +451,177 @@ umi.qc &lt;-<span class="st"> </span>umi[<span class="kw">fData</span>(umi)$use,
 endog_genes &lt;-<span class="st"> </span>!<span class="kw">fData</span>(umi.qc)$is_feature_control</code></pre></div>
 <div id="raw" class="section level3">
 <h3><span class="header-section-number">14.3.1</span> Raw</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
+    umi.qc[endog_genes, ],
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-raw"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-raw-1.png" alt="PCA plot of the tung data" width="90%" />
 <p class="caption">
 Figure 14.1: PCA plot of the tung data
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">get_exprs</span>(umi.qc[endog_genes, ], <span class="dt">exprs_values =</span> <span class="st">&quot;log2_counts&quot;</span>)),
-        <span class="dt">col =</span> <span class="st">&quot;grey50&quot;</span>,
-        <span class="dt">ylab =</span> <span class="st">&quot;RLE&quot;</span>,
-        <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylim=</span><span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-raw"></span>
-<img src="13-exprs-norm_files/figure-html/norm-ours-rle-raw-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
-<p class="caption">
-Figure 14.2: Cell-wise RLE of the tung data
-</p>
-</div>
 </div>
 <div id="cpm" class="section level3">
 <h3><span class="header-section-number">14.3.2</span> CPM</h3>
 <p>scater performs this normalisation by default, you can control it by changing <code>exprs_values</code> parameter to <code>&quot;exprs&quot;</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;exprs&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
+    umi.qc[endog_genes, ],
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;exprs&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-cpm"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-cpm-1.png" alt="PCA plot of the tung data after CPM normalisation" width="90%" />
 <p class="caption">
-Figure 14.3: PCA plot of the tung data after CPM normalisation
+Figure 14.2: PCA plot of the tung data after CPM normalisation
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">exprs</span>(umi.qc[endog_genes, ])),
-        <span class="dt">col =</span> <span class="st">&quot;grey50&quot;</span>,
-        <span class="dt">ylab =</span> <span class="st">&quot;RLE&quot;</span>,
-        <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
+    umi.qc[endog_genes, ], 
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">CPM =</span> <span class="st">&quot;exprs&quot;</span>),
+    <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-cpm"></span>
 <img src="13-exprs-norm_files/figure-html/norm-ours-rle-cpm-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
 <p class="caption">
-Figure 14.4: Cell-wise RLE of the tung data
+Figure 14.3: Cell-wise RLE of the tung data
 </p>
 </div>
 </div>
 <div id="tmm" class="section level3">
 <h3><span class="header-section-number">14.3.3</span> TMM</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span>
-<span class="st">    </span>scater::<span class="kw">normaliseExprs</span>(umi.qc,
-                           <span class="dt">method =</span> <span class="st">&quot;TMM&quot;</span>,
-                           <span class="dt">feature_set =</span> endog_genes)
-scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;norm_counts&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span><span class="kw">normaliseExprs</span>(
+    umi.qc,
+    <span class="dt">method =</span> <span class="st">&quot;TMM&quot;</span>,
+    <span class="dt">feature_set =</span> endog_genes
+)
+<span class="kw">plotPCA</span>(
+    umi.qc[endog_genes, ],
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_exprs&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-tmm"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-tmm-1.png" alt="PCA plot of the tung data after TMM normalisation" width="90%" />
 <p class="caption">
-Figure 14.5: PCA plot of the tung data after TMM normalisation
+Figure 14.4: PCA plot of the tung data after TMM normalisation
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">norm_counts</span>(umi.qc[endog_genes, ])),
-        <span class="dt">col =</span> <span class="st">&quot;grey50&quot;</span>,
-        <span class="dt">ylab =</span> <span class="st">&quot;RLE&quot;</span>,
-        <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylim=</span><span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
+    umi.qc[endog_genes, ], 
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">TMM =</span> <span class="st">&quot;norm_exprs&quot;</span>),
+    <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-tmm"></span>
 <img src="13-exprs-norm_files/figure-html/norm-ours-rle-tmm-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
 <p class="caption">
-Figure 14.6: Cell-wise RLE of the tung data
+Figure 14.5: Cell-wise RLE of the tung data
 </p>
 </div>
 </div>
 <div id="scran" class="section level3">
 <h3><span class="header-section-number">14.3.4</span> scran</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">qclust &lt;-<span class="st"> </span>scran::<span class="kw">quickCluster</span>(umi.qc, <span class="dt">min.size =</span> <span class="dv">30</span>)
-umi.qc &lt;-<span class="st"> </span>scran::<span class="kw">computeSumFactors</span>(umi.qc, <span class="dt">sizes =</span> <span class="dv">15</span>, <span class="dt">clusters =</span> qclust)
-umi.qc &lt;-<span class="st"> </span>scater::<span class="kw">normalize</span>(umi.qc)
-scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;exprs&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">qclust &lt;-<span class="st"> </span><span class="kw">quickCluster</span>(umi.qc, <span class="dt">min.size =</span> <span class="dv">30</span>)
+umi.qc &lt;-<span class="st"> </span><span class="kw">computeSumFactors</span>(umi.qc, <span class="dt">sizes =</span> <span class="dv">15</span>, <span class="dt">clusters =</span> qclust)
+umi.qc &lt;-<span class="st"> </span><span class="kw">normalize</span>(umi.qc)
+<span class="kw">plotPCA</span>(
+    umi.qc[endog_genes, ],
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;exprs&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-lsf"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-lsf-1.png" alt="PCA plot of the tung data after LSF normalisation" width="90%" />
 <p class="caption">
-Figure 14.7: PCA plot of the tung data after LSF normalisation
+Figure 14.6: PCA plot of the tung data after LSF normalisation
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">exprs</span>(umi.qc[endog_genes, ])),
-        <span class="dt">col =</span> <span class="st">&quot;grey50&quot;</span>,
-        <span class="dt">ylab =</span> <span class="st">&quot;RLE&quot;</span>,
-        <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylim=</span><span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
+    umi.qc[endog_genes, ], 
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">scran =</span> <span class="st">&quot;exprs&quot;</span>),
+    <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-scran"></span>
 <img src="13-exprs-norm_files/figure-html/norm-ours-rle-scran-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
 <p class="caption">
-Figure 14.8: Cell-wise RLE of the tung data
+Figure 14.7: Cell-wise RLE of the tung data
 </p>
 </div>
 </div>
 <div id="size-factor-rle" class="section level3">
 <h3><span class="header-section-number">14.3.5</span> Size-factor (RLE)</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span>
-<span class="st">    </span>scater::<span class="kw">normaliseExprs</span>(umi.qc,
-                           <span class="dt">method =</span> <span class="st">&quot;RLE&quot;</span>, 
-                           <span class="dt">feature_set =</span> endog_genes)
-scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;norm_counts&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span><span class="kw">normaliseExprs</span>(
+    umi.qc,
+    <span class="dt">method =</span> <span class="st">&quot;RLE&quot;</span>, 
+    <span class="dt">feature_set =</span> endog_genes
+)
+<span class="kw">plotPCA</span>(
+    umi.qc[endog_genes, ],
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_exprs&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-rle"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-rle-1.png" alt="PCA plot of the tung data after RLE normalisation" width="90%" />
 <p class="caption">
-Figure 14.9: PCA plot of the tung data after RLE normalisation
+Figure 14.8: PCA plot of the tung data after RLE normalisation
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">norm_counts</span>(umi.qc[endog_genes, ])),
-        <span class="dt">col =</span> <span class="st">&quot;grey50&quot;</span>,
-        <span class="dt">ylab =</span> <span class="st">&quot;RLE&quot;</span>,
-        <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylim=</span><span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
+    umi.qc[endog_genes, ], 
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">RLE =</span> <span class="st">&quot;norm_exprs&quot;</span>),
+    <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-rle"></span>
 <img src="13-exprs-norm_files/figure-html/norm-ours-rle-rle-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
 <p class="caption">
-Figure 14.10: Cell-wise RLE of the tung data
+Figure 14.9: Cell-wise RLE of the tung data
 </p>
 </div>
 </div>
 <div id="upperquantile" class="section level3">
 <h3><span class="header-section-number">14.3.6</span> Upperquantile</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span>
-<span class="st">    </span>scater::<span class="kw">normaliseExprs</span>(umi.qc,
-                           <span class="dt">method =</span> <span class="st">&quot;upperquartile&quot;</span>, 
-                           <span class="dt">feature_set =</span> endog_genes,
-                           <span class="dt">p =</span> <span class="fl">0.99</span>)
-scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;norm_counts&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span><span class="kw">normaliseExprs</span>(
+    umi.qc,
+    <span class="dt">method =</span> <span class="st">&quot;upperquartile&quot;</span>, 
+    <span class="dt">feature_set =</span> endog_genes,
+    <span class="dt">p =</span> <span class="fl">0.99</span>
+)
+<span class="kw">plotPCA</span>(
+    umi.qc[endog_genes, ],
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_exprs&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-uq"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-uq-1.png" alt="PCA plot of the tung data after UQ normalisation" width="90%" />
 <p class="caption">
-Figure 14.11: PCA plot of the tung data after UQ normalisation
+Figure 14.10: PCA plot of the tung data after UQ normalisation
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(<span class="kw">norm_counts</span>(umi.qc[endog_genes, ])),
-        <span class="dt">col =</span> <span class="st">&quot;grey50&quot;</span>,
-        <span class="dt">ylab =</span> <span class="st">&quot;RLE&quot;</span>,
-        <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>, <span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
+    umi.qc[endog_genes, ], 
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">UQ =</span> <span class="st">&quot;norm_exprs&quot;</span>),
+    <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-uq"></span>
 <img src="13-exprs-norm_files/figure-html/norm-ours-rle-uq-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
 <p class="caption">
-Figure 14.12: Cell-wise RLE of the tung data
+Figure 14.11: Cell-wise RLE of the tung data
 </p>
 </div>
 </div>
@@ -626,29 +642,30 @@ function (expr_mat)
     down_sampled_mat &lt;-<span class="st"> </span><span class="kw">apply</span>(expr_mat, <span class="dv">2</span>, down_sample)
     <span class="kw">return</span>(down_sampled_mat)
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">norm_counts</span>(umi.qc) &lt;-<span class="st"> </span>
-<span class="st">    </span><span class="kw">log2</span>(scRNA.seq.funcs::<span class="kw">Down_Sample_Matrix</span>(<span class="kw">counts</span>(umi.qc)) +<span class="st"> </span><span class="dv">1</span>)
-scater::<span class="kw">plotPCA</span>(umi.qc[endog_genes, ],
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;norm_counts&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">norm_counts</span>(umi.qc) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">Down_Sample_Matrix</span>(<span class="kw">counts</span>(umi.qc)) +<span class="st"> </span><span class="dv">1</span>)
+<span class="kw">plotPCA</span>(
+    umi.qc[endog_genes, ],
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;norm_counts&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-downsample"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-downsample-1.png" alt="PCA plot of the tung data after downsampling" width="90%" />
 <p class="caption">
-Figure 14.13: PCA plot of the tung data after downsampling
+Figure 14.12: PCA plot of the tung data after downsampling
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tmp &lt;-<span class="st"> </span><span class="kw">norm_counts</span>(umi.qc[endog_genes, ])
-<span class="co"># ignore genes which are not detected in any cells following downsampling</span>
-<span class="kw">boxplot</span>(<span class="kw">calc_cell_RLE</span>(tmp[<span class="kw">rowMeans</span>(tmp) &gt;<span class="st"> </span><span class="dv">0</span>, ]), 
-        <span class="dt">col =</span> <span class="st">&quot;grey50&quot;</span>,
-        <span class="dt">ylab =</span> <span class="st">&quot;RLE&quot;</span>,
-        <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>, <span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRLE</span>(
+    umi.qc[endog_genes, ], 
+    <span class="dt">exprs_mats =</span> <span class="kw">list</span>(<span class="dt">Raw =</span> <span class="st">&quot;log2_counts&quot;</span>, <span class="dt">DownSample =</span> <span class="st">&quot;norm_counts&quot;</span>),
+    <span class="dt">exprs_logged =</span> <span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>),
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-ours-rle-downsample"></span>
 <img src="13-exprs-norm_files/figure-html/norm-ours-rle-downsample-1.png" alt="Cell-wise RLE of the tung data" width="90%" />
 <p class="caption">
-Figure 14.14: Cell-wise RLE of the tung data
+Figure 14.13: Cell-wise RLE of the tung data
 </p>
 </div>
 </div>
@@ -662,46 +679,53 @@ Figure 14.14: Cell-wise RLE of the tung data
 </ul>
 <p>These methods are not applicable to our dataset since the end of the transcript which contains the UMI was preferentially sequenced. Furthermore in general these should only be calculated using appropriate quantification software from aligned BAM files not from read counts since often only a portion of the entire gene/transcript is sequenced, not the entire length. If in doubt check for a relationship between gene/transcript length and expression level.</p>
 <p>However, here we show how these normalisations can be calculated using scater. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. scater uses the <a href="https://bioconductor.org/packages/release/bioc/html/biomaRt.html">biomaRt</a> package, which allows one to annotate genes by other attributes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-
-<span class="st">    </span>scater::<span class="kw">getBMFeatureAnnos</span>(umi.qc,
-                              <span class="dt">filters =</span> <span class="st">&quot;ensembl_gene_id&quot;</span>, 
-                              <span class="dt">attributes =</span> <span class="kw">c</span>(<span class="st">&quot;ensembl_gene_id&quot;</span>,
-                                             <span class="st">&quot;hgnc_symbol&quot;</span>,
-                                             <span class="st">&quot;chromosome_name&quot;</span>,
-                                             <span class="st">&quot;start_position&quot;</span>,
-                                             <span class="st">&quot;end_position&quot;</span>), 
-                              <span class="dt">feature_symbol =</span> <span class="st">&quot;hgnc_symbol&quot;</span>,
-                              <span class="dt">feature_id =</span> <span class="st">&quot;ensembl_gene_id&quot;</span>,
-                              <span class="dt">biomart =</span> <span class="st">&quot;ENSEMBL_MART_ENSEMBL&quot;</span>, 
-                              <span class="dt">dataset =</span> <span class="st">&quot;hsapiens_gene_ensembl&quot;</span>,
-                              <span class="dt">host =</span> <span class="st">&quot;www.ensembl.org&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc &lt;-<span class="st"> </span><span class="kw">getBMFeatureAnnos</span>(
+    umi.qc,
+    <span class="dt">filters =</span> <span class="st">&quot;ensembl_gene_id&quot;</span>, 
+    <span class="dt">attributes =</span> <span class="kw">c</span>(
+        <span class="st">&quot;ensembl_gene_id&quot;</span>,
+        <span class="st">&quot;hgnc_symbol&quot;</span>,
+        <span class="st">&quot;chromosome_name&quot;</span>,
+        <span class="st">&quot;start_position&quot;</span>,
+        <span class="st">&quot;end_position&quot;</span>
+    ), 
+    <span class="dt">feature_symbol =</span> <span class="st">&quot;hgnc_symbol&quot;</span>,
+    <span class="dt">feature_id =</span> <span class="st">&quot;ensembl_gene_id&quot;</span>,
+    <span class="dt">biomart =</span> <span class="st">&quot;ENSEMBL_MART_ENSEMBL&quot;</span>, 
+    <span class="dt">dataset =</span> <span class="st">&quot;hsapiens_gene_ensembl&quot;</span>,
+    <span class="dt">host =</span> <span class="st">&quot;www.ensembl.org&quot;</span>
+)
 
 <span class="co"># If you have mouse data, change the arguments based on this example:</span>
-<span class="co"># scater::getBMFeatureAnnos(object,</span>
-<span class="co">#                           filters = &quot;ensembl_transcript_id&quot;, </span>
-<span class="co">#                           attributes = c(&quot;ensembl_transcript_id&quot;, </span>
-<span class="co">#                                        &quot;ensembl_gene_id&quot;, &quot;mgi_symbol&quot;, </span>
-<span class="co">#                                        &quot;chromosome_name&quot;,</span>
-<span class="co">#                                        &quot;transcript_biotype&quot;,</span>
-<span class="co">#                                        &quot;transcript_start&quot;,</span>
-<span class="co">#                                        &quot;transcript_end&quot;, </span>
-<span class="co">#                                        &quot;transcript_count&quot;), </span>
-<span class="co">#                           feature_symbol = &quot;mgi_symbol&quot;,</span>
-<span class="co">#                           feature_id = &quot;ensembl_gene_id&quot;,</span>
-<span class="co">#                           biomart = &quot;ENSEMBL_MART_ENSEMBL&quot;, </span>
-<span class="co">#                           dataset = &quot;mmusculus_gene_ensembl&quot;,</span>
-<span class="co">#                           host = &quot;www.ensembl.org&quot;) </span></code></pre></div>
+<span class="co"># getBMFeatureAnnos(</span>
+<span class="co">#     object,</span>
+<span class="co">#     filters = &quot;ensembl_transcript_id&quot;,</span>
+<span class="co">#     attributes = c(</span>
+<span class="co">#         &quot;ensembl_transcript_id&quot;,</span>
+<span class="co">#         &quot;ensembl_gene_id&quot;, </span>
+<span class="co">#         &quot;mgi_symbol&quot;,</span>
+<span class="co">#         &quot;chromosome_name&quot;,</span>
+<span class="co">#         &quot;transcript_biotype&quot;,</span>
+<span class="co">#         &quot;transcript_start&quot;,</span>
+<span class="co">#         &quot;transcript_end&quot;,</span>
+<span class="co">#         &quot;transcript_count&quot;</span>
+<span class="co">#     ),</span>
+<span class="co">#     feature_symbol = &quot;mgi_symbol&quot;,</span>
+<span class="co">#     feature_id = &quot;ensembl_gene_id&quot;,</span>
+<span class="co">#     biomart = &quot;ENSEMBL_MART_ENSEMBL&quot;,</span>
+<span class="co">#     dataset = &quot;mmusculus_gene_ensembl&quot;,</span>
+<span class="co">#     host = &quot;www.ensembl.org&quot;</span>
+<span class="co"># )</span></code></pre></div>
 <p>Some of the genes were not annotated, therefore we filter them out:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc.ann &lt;-
-<span class="st">    </span>umi.qc[!<span class="kw">is.na</span>(<span class="kw">fData</span>(umi.qc)$ensembl_gene_id), ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi.qc.ann &lt;-<span class="st"> </span>umi.qc[!<span class="kw">is.na</span>(<span class="kw">fData</span>(umi.qc)$ensembl_gene_id), ]</code></pre></div>
 <p>Now we compute the total gene length in Kilobases by using the <code>end_position</code> and <code>start_position</code> fields:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eff_length &lt;-<span class="st"> </span><span class="kw">abs</span>(<span class="kw">fData</span>(umi.qc.ann)$end_position -
-<span class="st">                      </span><span class="kw">fData</span>(umi.qc.ann)$start_position)/<span class="dv">1000</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eff_length &lt;-<span class="st"> </span>
+<span class="st">    </span><span class="kw">abs</span>(<span class="kw">fData</span>(umi.qc.ann)$end_position -<span class="st"> </span><span class="kw">fData</span>(umi.qc.ann)$start_position) /<span class="st"> </span><span class="dv">1000</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(eff_length, <span class="kw">rowMeans</span>(<span class="kw">counts</span>(umi.qc.ann)))</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:length-vs-mean"></span>
 <img src="13-exprs-norm_files/figure-html/length-vs-mean-1.png" alt="Gene length vs Mean Expression for the raw data" width="90%" />
 <p class="caption">
-Figure 14.15: Gene length vs Mean Expression for the raw data
+Figure 14.14: Gene length vs Mean Expression for the raw data
 </p>
 </div>
 <p>There is no relationship between gene length and mean expression so FPKMs &amp; TPMs are inappropriate for this dataset. But we will demonstrate them anyway.</p>
@@ -709,26 +733,30 @@ Figure 14.15: Gene length vs Mean Expression for the raw data
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tpm</span>(umi.qc.ann) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateTPM</span>(umi.qc.ann, eff_length) +<span class="st"> </span><span class="dv">1</span>)
 <span class="kw">fpkm</span>(umi.qc.ann) &lt;-<span class="st"> </span><span class="kw">log2</span>(<span class="kw">calculateFPKM</span>(umi.qc.ann, eff_length) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
 <p>Plot the results as a PCA plot:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPCA</span>(umi.qc.ann,
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;fpkm&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
+    umi.qc.ann,
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;fpkm&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-fpkm"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-fpkm-1.png" alt="PCA plot of the tung data after FPKM normalisation" width="90%" />
 <p class="caption">
-Figure 14.16: PCA plot of the tung data after FPKM normalisation
+Figure 14.15: PCA plot of the tung data after FPKM normalisation
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scater::<span class="kw">plotPCA</span>(umi.qc.ann,
-                <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
-                <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
-                <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
-                <span class="dt">exprs_values =</span> <span class="st">&quot;tpm&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotPCA</span>(
+    umi.qc.ann,
+    <span class="dt">colour_by =</span> <span class="st">&quot;batch&quot;</span>,
+    <span class="dt">size_by =</span> <span class="st">&quot;total_features&quot;</span>,
+    <span class="dt">shape_by =</span> <span class="st">&quot;individual&quot;</span>,
+    <span class="dt">exprs_values =</span> <span class="st">&quot;tpm&quot;</span>
+)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:norm-pca-tpm"></span>
 <img src="13-exprs-norm_files/figure-html/norm-pca-tpm-1.png" alt="PCA plot of the tung data after TPM normalisation" width="90%" />
 <p class="caption">
-Figure 14.17: PCA plot of the tung data after TPM normalisation
+Figure 14.16: PCA plot of the tung data after TPM normalisation
 </p>
 </div>
 <p><strong>Note:</strong> The PCA looks for differences between cells. Gene length is the same across cells for each gene thus FPKM is almost identical to the CPM plot (it is just rotated) since it performs CPM first then normalizes gene length. Whereas, TPM is different because it weights genes by their length before performing CPM.</p>

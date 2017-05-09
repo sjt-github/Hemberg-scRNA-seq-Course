@@ -182,14 +182,15 @@ geneNames <- rownames(d)
 rownames(d) <- 1:nrow(d)
 pd <- data.frame(timepoint = cellLabels)
 pd <- new("AnnotatedDataFrame", data=pd)
-fd <- data.frame(gene = geneNames)
+fd <- data.frame(gene_short_name = geneNames)
 fd <- new("AnnotatedDataFrame", data=fd)
 
-dCellData <- monocle::newCellDataSet(d, phenoData = pd, featureData = fd)
-dCellData <- monocle::setOrderingFilter(dCellData, which(geneNames %in% m3dGenes))
-dCellDataSet <- monocle::reduceDimension(dCellData, pseudo_expr = 1)
-dCellDataSet <- monocle::orderCells(dCellDataSet, reverse = TRUE)
-monocle::plot_cell_trajectory(dCellDataSet)
+dCellData <- newCellDataSet(d, phenoData = pd, featureData = fd, expressionFamily = tobit())
+dCellData <- setOrderingFilter(dCellData, which(geneNames %in% m3dGenes))
+dCellData <- estimateSizeFactors(dCellData)
+dCellDataSet <- reduceDimension(dCellData, pseudo_expr = 1)
+dCellDataSet <- orderCells(dCellDataSet, reverse = TRUE)
+plot_cell_trajectory(dCellDataSet)
 ```
 
 
@@ -240,7 +241,7 @@ plot(
 
 
 ```r
-dm <- DiffusionMap(t(log2(1+deng)))
+dm <- DiffusionMap(t(log2(deng + 1)))
 tmp <- factor(
     colnames(deng),
     levels = c(
@@ -258,8 +259,8 @@ tmp <- factor(
 plot(
     eigenvectors(dm)[,1],
     eigenvectors(dm)[,2],
-    xlab="Diffusion component 1",
-    ylab="Diffusion component 2",
+    xlab = "Diffusion component 1",
+    ylab = "Diffusion component 2",
     col = colours[tmp],
     pch = 16
 )

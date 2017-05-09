@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-04-24">
+<meta name="date" content="2017-05-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -528,10 +528,10 @@ res1 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit1)
 ## ENSG00000134369  1.2492359 7.112593 36.51166 1.517556e-09 2.371266e-06
 ## ENSG00000198417 -2.6086556 5.456231 34.46438 4.341236e-09 6.105081e-06</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res1))</code></pre></div>
-<pre><code>##    [,1] 
-## -1   125
-## 0  13875
-## 1     63</code></pre>
+<pre><code>##    umi.qc[, keep]$batchNA19101.r3
+## -1                            125
+## 0                           13875
+## 1                              63</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res1, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res1, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res1))))$table)
@@ -575,10 +575,10 @@ res2 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit2)
 ## ENSG00000143570 -0.7983990 7.670748 28.97874 7.317717e-08 1.143434e-04
 ## ENSG00000150459  0.5770140 8.417628 28.77421 8.132704e-08 1.143702e-04</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res2))</code></pre></div>
-<pre><code>##    [,1] 
-## -1    94
-## 0  13920
-## 1     49</code></pre>
+<pre><code>##    umi.qc[, keep]$batchNA19101.r3
+## -1                             94
+## 0                           13920
+## 1                              49</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res2, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res2, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res2))))$table)
@@ -622,10 +622,10 @@ res3 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit3)
 ## ENSG00000150459  0.6754420  8.423888 27.82351 1.329011e-07 2.076654e-04
 ## ENSG00000114391  0.5009652 10.200433 27.52536 1.550481e-07 2.180441e-04</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res3))</code></pre></div>
-<pre><code>##    [,1] 
-## -1    83
-## 0  13911
-## 1     69</code></pre>
+<pre><code>##    umi.qc[, keep]$batchNA19101.r3
+## -1                             83
+## 0                           13911
+## 1                              69</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res3, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res3, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res3))))$table)
@@ -653,10 +653,10 @@ res4 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit4)
 ## ENSG00000181163  0.3668285 11.635978 20.39748 6.291268e-06 0.0084570542
 ## ENSG00000114391  0.5512702 10.275265 20.07975 7.427918e-06 0.0084570542</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res4))</code></pre></div>
-<pre><code>##    [,1] 
-## -1    43
-## 0  13973
-## 1     47</code></pre>
+<pre><code>##    umi.qc[, keep]$batchNA19101.r3
+## -1                             43
+## 0                           13973
+## 1                              47</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res4, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res4, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res4))))$table)

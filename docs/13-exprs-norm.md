@@ -1,5 +1,5 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
 # Normalization for library size
@@ -119,7 +119,8 @@ We will continue to work with the `tung` data that was used in the previous chap
 
 ```r
 library(scRNA.seq.funcs)
-library(scater, quietly = TRUE)
+library(scater)
+library(scran)
 options(stringsAsFactors = FALSE)
 set.seed(1234567)
 umi <- readRDS("tung/umi.rds")
@@ -130,11 +131,13 @@ endog_genes <- !fData(umi.qc)$is_feature_control
 ### Raw
 
 ```r
-scater::plotPCA(umi.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "log2_counts")
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "log2_counts"
+)
 ```
 
 \begin{figure}
@@ -146,32 +149,17 @@ scater::plotPCA(umi.qc[endog_genes, ],
 \caption{PCA plot of the tung data}(\#fig:norm-pca-raw)
 \end{figure}
 
-
-```r
-boxplot(calc_cell_RLE(get_exprs(umi.qc[endog_genes, ], exprs_values = "log2_counts")),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
-```
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{13-exprs-norm_files/figure-latex/norm-ours-rle-raw-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-raw)
-\end{figure}
-
 ### CPM
 scater performs this normalisation by default, you can control it by changing `exprs_values` parameter to `"exprs"`.
 
 ```r
-scater::plotPCA(umi.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "exprs")
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "exprs"
+)
 ```
 
 \begin{figure}
@@ -184,10 +172,12 @@ scater::plotPCA(umi.qc[endog_genes, ],
 \end{figure}
 
 ```r
-boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim = c(-1,1))
+plotRLE(
+    umi.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", CPM = "exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 \begin{figure}
@@ -203,15 +193,18 @@ boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
 ### TMM
 
 ```r
-umi.qc <- 
-    scater::normaliseExprs(umi.qc,
-                           method = "TMM",
-                           feature_set = endog_genes)
-scater::plotPCA(umi.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "norm_counts")
+umi.qc <- normaliseExprs(
+    umi.qc,
+    method = "TMM",
+    feature_set = endog_genes
+)
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "norm_exprs"
+)
 ```
 
 \begin{figure}
@@ -224,10 +217,12 @@ scater::plotPCA(umi.qc[endog_genes, ],
 \end{figure}
 
 ```r
-boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
+plotRLE(
+    umi.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", TMM = "norm_exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 \begin{figure}
@@ -242,14 +237,16 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
 ### scran
 
 ```r
-qclust <- scran::quickCluster(umi.qc, min.size = 30)
-umi.qc <- scran::computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
-umi.qc <- scater::normalize(umi.qc)
-scater::plotPCA(umi.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "exprs")
+qclust <- quickCluster(umi.qc, min.size = 30)
+umi.qc <- computeSumFactors(umi.qc, sizes = 15, clusters = qclust)
+umi.qc <- normalize(umi.qc)
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "exprs"
+)
 ```
 
 \begin{figure}
@@ -262,10 +259,12 @@ scater::plotPCA(umi.qc[endog_genes, ],
 \end{figure}
 
 ```r
-boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
+plotRLE(
+    umi.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", scran = "exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 \begin{figure}
@@ -280,15 +279,18 @@ boxplot(calc_cell_RLE(exprs(umi.qc[endog_genes, ])),
 ### Size-factor (RLE)
 
 ```r
-umi.qc <- 
-    scater::normaliseExprs(umi.qc,
-                           method = "RLE", 
-                           feature_set = endog_genes)
-scater::plotPCA(umi.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "norm_counts")
+umi.qc <- normaliseExprs(
+    umi.qc,
+    method = "RLE", 
+    feature_set = endog_genes
+)
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "norm_exprs"
+)
 ```
 
 \begin{figure}
@@ -301,10 +303,12 @@ scater::plotPCA(umi.qc[endog_genes, ],
 \end{figure}
 
 ```r
-boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim=c(-1,1))
+plotRLE(
+    umi.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", RLE = "norm_exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 \begin{figure}
@@ -320,16 +324,19 @@ boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
 ### Upperquantile
 
 ```r
-umi.qc <- 
-    scater::normaliseExprs(umi.qc,
-                           method = "upperquartile", 
-                           feature_set = endog_genes,
-                           p = 0.99)
-scater::plotPCA(umi.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "norm_counts")
+umi.qc <- normaliseExprs(
+    umi.qc,
+    method = "upperquartile", 
+    feature_set = endog_genes,
+    p = 0.99
+)
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "norm_exprs"
+)
 ```
 
 \begin{figure}
@@ -342,10 +349,12 @@ scater::plotPCA(umi.qc[endog_genes, ],
 \end{figure}
 
 ```r
-boxplot(calc_cell_RLE(norm_counts(umi.qc[endog_genes, ])),
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim = c(-1, 1))
+plotRLE(
+    umi.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", UQ = "norm_exprs"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 \begin{figure}
@@ -379,13 +388,14 @@ function (expr_mat)
 
 
 ```r
-norm_counts(umi.qc) <- 
-    log2(scRNA.seq.funcs::Down_Sample_Matrix(counts(umi.qc)) + 1)
-scater::plotPCA(umi.qc[endog_genes, ],
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "norm_counts")
+norm_counts(umi.qc) <- log2(Down_Sample_Matrix(counts(umi.qc)) + 1)
+plotPCA(
+    umi.qc[endog_genes, ],
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "norm_counts"
+)
 ```
 
 \begin{figure}
@@ -398,12 +408,12 @@ scater::plotPCA(umi.qc[endog_genes, ],
 \end{figure}
 
 ```r
-tmp <- norm_counts(umi.qc[endog_genes, ])
-# ignore genes which are not detected in any cells following downsampling
-boxplot(calc_cell_RLE(tmp[rowMeans(tmp) > 0, ]), 
-        col = "grey50",
-        ylab = "RLE",
-        main = "", ylim = c(-1, 1))
+plotRLE(
+    umi.qc[endog_genes, ], 
+    exprs_mats = list(Raw = "log2_counts", DownSample = "norm_counts"),
+    exprs_logged = c(TRUE, TRUE),
+    colour_by = "batch"
+)
 ```
 
 \begin{figure}
@@ -434,49 +444,56 @@ for a relationship between gene/transcript length and expression level.
 However, here we show how these normalisations can be calculated using scater. First, we need to find the effective transcript length in Kilobases. However, our dataset containes only gene IDs, therefore we will be using the gene lengths instead of transcripts. scater uses the [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html) package, which allows one to annotate genes by other attributes:
 
 ```r
-umi.qc <-
-    scater::getBMFeatureAnnos(umi.qc,
-                              filters = "ensembl_gene_id", 
-                              attributes = c("ensembl_gene_id",
-                                             "hgnc_symbol",
-                                             "chromosome_name",
-                                             "start_position",
-                                             "end_position"), 
-                              feature_symbol = "hgnc_symbol",
-                              feature_id = "ensembl_gene_id",
-                              biomart = "ENSEMBL_MART_ENSEMBL", 
-                              dataset = "hsapiens_gene_ensembl",
-                              host = "www.ensembl.org")
+umi.qc <- getBMFeatureAnnos(
+    umi.qc,
+    filters = "ensembl_gene_id", 
+    attributes = c(
+        "ensembl_gene_id",
+        "hgnc_symbol",
+        "chromosome_name",
+        "start_position",
+        "end_position"
+    ), 
+    feature_symbol = "hgnc_symbol",
+    feature_id = "ensembl_gene_id",
+    biomart = "ENSEMBL_MART_ENSEMBL", 
+    dataset = "hsapiens_gene_ensembl",
+    host = "www.ensembl.org"
+)
 
 # If you have mouse data, change the arguments based on this example:
-# scater::getBMFeatureAnnos(object,
-#                           filters = "ensembl_transcript_id", 
-#                           attributes = c("ensembl_transcript_id", 
-#                                        "ensembl_gene_id", "mgi_symbol", 
-#                                        "chromosome_name",
-#                                        "transcript_biotype",
-#                                        "transcript_start",
-#                                        "transcript_end", 
-#                                        "transcript_count"), 
-#                           feature_symbol = "mgi_symbol",
-#                           feature_id = "ensembl_gene_id",
-#                           biomart = "ENSEMBL_MART_ENSEMBL", 
-#                           dataset = "mmusculus_gene_ensembl",
-#                           host = "www.ensembl.org") 
+# getBMFeatureAnnos(
+#     object,
+#     filters = "ensembl_transcript_id",
+#     attributes = c(
+#         "ensembl_transcript_id",
+#         "ensembl_gene_id", 
+#         "mgi_symbol",
+#         "chromosome_name",
+#         "transcript_biotype",
+#         "transcript_start",
+#         "transcript_end",
+#         "transcript_count"
+#     ),
+#     feature_symbol = "mgi_symbol",
+#     feature_id = "ensembl_gene_id",
+#     biomart = "ENSEMBL_MART_ENSEMBL",
+#     dataset = "mmusculus_gene_ensembl",
+#     host = "www.ensembl.org"
+# )
 ```
 
 Some of the genes were not annotated, therefore we filter them out:
 
 ```r
-umi.qc.ann <-
-    umi.qc[!is.na(fData(umi.qc)$ensembl_gene_id), ]
+umi.qc.ann <- umi.qc[!is.na(fData(umi.qc)$ensembl_gene_id), ]
 ```
 
 Now we compute the total gene length in Kilobases by using the `end_position` and `start_position` fields:
 
 ```r
-eff_length <- abs(fData(umi.qc.ann)$end_position -
-                      fData(umi.qc.ann)$start_position)/1000
+eff_length <- 
+    abs(fData(umi.qc.ann)$end_position - fData(umi.qc.ann)$start_position) / 1000
 ```
 
 
@@ -505,11 +522,13 @@ fpkm(umi.qc.ann) <- log2(calculateFPKM(umi.qc.ann, eff_length) + 1)
 Plot the results as a PCA plot:
 
 ```r
-scater::plotPCA(umi.qc.ann,
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "fpkm")
+plotPCA(
+    umi.qc.ann,
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "fpkm"
+)
 ```
 
 \begin{figure}
@@ -523,11 +542,13 @@ scater::plotPCA(umi.qc.ann,
 
 
 ```r
-scater::plotPCA(umi.qc.ann,
-                colour_by = "batch",
-                size_by = "total_features",
-                shape_by = "individual",
-                exprs_values = "tpm")
+plotPCA(
+    umi.qc.ann,
+    colour_by = "batch",
+    size_by = "total_features",
+    shape_by = "individual",
+    exprs_values = "tpm"
+)
 ```
 
 \begin{figure}
@@ -540,8 +561,6 @@ scater::plotPCA(umi.qc.ann,
 \end{figure}
 
 __Note:__ The PCA looks for differences between cells. Gene length is the same across cells for each gene thus FPKM is almost identical to the CPM plot (it is just rotated) since it performs CPM first then normalizes gene length. Whereas, TPM is different because it weights genes by their length before performing CPM. 
-
-
 
 ## Exercise
 
