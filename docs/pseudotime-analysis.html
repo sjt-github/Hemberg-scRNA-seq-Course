@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-04-24">
+<meta name="date" content="2017-05-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -458,14 +458,15 @@ geneNames &lt;-<span class="st"> </span><span class="kw">rownames</span>(d)
 <span class="kw">rownames</span>(d) &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="kw">nrow</span>(d)
 pd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">timepoint =</span> cellLabels)
 pd &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;AnnotatedDataFrame&quot;</span>, <span class="dt">data=</span>pd)
-fd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">gene =</span> geneNames)
+fd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">gene_short_name =</span> geneNames)
 fd &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;AnnotatedDataFrame&quot;</span>, <span class="dt">data=</span>fd)
 
-dCellData &lt;-<span class="st"> </span>monocle::<span class="kw">newCellDataSet</span>(d, <span class="dt">phenoData =</span> pd, <span class="dt">featureData =</span> fd)
-dCellData &lt;-<span class="st"> </span>monocle::<span class="kw">setOrderingFilter</span>(dCellData, <span class="kw">which</span>(geneNames %in%<span class="st"> </span>m3dGenes))
-dCellDataSet &lt;-<span class="st"> </span>monocle::<span class="kw">reduceDimension</span>(dCellData, <span class="dt">pseudo_expr =</span> <span class="dv">1</span>)
-dCellDataSet &lt;-<span class="st"> </span>monocle::<span class="kw">orderCells</span>(dCellDataSet, <span class="dt">reverse =</span> <span class="ot">TRUE</span>)
-monocle::<span class="kw">plot_cell_trajectory</span>(dCellDataSet)</code></pre></div>
+dCellData &lt;-<span class="st"> </span><span class="kw">newCellDataSet</span>(d, <span class="dt">phenoData =</span> pd, <span class="dt">featureData =</span> fd, <span class="dt">expressionFamily =</span> <span class="kw">tobit</span>())
+dCellData &lt;-<span class="st"> </span><span class="kw">setOrderingFilter</span>(dCellData, <span class="kw">which</span>(geneNames %in%<span class="st"> </span>m3dGenes))
+dCellData &lt;-<span class="st"> </span><span class="kw">estimateSizeFactors</span>(dCellData)
+dCellDataSet &lt;-<span class="st"> </span><span class="kw">reduceDimension</span>(dCellData, <span class="dt">pseudo_expr =</span> <span class="dv">1</span>)
+dCellDataSet &lt;-<span class="st"> </span><span class="kw">orderCells</span>(dCellDataSet, <span class="dt">reverse =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot_cell_trajectory</span>(dCellDataSet)</code></pre></div>
 <p><img src="20-pseudotime_files/figure-html/monocle-all-genes-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Store the ordering</span>
 pseudotime_monocle &lt;-
@@ -498,7 +499,7 @@ pseudotime_order_monocle &lt;-
 <h2><span class="header-section-number">21.3</span> Diffusion maps</h2>
 <p><a href="https://en.wikipedia.org/wiki/Diffusion_map">Diffusion maps</a> were introduced by <a href="http://www.sciencedirect.com/science/article/pii/S1063520306000546">Ronald Coifman and Stephane Lafon</a>, and the underlying idea is to assume that the data are samples from a diffusion process. The method infers the low-dimensional manifold by estimating the eigenvalues and eigenvectors for the diffusion operator related to the data.</p>
 <p><a href="http://biorxiv.org/content/biorxiv/early/2015/08/04/023309.full.pdf">Haghverdi et al</a> have applied the diffusion maps concept to the analysis of single-cell RNA-seq data to create an R package called <a href="http://bioconductor.org/packages/destiny">destiny</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dm &lt;-<span class="st"> </span><span class="kw">DiffusionMap</span>(<span class="kw">t</span>(<span class="kw">log2</span>(<span class="dv">1</span>+deng)))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dm &lt;-<span class="st"> </span><span class="kw">DiffusionMap</span>(<span class="kw">t</span>(<span class="kw">log2</span>(deng +<span class="st"> </span><span class="dv">1</span>)))
 tmp &lt;-<span class="st"> </span><span class="kw">factor</span>(
     <span class="kw">colnames</span>(deng),
     <span class="dt">levels =</span> <span class="kw">c</span>(
@@ -516,8 +517,8 @@ tmp &lt;-<span class="st"> </span><span class="kw">factor</span>(
 <span class="kw">plot</span>(
     <span class="kw">eigenvectors</span>(dm)[,<span class="dv">1</span>],
     <span class="kw">eigenvectors</span>(dm)[,<span class="dv">2</span>],
-    <span class="dt">xlab=</span><span class="st">&quot;Diffusion component 1&quot;</span>,
-    <span class="dt">ylab=</span><span class="st">&quot;Diffusion component 2&quot;</span>,
+    <span class="dt">xlab =</span> <span class="st">&quot;Diffusion component 1&quot;</span>,
+    <span class="dt">ylab =</span> <span class="st">&quot;Diffusion component 2&quot;</span>,
     <span class="dt">col =</span> colours[tmp],
     <span class="dt">pch =</span> <span class="dv">16</span>
 )</code></pre></div>

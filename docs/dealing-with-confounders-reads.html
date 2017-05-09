@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-04-24">
+<meta name="date" content="2017-05-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -499,10 +499,10 @@ res1 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit1)
 ## ENSG00000018869  5.873107 0.7109472 24.74574 6.541323e-07 0.0011090305
 ## ENSG00000182575  6.251666 0.9288213 24.64143 6.905115e-07 0.0011090305</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res1))</code></pre></div>
-<pre><code>##    [,1] 
-## -1   464
-## 0  14851
-## 1    746</code></pre>
+<pre><code>##    reads.qc[, keep]$batchNA19101.r3
+## -1                              464
+## 0                             14851
+## 1                               746</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res1, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res1, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res1))))$table)
@@ -546,10 +546,10 @@ res2 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit2)
 ## ENSG00000062282  5.554112 0.8624379 25.73278 3.921092e-07 0.0005768692
 ## ENSG00000114737 -7.712987 2.0853276 25.54660 4.318272e-07 0.0005768692</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res2))</code></pre></div>
-<pre><code>##    [,1] 
-## -1   395
-## 0  15341
-## 1    325</code></pre>
+<pre><code>##    reads.qc[, keep]$batchNA19101.r3
+## -1                              395
+## 0                             15341
+## 1                               325</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res2, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res2, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res2))))$table)
@@ -593,10 +593,10 @@ res3 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit3)
 ## ENSG00000169228  8.240724 2.405449 25.92722 3.545347e-07 0.0005614098
 ## ENSG00000143127  5.971608 1.023916 25.47575 4.479788e-07 0.0005614098</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res3))</code></pre></div>
-<pre><code>##    [,1] 
-## -1   303
-## 0  15219
-## 1    539</code></pre>
+<pre><code>##    reads.qc[, keep]$batchNA19101.r3
+## -1                              303
+## 0                             15219
+## 1                               539</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res3, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res3, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res3))))$table)
@@ -623,10 +623,10 @@ res4 &lt;-<span class="st"> </span><span class="kw">glmLRT</span>(fit4)
 ## ENSG00000127366 -7.248685 1.81131942 25.42882 4.590090e-07 0.0007083699
 ## ENSG00000169228  8.417010 2.31022748 25.39601 4.668829e-07 0.0007083699</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">decideTestsDGE</span>(res4))</code></pre></div>
-<pre><code>##    [,1] 
-## -1   232
-## 0  15307
-## 1    522</code></pre>
+<pre><code>##    reads.qc[, keep]$batchNA19101.r3
+## -1                              232
+## 0                             15307
+## 1                               522</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotSmear</span>(
     res4, <span class="dt">lowess =</span> <span class="ot">TRUE</span>,
     <span class="dt">de.tags =</span> <span class="kw">rownames</span>(<span class="kw">topTags</span>(res4, <span class="dt">n =</span> <span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">decideTestsDGE</span>(res4))))$table)

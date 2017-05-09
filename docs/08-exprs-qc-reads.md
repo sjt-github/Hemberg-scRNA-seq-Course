@@ -504,17 +504,17 @@ scater::plotPCA(reads,
 ## \hline
 ##   & PC1 & PC2\\
 ## \hline
-## pct\_counts\_feature\_controls & 0.5057646 & 0.2473134\\
+## pct\_counts\_feature\_controls & 0.5057646 & -0.2473134\\
 ## \hline
-## pct\_counts\_top\_100\_features & 0.4888852 & 0.2277068\\
+## pct\_counts\_top\_100\_features & 0.4888852 & -0.2277068\\
 ## \hline
-## n\_detected\_feature\_controls & 0.0231277 & 0.6235516\\
+## n\_detected\_feature\_controls & 0.0231277 & -0.6235516\\
 ## \hline
-## log10\_counts\_feature\_controls & -0.1226860 & 0.6576822\\
+## log10\_counts\_feature\_controls & -0.1226860 & -0.6576822\\
 ## \hline
-## total\_features & -0.4655518 & 0.2219694\\
+## total\_features & -0.4655518 & -0.2219694\\
 ## \hline
-## log10\_counts\_endogenous\_features & -0.5223679 & 0.1278782\\
+## log10\_counts\_endogenous\_features & -0.5223679 & -0.1278782\\
 ## \hline
 ## \end{tabular}
 ```

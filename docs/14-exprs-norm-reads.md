@@ -1,5 +1,5 @@
 ---
-knit: bookdown::preview_chapter
+output: html_document
 ---
 
 # Normalization for library size (Reads)
@@ -13,14 +13,6 @@ knit: bookdown::preview_chapter
 }
 
 \caption{PCA plot of the tung data}(\#fig:norm-pca-raw-reads)
-\end{figure}
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{14-exprs-norm-reads_files/figure-latex/norm-ours-rle-raw-reads-1} 
-
-}
-
-\caption{Cell-wise RLE of the tung data}(\#fig:norm-ours-rle-raw-reads)
 \end{figure}
 
 \begin{figure}

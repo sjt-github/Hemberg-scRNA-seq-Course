@@ -26,7 +26,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-04-24">
+<meta name="date" content="2017-05-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -558,6 +558,9 @@ cond &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="k
 
 <span class="co"># Model expression as function of condition &amp; number of detected genes</span>
 zlmCond &lt;-<span class="st"> </span><span class="kw">zlm.SingleCellAssay</span>(~cond +<span class="st"> </span>cngeneson, obj) </code></pre></div>
+<pre><code>## Warning: &#39;zlm.SingleCellAssay&#39; is deprecated.
+## Use &#39;zlm&#39; instead.
+## See help(&quot;Deprecated&quot;)</code></pre>
 <pre><code>## Warning in .nextMethod(object = object, value = value): Coefficients
 ## condNA19239 are never estimible and will be dropped.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">summaryCond &lt;-<span class="st"> </span><span class="kw">summary</span>(zlmCond, <span class="dt">doLRT=</span><span class="st">&quot;condNA19101&quot;</span>)
