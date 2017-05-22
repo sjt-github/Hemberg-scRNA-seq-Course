@@ -435,101 +435,6 @@ scater::plotPCA(umi,
                 return_SCESet = TRUE)
 ```
 
-```
-## The following cells/samples are detected as outliers:
-## NA19098.r2.A01
-## NA19098.r2.A02
-## NA19098.r2.A06
-## NA19098.r2.A09
-## NA19098.r2.A10
-## NA19098.r2.A12
-## NA19098.r2.B01
-## NA19098.r2.B03
-## NA19098.r2.B04
-## NA19098.r2.B05
-## NA19098.r2.B07
-## NA19098.r2.B11
-## NA19098.r2.B12
-## NA19098.r2.C01
-## NA19098.r2.C02
-## NA19098.r2.C03
-## NA19098.r2.C04
-## NA19098.r2.C05
-## NA19098.r2.C06
-## NA19098.r2.C07
-## NA19098.r2.C08
-## NA19098.r2.C09
-## NA19098.r2.C10
-## NA19098.r2.C11
-## NA19098.r2.C12
-## NA19098.r2.D01
-## NA19098.r2.D02
-## NA19098.r2.D03
-## NA19098.r2.D04
-## NA19098.r2.D07
-## NA19098.r2.D08
-## NA19098.r2.D09
-## NA19098.r2.D10
-## NA19098.r2.D12
-## NA19098.r2.E01
-## NA19098.r2.E02
-## NA19098.r2.E03
-## NA19098.r2.E04
-## NA19098.r2.E05
-## NA19098.r2.E06
-## NA19098.r2.E07
-## NA19098.r2.E12
-## NA19098.r2.F01
-## NA19098.r2.F02
-## NA19098.r2.F07
-## NA19098.r2.F08
-## NA19098.r2.F09
-## NA19098.r2.F10
-## NA19098.r2.F11
-## NA19098.r2.F12
-## NA19098.r2.G01
-## NA19098.r2.G02
-## NA19098.r2.G03
-## NA19098.r2.G05
-## NA19098.r2.G06
-## NA19098.r2.G08
-## NA19098.r2.G09
-## NA19098.r2.G10
-## NA19098.r2.G11
-## NA19098.r2.H01
-## NA19098.r2.H02
-## NA19098.r2.H03
-## NA19098.r2.H04
-## NA19098.r2.H05
-## NA19098.r2.H06
-## NA19098.r2.H07
-## NA19098.r2.H08
-## NA19098.r2.H10
-## NA19098.r2.H12
-## NA19101.r3.A02
-## NA19101.r3.C12
-## NA19101.r3.D01
-## NA19101.r3.E08
-## Variables with highest loadings for PC1 and PC2:
-## \begin{tabular}{l|r|r}
-## \hline
-##   & PC1 & PC2\\
-## \hline
-## pct\_counts\_top\_100\_features & 0.4771343 & 0.3009332\\
-## \hline
-## pct\_counts\_feature\_controls & 0.4735839 & 0.3309562\\
-## \hline
-## n\_detected\_feature\_controls & 0.1332811 & 0.5367629\\
-## \hline
-## log10\_counts\_feature\_controls & -0.1427373 & 0.5911762\\
-## \hline
-## total\_features & -0.5016681 & 0.2936705\\
-## \hline
-## log10\_counts\_endogenous\_features & -0.5081855 & 0.2757918\\
-## \hline
-## \end{tabular}
-```
-
 \begin{figure}
 
 {\centering \includegraphics[width=0.9\linewidth]{07-exprs-qc_files/figure-latex/auto-cell-filt-1} 
@@ -553,12 +458,11 @@ knitr::kable(
 
 \caption{(\#tab:unnamed-chunk-16)The number of cells removed by automatic filter (FALSE)}
 \centering
-\begin{tabular}[t]{lr}
+\begin{tabular}[t]{r}
 \toprule
-Var1 & Freq\\
-\midrule
-FALSE & 791\\
-TRUE & 73\\
+Freq\\
+
+
 \bottomrule
 \end{tabular}
 \end{table}
