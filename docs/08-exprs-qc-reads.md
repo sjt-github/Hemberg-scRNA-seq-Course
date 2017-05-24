@@ -386,6 +386,139 @@ scater::plotPCA(reads,
                 return_SCESet = TRUE)
 ```
 
+```
+## The following cells/samples are detected as outliers:
+## NA19098.r1.B10
+## NA19098.r1.D07
+## NA19098.r1.E04
+## NA19098.r1.F06
+## NA19098.r1.H08
+## NA19098.r1.H09
+## NA19098.r2.A01
+## NA19098.r2.A06
+## NA19098.r2.A09
+## NA19098.r2.A12
+## NA19098.r2.B01
+## NA19098.r2.B11
+## NA19098.r2.B12
+## NA19098.r2.C04
+## NA19098.r2.C09
+## NA19098.r2.D02
+## NA19098.r2.D03
+## NA19098.r2.D09
+## NA19098.r2.E04
+## NA19098.r2.E07
+## NA19098.r2.F01
+## NA19098.r2.F11
+## NA19098.r2.G01
+## NA19098.r2.G05
+## NA19098.r2.G10
+## NA19098.r2.H01
+## NA19098.r2.H07
+## NA19098.r2.H08
+## NA19098.r2.H12
+## NA19098.r3.A05
+## NA19098.r3.A07
+## NA19098.r3.B02
+## NA19098.r3.C07
+## NA19098.r3.E05
+## NA19098.r3.E08
+## NA19098.r3.E09
+## NA19098.r3.F11
+## NA19098.r3.F12
+## NA19098.r3.G02
+## NA19098.r3.G03
+## NA19098.r3.G04
+## NA19098.r3.G11
+## NA19098.r3.G12
+## NA19098.r3.H08
+## NA19101.r1.A01
+## NA19101.r1.A12
+## NA19101.r1.B01
+## NA19101.r1.B06
+## NA19101.r1.E09
+## NA19101.r1.E11
+## NA19101.r1.F05
+## NA19101.r1.F10
+## NA19101.r1.G01
+## NA19101.r1.G06
+## NA19101.r1.H04
+## NA19101.r1.H09
+## NA19101.r2.A03
+## NA19101.r2.C10
+## NA19101.r2.E05
+## NA19101.r2.F02
+## NA19101.r2.H04
+## NA19101.r2.H10
+## NA19101.r3.A02
+## NA19101.r3.A03
+## NA19101.r3.A05
+## NA19101.r3.A09
+## NA19101.r3.B05
+## NA19101.r3.C01
+## NA19101.r3.C09
+## NA19101.r3.C12
+## NA19101.r3.D01
+## NA19101.r3.D04
+## NA19101.r3.D07
+## NA19101.r3.D09
+## NA19101.r3.E08
+## NA19101.r3.F09
+## NA19101.r3.G09
+## NA19101.r3.H01
+## NA19101.r3.H03
+## NA19101.r3.H07
+## NA19101.r3.H09
+## NA19239.r1.F05
+## NA19239.r1.G05
+## NA19239.r2.B01
+## NA19239.r2.B03
+## NA19239.r2.B10
+## NA19239.r2.B11
+## NA19239.r2.C03
+## NA19239.r2.C06
+## NA19239.r2.C08
+## NA19239.r2.D07
+## NA19239.r2.D09
+## NA19239.r2.E09
+## NA19239.r2.F04
+## NA19239.r2.F06
+## NA19239.r2.F07
+## NA19239.r2.F12
+## NA19239.r2.G03
+## NA19239.r2.G08
+## NA19239.r2.H02
+## NA19239.r2.H03
+## NA19239.r2.H07
+## NA19239.r3.A01
+## NA19239.r3.B09
+## NA19239.r3.C04
+## NA19239.r3.C07
+## NA19239.r3.E01
+## NA19239.r3.E03
+## NA19239.r3.E12
+## NA19239.r3.H02
+## NA19239.r3.H10
+## Variables with highest loadings for PC1 and PC2:
+## \begin{tabular}{l|r|r}
+## \hline
+##   & PC1 & PC2\\
+## \hline
+## pct\_counts\_feature\_controls & 0.5057646 & -0.2473134\\
+## \hline
+## pct\_counts\_top\_100\_features & 0.4888852 & -0.2277068\\
+## \hline
+## n\_detected\_feature\_controls & 0.0231277 & -0.6235516\\
+## \hline
+## log10\_counts\_feature\_controls & -0.1226860 & -0.6576822\\
+## \hline
+## total\_features & -0.4655518 & -0.2219694\\
+## \hline
+## log10\_counts\_endogenous\_features & -0.5223679 & -0.1278782\\
+## \hline
+## \end{tabular}
+```
+
 \begin{figure}
 
 {\centering \includegraphics[width=0.9\linewidth]{08-exprs-qc-reads_files/figure-latex/auto-cell-filt-reads-1} 
@@ -409,11 +542,12 @@ knitr::kable(
 
 \caption{(\#tab:unnamed-chunk-21)The number of cells removed by automatic filter (FALSE)}
 \centering
-\begin{tabular}[t]{r}
+\begin{tabular}[t]{lr}
 \toprule
-Freq\\
-
-
+Var1 & Freq\\
+\midrule
+FALSE & 753\\
+TRUE & 111\\
 \bottomrule
 \end{tabular}
 \end{table}
