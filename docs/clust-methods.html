@@ -6,9 +6,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Analysis of single cell RNA-seq data</title>
-  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="Analysis of single cell RNA-seq data">
-  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
 
   <meta property="og:title" content="Analysis of single cell RNA-seq data" />
   <meta property="og:type" content="book" />
@@ -26,7 +25,7 @@
 <meta name="author" content="Vladimir Kiselev, Tallulah Andrews, Davis McCarthy and Martin Hemberg">
 
 
-<meta name="date" content="2017-05-11">
+<meta name="date" content="2017-07-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,7 +34,6 @@
   
 <link rel="prev" href="clustering-introduction.html">
 <link rel="next" href="identification-of-important-genes.html">
-
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -115,6 +113,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </head>
 
 <body>
+
 
 
   <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
@@ -633,19 +632,19 @@ pollen_seurat &lt;-<span class="st"> </span><span class="kw">MeanVarPlot</span>(
 ## [1] &quot;&quot;
 ## [1] &quot;&quot;
 ## [1] &quot;PC3&quot;
-##  [1] &quot;KRT81&quot;    &quot;STEAP4&quot;   &quot;LCN2&quot;     &quot;S100A9&quot;   &quot;KRT15&quot;    &quot;ELF3&quot;    
-##  [7] &quot;CEACAM6&quot;  &quot;CLDN4&quot;    &quot;RARRES1&quot;  &quot;SLPI&quot;     &quot;KLK5&quot;     &quot;GRB7&quot;    
-## [13] &quot;DHRS3&quot;    &quot;CXorf61&quot;  &quot;RARRES3&quot;  &quot;KLK6&quot;     &quot;IFI27&quot;    &quot;AZGP1&quot;   
-## [19] &quot;S100A8&quot;   &quot;MYEOV&quot;    &quot;CXCL17&quot;   &quot;KLK8&quot;     &quot;PDZK1IP1&quot; &quot;BMP3&quot;    
-## [25] &quot;MUC1&quot;     &quot;FOLR1&quot;    &quot;TNFSF10&quot;  &quot;MIEN1&quot;    &quot;KRT23&quot;    &quot;VGLL1&quot;   
-## [1] &quot;&quot;
 ##  [1] &quot;COL1A2&quot;    &quot;LUM&quot;       &quot;DCN&quot;       &quot;GREM1&quot;     &quot;PSG5&quot;     
 ##  [6] &quot;TNFRSF11B&quot; &quot;SERPINE1&quot;  &quot;TPM2&quot;      &quot;COL1A1&quot;    &quot;LOX&quot;      
 ## [11] &quot;TIMP3&quot;     &quot;VIM&quot;       &quot;TAGLN&quot;     &quot;CRYAB&quot;     &quot;S100A4&quot;   
 ## [16] &quot;SULF1&quot;     &quot;GLIPR1&quot;    &quot;DKK1&quot;      &quot;COX7A1&quot;    &quot;RGS4&quot;     
 ## [21] &quot;CCDC80&quot;    &quot;SERPINE2&quot;  &quot;FN1&quot;       &quot;THBS1&quot;     &quot;KRT34&quot;    
 ## [26] &quot;ALDH1A1&quot;   &quot;KIAA1199&quot;  &quot;FGF7&quot;      &quot;TIMP1&quot;     &quot;WBP5&quot;     
-## [31] &quot;MT1E&quot;     
+## [1] &quot;&quot;
+##  [1] &quot;KRT81&quot;    &quot;STEAP4&quot;   &quot;LCN2&quot;     &quot;S100A9&quot;   &quot;KRT15&quot;    &quot;ELF3&quot;    
+##  [7] &quot;CEACAM6&quot;  &quot;CLDN4&quot;    &quot;RARRES1&quot;  &quot;SLPI&quot;     &quot;KLK5&quot;     &quot;GRB7&quot;    
+## [13] &quot;DHRS3&quot;    &quot;CXorf61&quot;  &quot;RARRES3&quot;  &quot;KLK6&quot;     &quot;IFI27&quot;    &quot;AZGP1&quot;   
+## [19] &quot;S100A8&quot;   &quot;MYEOV&quot;    &quot;CXCL17&quot;   &quot;KLK8&quot;     &quot;PDZK1IP1&quot; &quot;BMP3&quot;    
+## [25] &quot;MUC1&quot;     &quot;FOLR1&quot;    &quot;TNFSF10&quot;  &quot;MIEN1&quot;    &quot;KRT23&quot;    &quot;VGLL1&quot;   
+## [31] &quot;ALDH1A3&quot; 
 ## [1] &quot;&quot;
 ## [1] &quot;&quot;
 ## [1] &quot;PC4&quot;
@@ -710,8 +709,9 @@ pollen_seurat &lt;-<span class="st"> </span><span class="kw">FindClusters</span>
         </div>
       </div>
 <a href="clustering-introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="identification-of-important-genes.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
-
+<a href="identification-of-important-genes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
@@ -755,7 +755,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(script.src))
       script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
